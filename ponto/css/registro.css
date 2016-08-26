@@ -1,0 +1,477 @@
+body {
+    background: #0085CC;
+    /*color: #FFF;*/
+}
+
+header{
+    padding: 5% 0 2.5% 0;
+}
+
+#logo {
+    max-width: 100%;
+    margin-bottom: 10px;
+}
+
+.logo{   
+    max-width: 100%;    
+    margin: 0;
+    margin-left: 100px;
+}
+
+.row{
+  margin-bottom: 0px !important;
+}
+
+#container {
+  margin: 0 auto;
+  max-width: 1280px;
+  width: 90%; }
+
+@media only screen and (max-width : 601px) {
+  #container {
+   width: 96%; } }
+
+#container .row {
+  margin-left: -0.75rem;
+  margin-right: -0.75rem; }
+
+#acessibilidade {
+    float: right;    
+}
+
+#top a {
+    color: #fff;    
+    display: inline-block;
+    overflow: hidden; 
+    height: 24px;
+}
+
+#top span {
+    height: 100%;
+    margin-top: -20px;
+    margin-left: 24px;
+    display: block;
+}
+
+.logoff {
+    margin-left: 20px;
+    float: right;
+    color: #fff;
+}
+
+/*ALTERACAO CORES*/
+.waves-effect.waves-light.green.darken-4 {
+  background-color: rgb(76,175,80) !important;
+}
+.waves-effect.waves-light.red.darken-4 {
+  background-color: rgb(178,0,0) !important;
+}
+.waves-effect.waves-light.green.darken-4:hover{
+    background:rgb(78,155,0) !important;
+}
+.waves-effect.waves-light.red.darken-4:hover{
+  background:rgb(191,0,0) !important;
+}
+
+#divUsuario{
+  border: 1px #FFF dashed; 
+  padding: 1% 2%;
+  position: relative;
+  padding-right: 130px;
+  font-size: 1.1em;
+  color: #fff;
+  line-height: 160%;
+  min-height: 100px;
+}
+
+#divUsuario ul{
+  list-style: none;
+  padding: 0;
+}
+
+#divUsuario .foto {
+    position: absolute;
+    top: 65px;
+    right: 115px;
+}
+
+#divUsuario .foto img {
+    float: left;
+    display: block;
+    width: 100px;
+    height: 100px;
+    text-align: center;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: auto;
+    position: absolute;
+    top: -50%;
+    bottom: -50%;
+    left: -50%;
+    right: -50%;
+}
+
+.info {
+    font-size: 0.8em;
+}
+
+#divRegistro{
+    background: #fff;
+    color: #000;
+    border-radius: 3px;
+    padding: 7% 0;
+    width: 100%;
+    margin: 0;
+    box-sizing: border-box;
+    text-align: center;
+    font-size: 2em;
+    min-height: 420px;
+    position: relative;
+}
+
+#divRegistro button{
+  font-size: 0.8em;
+  width: 180px;
+  box-sizing: border-box;
+  margin: 2.5%;
+}
+
+button:focus {
+    outline: 4px dotted #aaa !important;
+}
+
+@media only screen and (max-width : 940px) {
+  #divRegistro button {
+      width: 130px;
+    }
+  }
+
+@media only screen and (max-width : 400px) {
+  #divRegistro button {
+      margin: 2%;
+
+    }
+  }
+
+@media only screen and (max-width : 600px) {
+  #divRegistro button {
+      width: 125px;
+    }
+
+   .logo{
+     margin-bottom: 20px;
+     float: left;
+    }
+  }
+
+#relogio{
+  background: none;
+  color: #000;
+  font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
+  font-size: 2.5em;
+  margin: 40px auto;
+}
+
+.buttons {
+    position: absolute;
+    bottom: 5%;
+    width: 100%;
+}
+
+#divProgressos {
+    float: left;
+    width: calc(50% - 30px);
+    margin-bottom: 10px;
+}
+
+.progresso {
+    display: inline-block;
+    margin: 0 5px;
+}
+
+.progresso label {
+    display: block;
+}
+
+.progresso .circulo {
+    margin: 5px 0;
+    text-align: center;
+}
+
+.progresso .circulo span {
+    float: right;
+    display: block;
+    width: 120px;
+    margin-left: -120px;
+    margin-top: 40px;
+}
+
+@media all and (-webkit-min-device-pixel-ratio:0) and (min-resolution: .001dpcm) {
+    .progresso .circulo span {
+        margin-top: -80px;
+    }
+}
+
+#divRegistrosHoje {
+    clear: both;
+    color: #fff;
+}
+
+#divRegistrosHoje .rounded{
+    border: 2px solid #FFF;
+    border-radius: 5px;    
+    margin-bottom: 30px;     
+}
+
+#divRegistrosHoje table{
+  border-collapse: collapse;
+  display: table;
+  width: 100%;
+}
+
+#divRegistrosHoje table thead{
+    background-color: #339DD6;
+    border-bottom: 1px solid #d0d0d0;
+}
+
+#divRegistrosHoje table thead tr{
+    border: 1px solid #fff;
+}
+
+#divRegistrosHoje table thead th, #divRegistrosHoje table tbody td{
+  border: 1px solid #fff;
+}
+
+#divRegistrosHoje table td{
+  border: 1px solid #fff;
+}
+
+table.centered tbody tr td {
+    text-align: center; 
+    border: 1px solid #fff;
+    } 
+
+#janelaModal {
+    position: fixed;
+    top: 10%;
+    left: 50%;
+    width: 50%;
+    max-height: 70%;
+    margin-left: -26%;
+    padding: 10px;
+    z-index: 999;
+    background-color: #fff;
+    border-radius: 2px;
+    -moz-box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.5);
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.5);
+    overflow: auto;
+}
+
+#janelaModal .botoes {
+    display: block;
+}
+
+#janelaModal .conteudo {
+    display: block;
+    margin: 20px 0;
+}
+
+#janelaModal .botoes {
+    text-align: right;
+}
+
+#janelaModal .botoes button, #divLogin button {
+    display: inline-block;
+    padding: 3px 10px;
+    margin: 0 5px;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    color: #fff;
+    background-color: #0085CC;
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+    -webkit-box-shadow:  0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+    -moz-box-shadow:  0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+}
+
+#fundoModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 998;
+    background-color: #000;
+    text-align: center;
+    overflow: hidden;
+    opacity: 0.7;
+    z-index: 2;
+}
+
+#divLogin {
+    display: block;
+    margin: 10% auto;
+    text-align: center;
+}
+
+#divLogin button {
+    font-size: 1.5em;
+    padding: 10px;
+    margin: 5px 0 10px;
+}
+
+#divLogin input {
+    padding: 3px;
+    margin-bottom: 0.5em;
+    width: 10em;
+    border: 1px solid #ccc;
+    font-size: 1.5em;
+}
+
+#mensagemAjuste {
+    color: #fff;
+}
+
+@media screen and (max-width: 480px) {
+    #divRegistro, #divProgressos {
+        float: none;
+        width: auto;
+    }
+    #janelaModal {
+        width: 90%;
+        left: 2%;
+        margin-left: 0;
+    }
+}
+
+#dia,#semana, #mes{
+  background: #fff;
+  border-radius: 3px;
+  padding: 3px;
+  font-size: 14px;
+  margin-bottom: 15px;
+  display: block;
+  float: left; 
+  width: 100%;
+  box-sizing: border-box;
+  text-align: center;
+  height: 36px;  
+}
+
+
+.hora{
+    margin-top:8px;
+    color:#fff;
+    background:#8E5D9F;
+}
+
+
+.text{
+    float: right;
+    margin-right: 5px;
+    text-align: center;    
+}
+
+
+.floating .text{
+  color: #fff;
+  text-align: center;
+  width: 66px;
+  float: left;
+  line-height: 30px;
+}
+
+#dia .floating .text{
+  background: #238E7A;
+}
+
+#semana .floating .text{
+  background: #00274F;
+}
+
+#mes .floating .text{
+  background: #B7024F;
+}
+
+.expand {
+    min-width: 1%;
+    margin-left: 0px;
+    position: relative;
+    border-radius: 2px;
+    -moz-animation: fullexpand 1s ease-out;
+    -webkit-animation: fullexpand 1s ease-out;
+    float: left;
+    height: 30px;
+    padding-right: 0;
+    box-sizing: border-box;
+    
+}
+
+#dia .expand{
+  background:#2CB299; 
+}
+
+#semana .expand{
+  background:#004182; 
+}
+
+#mes .expand{
+  background:#E60464; 
+}
+
+#dia .expand.limite,
+#semana .expand.limite,
+#mes .expand.limite{
+  background: #b20000;
+  width: 85%; /*para navegadores que nao suportam calc*/
+  width:calc(100% - 72px)!important;
+}
+
+.expand .text{
+  color: #fff;
+  float: right;
+  line-height: 30px;
+  margin-right: 3px;
+}
+
+/* Full Width Animation Bar */
+@-moz-keyframes fullexpand {
+    0%  { width: 0;
+}
+
+100% {
+    width: 100%;
+} 
+}
+
+@-webkit-keyframes fullexpand {
+    0% {
+        width: 0;
+    }
+
+    100% {
+        width: 99,5%;
+    }
+}
+
+#aviso{
+  background: #fff;
+  box-shadow: #555 2px 2px 5px;
+  border-radius: 3px;
+  float: left;
+  width: 100%;
+  margin-bottom: 30px;
+  padding: 15px;
+  box-sizing: border-box;
+  color: #000;
+}
+
+#aviso p{
+  margin: 0;
+}
+
+.atencao{
+  color: #b20000;
+  font-weight: bold;
+  text-transform: uppercase;
+}

@@ -1,0 +1,54 @@
+/* CSS Document */
+
+/* Modelo 1 de tabela */
+
+table.modelo1 {
+	border-collapse:collapse;
+	margin: 10px;
+	background-color: #efefef;
+}
+
+table.cemPorCento {
+    width: 98%;
+}    
+    
+table.modelo1 td {
+	padding: 3px 5px;
+	margin: 0;
+	border: 1px solid #CDCDCD;
+}
+
+table.modelo1 th {
+    padding: 3px 5px;
+	height: 28px;
+	color: #006699;
+	background: url(imgs/fundo_tab.jpg) repeat-x;
+	border: 1px solid #8DCEFF;
+    text-align: center;
+}
+
+.esq, .esquerda {
+	text-align:left;
+	padding-left: 10px;
+}
+.dir, .direita {
+	text-align:right;
+	padding-left: 10px;
+}	
+
+table.modelo1 tbody tr:nth-child(odd) {
+	background-color: #FFFFFF;
+}
+table.modelo1 tbody tr:nth-child(even) {
+	background-color: #efefef;
+}
+table.modelo1 tbody tr:nth-child(odd):hover {
+	background-color: #E4EDF5;
+}
+table.modelo1 tbody tr:nth-child(even):hover {
+	background-color: #CCDDED;
+}
+        
+table.centralizada {
+    margin: 10px auto;
+}

@@ -1,0 +1,135 @@
+/* FLASH-ALERTS */
+
+.error {
+	background-color: #FFE1E1 !important;
+}
+
+ul.flashes {
+    list-style-type:none; 
+}
+
+div.errorSummary ul { 
+    margin-left: 30px; 
+} 
+
+/* Flash Messages CSS from Yii (\framework\cli\views\webapp\css\main.css) */	
+
+div.flash-error, div.flash-notice, div.flash-success, div.errorSummary  { 
+    padding: .8em; 
+    margin-bottom: 1em; 
+    border: 2px solid #ddd; 
+    border-radius: 5px;
+    margin: 10px; 
+}
+	
+div.flash-error, div.errorSummary  { 
+    background: #FFE1E1 !important; 
+    color: #a00 !important; 
+    border-color: #a00 !important; 
+}
+	
+div.flash-notice { 
+    background: #FEFEDD !important; 
+    color: #B14400 !important; 
+    border-color: #B14400 !important; 
+}
+	
+div.flash-success  { 
+    background: #E1FFE1 !important; 
+    color: #007700 !important; 
+    border-color: #007700 !important; 
+}
+
+div.flash-error a , div.errorSummary a{ 
+    color: #a00 !important; 
+}
+
+div.flash-notice a { 
+    color: #B14400 !important; 
+}
+
+div.flash-success a { 
+    color: #007700 !important; 
+}
+
+/* CGRIDVIEW */
+
+.grid-view .summary {
+    margin-top: -12px !important;
+}
+
+.grid-view table {
+    background-color: #efefef !important;
+    border-collapse: collapse;
+}
+
+.grid-view table.items th, .grid-view table.table th { 
+    height: 28px !important;
+    padding: 3px 5px !important;
+    background: url(imgs/fundo_tab.jpg) repeat-x !important;
+    background-color: #DFF1FF !important;
+    color: #006699 !important;
+    font-size: 1em !important;
+    border: 1px solid #8DCEFF !important;
+	
+}
+
+.grid-view table.items th a, .grid-view table.table th a {
+    color: #006699 !important;
+    font-size: 1em !important;
+    text-decoration: underline !important;
+}
+
+.grid-view table.items th a:hover, .grid-view table.table th a:hover {
+    color: #006699 !important;
+    text-decoration: none !important;
+}
+
+.grid-view table.item th
+{
+    border: 1px solid white;
+}
+
+.grid-view table.items td, .grid-view table.table td
+{
+    padding: 3px 5px !important;
+	margin: 0 !important;
+	border: 1px solid #CDCDCD !important;
+	font-size: 12px !important;
+}
+.grid-view table.items tr.even, .grid-view table.table-striped tr:nth-child(even)
+{
+    background-color: #efefef !important;
+}
+
+.grid-view table.items tr.odd, .grid-view table.table-striped tr:nth-child(odd)
+{
+    background-color: #FFFFFF !important;
+}
+
+.grid-view table.items tr.even:hover, .grid-view table.table-striped tr:nth-child(even):hover {
+	background-color: #CCDDED !important;
+}
+
+.grid-view table.items tr.odd:hover, .grid-view table.table-striped tr:nth-child(odd):hover {
+	background-color: #E4EDF5 !important;
+}
+
+.grid-view .yiiPager li a {
+    border-color: #CDCDCD !important;
+    color: #000 !important;
+}
+.grid-view .yiiPager li a:hover {
+    border-color: #666 !important;
+}
+
+.grid-view .yiiPager li.selected a {
+    background-color: #eee !important;    
+    color: #666 !important;
+}
+
+.grid-view .filters input,
+.grid-view .filters select
+{
+	width: 98% !important;
+}

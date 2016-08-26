@@ -1,0 +1,66 @@
+.alinhaDireita {
+    text-align: right;
+}
+
+h2 {
+    padding-left: 0;
+}
+
+.calendario thead th {
+    line-height: 3rem;
+}
+
+.calendario th.domingo {
+    color: #c00;
+}
+
+.calendario tbody td {
+    padding: 1em 5px 5px;
+    border: 1px solid #ccc;
+    min-width: 7rem;
+    vertical-align: top;
+}
+
+.calendario tbody td.vazia {
+    border: none;
+}
+
+.calendario tbody td .numeroDia {
+    float: right;
+    margin-top: -1em;
+    color: #ccc;
+    font-weight: bold;
+}
+
+.calendario tbody td.dia1 .numeroDia, .calendario tbody td.feriado .numeroDia {
+    color: #e55;
+}
+
+.calendario tbody td label {
+    display: block;
+    font-size: 0.8rem;
+    color: #888;
+}
+
+.calendario tbody td .dado {
+    padding: 2px 0;
+    font-size: 2rem;
+    display: block;
+    width: 7rem;
+    text-align: right;
+}
+
+.calendario tbody td.afastado {
+    background: url("../imgs/fundo-listrado-diagonal.gif") repeat;
+}
+
+.calendario tbody td .afastamentos {
+    display: block;
+    min-height: 4rem;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.dadoRotulado {
+    font-weight: bold;
+}

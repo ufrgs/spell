@@ -1,0 +1,180 @@
+
+CREATE TABLE ponto(
+	nr_ponto numeric(12, 0) NOT NULL,
+	id_pessoa numeric(6, 0) NOT NULL,
+	matricula numeric(8, 0) NULL,
+	nr_vinculo numeric(1, 0) NULL,
+	data_hora_ponto datetime NOT NULL,
+	entrada_saida char(1) NOT NULL,
+	id_pessoa_registro numeric(6, 0) NOT NULL,
+	data_hora_registro datetime NULL,
+	ip_registro varchar(39) NOT NULL,
+	ObservacaoRegistro text NULL
+);# MySQL não retornou nenhum registo.
+
+
+CREATE TABLE justificativa_ajuste(
+	nr_justificativa numeric(2, 0) NOT NULL,
+	texto_justificativa varchar(255) NOT NULL,
+	tipo_justificativa char(1) NULL
+);# MySQL não retornou nenhum registo.
+
+
+CREATE TABLE ajuste(
+	nr_ajuste numeric(12, 0) NOT NULL,
+	id_pessoa numeric(6, 0) NOT NULL,
+	matricula numeric(8, 0) NULL,
+	nr_vinculo numeric(1, 0) NULL,
+	data_hora_ponto datetime NOT NULL,
+	entrada_saida char(1) NOT NULL,
+	id_pessoa_registro numeric(6, 0) NOT NULL,
+	data_hora_registro datetime NOT NULL,
+	ip_registro varchar(39) NOT NULL,
+	justificativa text NULL,
+	id_pessoa_certificacao numeric(6, 0) NULL,
+	data_hora_certificacao datetime NULL,
+	indicador_certificado char(1) NULL,
+	nr_ponto numeric(12, 0) NULL,
+	nr_justificativa numeric(2, 0) NULL,
+	justificativa_certificacao varchar(512) NULL,
+	indicador_excluido char(1) NULL
+);# MySQL não retornou nenhum registo.
+
+
+CREATE TABLE abono(
+	nr_abono numeric(12, 0) NOT NULL,
+	id_pessoa numeric(10, 0) NOT NULL,
+	matricula numeric(8, 0) NULL,
+	nr_vinculo numeric(1, 0) NULL,
+	data_abono datetime NULL,
+	periodo_abono numeric(4, 0) NULL,
+	justificativa text NULL,
+	id_pessoa_certificacao numeric(6, 0) NULL,
+	data_hora_certificacao datetime NULL,
+	indicador_certificado char(1) NULL,
+	id_pessoa_registro numeric(6, 0) NOT NULL,
+	data_hora_registro datetime NOT NULL,
+	ip_registro varchar(39) NOT NULL,
+	justificativa_certificacao varchar(512) NULL,
+	nr_justificativa numeric(2, 0) NULL,
+	indicador_excluido char(1) NULL
+);# MySQL não retornou nenhum registo.
+
+
+CREATE TABLE arquivo_ajuste(
+	nr_arquivo_ajuste numeric(12, 0) NOT NULL,
+	nr_ajuste numeric(12, 0) NULL,
+	nr_abono numeric(12, 0) NULL,
+	cod_repositorio varchar(12) NOT NULL,
+	descricao_arquivo varchar(256) NULL
+);# MySQL não retornou nenhum registo.
+
+
+CREATE TABLE compensacao(
+	nr_compensacao numeric(12, 0) NOT NULL,
+	id_pessoa numeric(6, 0) NOT NULL,
+	matricula numeric(8, 0) NOT NULL,
+	nr_vinculo numeric(1, 0) NOT NULL,
+	periodo_compensacao numeric(5, 0) NOT NULL,
+	data_compensacao datetime NULL,
+	descricao_compensacao varchar(512) NULL,
+	justificativa varchar(512) NULL,
+	id_pessoa_registro numeric(6, 0) NOT NULL,
+	data_hora_registro datetime NOT NULL,
+	ip_registro varchar(39) NOT NULL,
+	id_pessoa_certificacao numeric(6, 0) NULL,
+	data_hora_certificacao datetime NULL,
+	indicador_certificado char(1) NULL,
+	justificativa_certificacao varchar(512) NULL,
+	indicador_excluido char(1) NULL
+);# MySQL não retornou nenhum registo.
+
+
+CREATE TABLE ch_mes_servidor(
+	NrSeqCargaHoraria numeric(12, 0) NOT NULL,
+	id_pessoa numeric(6, 0) NOT NULL,
+	matricula numeric(8, 0) NOT NULL,
+	nr_vinculo numeric(1, 0) NOT NULL,
+	ano numeric(4, 0) NOT NULL,
+	mes numeric(2, 0) NOT NULL,
+	data_inicio_mes datetime NOT NULL,
+	nr_minutos_trabalho numeric(5, 0) NOT NULL,
+	nr_minutos_abono numeric(5, 0) NOT NULL,
+	nr_minutos_afastamento numeric(5, 0) NOT NULL,
+	nr_minutos_previsto numeric(5, 0) NOT NULL,
+	nr_minutos_saldo numeric(6, 0) NULL,
+	id_pessoa_atualizacao numeric(6, 0) NOT NULL,
+	data_atualizacao datetime NOT NULL,
+	ip_atualizacao varchar(39) NOT NULL,
+	nr_minutos_compensacao numeric(5, 0) NULL
+);# MySQL não retornou nenhum registo.
+
+
+CREATE TABLE restricao_relogio(
+	nr_restricao numeric(12, 0) NOT NULL,
+	id_orgao numeric(5, 0) NULL,
+	escopo char(1) NULL,
+	id_pessoa numeric(6, 0) NULL,
+	marcara_ip_v4 varchar(18) NULL,
+	marcara_ip_v6 varchar(45) NULL,
+	data_atualizacao datetime NOT NULL,
+	id_pessoa_atualizacao numeric(6, 0) NOT NULL,
+	ip_atualizacao varchar(39) NOT NULL,
+	matricula numeric(8, 0) NULL,
+	nr_vinculo numeric(1, 0) NULL
+);# MySQL não retornou nenhum registo.
+
+
+CREATE TABLE definicoes_orgao(
+	id_orgao numeric(5, 0) NOT NULL,
+	hora_inicio_expediente datetime NULL,
+	hora_fim_expediente datetime NULL,
+	permite_ocorrencia char(1) NULL,
+	id_pessoa_atualizacao numeric(6, 0) NOT NULL,
+	data_atualizacao datetime NOT NULL,
+	hora_inicio_expediente_sab datetime NULL,
+	hora_fim_expediente_sab datetime NULL,
+	hora_inicio_expediente_dom datetime NULL,
+	hora_fim_expediente_dom datetime NULL
+);# MySQL não retornou nenhum registo.
+
+
+CREATE TABLE log_erro_acesso_registro(
+	nr_log numeric(12, 0) NOT NULL,
+	id_pessoa numeric(6, 0) NOT NULL,
+	matricula numeric(8, 0) NOT NULL,
+	nr_vinculo numeric(1, 0) NOT NULL,
+	data_log datetime NOT NULL,
+	mensagem_log varchar(512) NOT NULL,
+	ip_log varchar(39) NOT NULL,
+	host_log varchar(100) NOT NULL
+);# MySQL não retornou nenhum registo.
+
+CREATE view v_ponto_e_ajuste as
+SELECT
+        p.nr_ponto as nr_seq, p.id_pessoa, p.matricula, p.nr_vinculo, p.data_hora_ponto, 
+        p.entrada_saida, p.id_pessoa_registro, p.data_hora_registro, p.ip_registro,
+        NULL as justificativa, NULL as nr_justificativa, NULL as texto_justificativa,
+        NULL as id_pessoa_certificacao, NULL as data_hora_certificacao, 
+        NULL as indicador_certificado, 'R' as tipo
+FROM ponto P
+WHERE
+        not exists (
+                select 1
+                from ajuste A
+                where
+                        a.nr_ponto = p.nr_ponto
+                        and a.indicador_certificado = 'S'
+        )
+UNION
+SELECT  
+        a.nr_ajuste as nr_seq, a.id_pessoa, a.matricula, a.nr_vinculo, a.data_hora_ponto, 
+        a.entrada_saida, a.id_pessoa_registro, a.data_hora_registro, a.ip_registro, 
+        a.justificativa, a.nr_justificativa, j.texto_justificativa,
+        a.id_pessoa_certificacao, a.data_hora_certificacao, 
+        a.indicador_certificado, 'A' as tipo
+FROM ajuste A
+        LEFT JOIN justificativa_ajuste J ON
+                a.nr_justificativa = j.nr_justificativa
+WHERE
+        coalesce(a.indicador_excluido, 'N') = 'N'

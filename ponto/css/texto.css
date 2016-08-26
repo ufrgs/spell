@@ -1,0 +1,189 @@
+
+h1 {
+    font-size: 1.5em;
+    color: #005B95;
+    padding: 0 0px 10px;
+}
+
+h2 {
+    font-size: 14px;
+    padding: 5px 0px;
+    color: #666;
+    font-weight: normal;
+}
+
+h3 {
+    font-size: 12px;
+    padding: 5px 0px;
+}
+
+/*Fieldsets expansiveis*/	
+fieldset.expansivel {
+	padding: 0;
+}
+
+fieldset.expansivel legend {
+	padding: 0.5em 1em 0.5em 2em;
+	margin-left: 0.5em;
+	background: url("imgs/expandir.gif") no-repeat;
+	background-position: 0.5em center;
+	cursor: pointer;
+	transition: all .3s ease-out;
+}
+
+fieldset.expansivel .conteudo {
+	display: none;
+	padding: 0.5em;
+}
+
+fieldset.expansivel.expandido > legend {
+	background-image: url("imgs/contrair.gif");
+}
+
+fieldset.expansivel.expandido > .conteudo {
+	display: inherit;
+}
+	
+/*Avisos*/
+
+.fieldInfo.comIcone legend, .fieldSucesso.comIcone legend, 
+.fieldErro.comIcone legend, .fieldErro.comIconeProibicao legend, .fieldAlerta.comIcone legend
+{
+    margin-left: -40px;
+}
+
+.fieldAlerta {
+	color: #B14400;
+	background-color: #FEFEDD !important;
+	border: 1px solid #B14400;
+	}
+	
+.fieldAlerta legend{
+	color: #B14400;
+	font-weight: bold;
+	}
+
+.fieldAlerta.comIcone {
+    padding-left: 50px;
+    background: url(imgs/icone_aviso.png) no-repeat #FEFEDD;
+    background-position: 5px 50%;
+    min-height: 30px;
+}
+
+.fieldSucesso{
+	color: #007700;
+	background-color: #E1FFE1 !important;
+	border: 1px solid #007700;
+	}
+	
+.fieldSucesso legend{
+    color: #007700;
+	font-weight: bold;
+	}
+
+.fieldSucesso.comIcone {
+    padding-left: 50px;
+    background: url(imgs/icone_sucesso.png) no-repeat #E1FFE1;
+    background-position: 5px 50%;
+    min-height: 30px;
+}
+
+.fieldErro {
+	color: #AA0000;
+	background-color: #FFE1E1 !important;
+	border: 1px solid #a00;
+	}
+	
+.fieldErro legend{
+	color: #AA0000;
+	font-weight: bold;
+	}
+
+.fieldErro.comIcone {
+    padding-left: 50px;
+    background: url(imgs/icone_erro.png) no-repeat #FFE1E1;
+    background-position: 5px 50%;
+    min-height: 30px;
+}    
+
+.fieldErro.comIconeProibicao {
+    padding-left: 50px;
+    background: url(imgs/icone_proibido.png) no-repeat #FFE1E1;
+    background-position: 5px 50%;
+    min-height: 30px;
+} 
+
+.fieldInfo {
+    color: #006699;
+    background-color: #F2F9FF !important;
+    border: 1px solid #006699;
+}
+.fieldInfo legend {
+    color: #006699;
+	font-weight: bold;
+}
+
+.fieldInfo.comIcone {
+    padding-left: 50px;
+    background: url(imgs/icone_informacao.png) no-repeat #F2F9FF;
+    background-position: 5px 50%;
+    min-height: 30px;
+}
+
+.fieldAlerta legend, .fieldErro legend, .fieldInfo legend, .fieldSucesso legend {
+    padding: 0 10px;
+}
+
+/* listas */
+
+ul.listaSimples {
+    list-style: square;
+    margin-left: 25px;
+}
+
+ul.listaComum, ol.listaComum, ul, ol {
+    margin-left: 25px;
+}
+
+/* classes genericas */
+
+.textoCentralizado, .centro {
+    text-align: center !important;
+}
+
+.textoJustificado {
+    text-align: justify;
+}
+
+.textoADireita, .alinhaDireita {
+    text-align: right;
+}
+
+.textoGrande {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.textoAzul, .textoMensagem {
+    color: #005B95;
+}
+
+.textoVerde, .textoSucesso {
+    color: #009D00;
+}
+
+.textoVermelho, .textoErro {
+    color: #CC0000;
+}
+
+.textoAmarelo, .textoAlerta {
+	color: #c1ae00;
+}
+
+.negrito {
+    font-weight: bold;
+}
+
+.italico {
+    font-style: italic; 
+}

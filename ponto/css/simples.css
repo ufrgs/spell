@@ -1,0 +1,98 @@
+/* CSS Document */
+
+* {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    margin: 0px;
+	padding: 0px;
+    font-size: 1em;
+    font-size: 12px;
+}
+
+/* Correcoes do jQuery UI*/
+.ui-datepicker * {
+    font-size: 0.95em;
+}
+
+.ui-tabs .ui-state-active, .ui-tabs .ui-widget-content .ui-state-active, .ui-tabs .ui-widget-header .ui-state-active {
+	background: none !important;
+	background-color: #f9fafb !important;
+}
+.ui-tabs .ui-state-active a, .ui-tabs .ui-widget-content .ui-state-active a, .ui-tabs .ui-widget-header .ui-state-active a, .ui-accordion-content a {
+	color: #2779aa !important;
+}
+
+.ui-autocomplete-input {
+	background: url('imgs/icone_zoom_in.png') no-repeat right center #fff;
+	background-size: 20px 20px;
+}
+.ui-autocomplete-loading
+{
+    background: url('imgs/smallLoader.gif') no-repeat right center;
+}
+
+body {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	margin: 0;
+}
+
+a {
+    color: #0066CC;
+    text-decoration:  underline;
+}
+a:hover {
+    color: #006391;
+    text-decoration: none;
+}
+
+.coluna50 {
+    position: relative;
+    float: left;
+    display: block;
+    width: 50%;
+}
+
+fieldset {
+    background-color: #F7F7F7;
+	border: 1px solid #CCCCCC;
+	border-radius: 7px;
+	padding: 10px;
+}
+
+fieldset legend {
+    font-weight: bold;
+	color: #006699;
+	padding: 0 10px;
+}
+
+fieldset fieldset,
+fieldset fieldset fieldset fieldset,
+fieldset fieldset fieldset fieldset fieldset fieldset,
+fieldset fieldset fieldset fieldset fieldset fieldset fieldset fieldset
+{
+    background-color: #fff;
+}
+
+fieldset fieldset fieldset, 
+fieldset fieldset fieldset fieldset fieldset, 
+fieldset fieldset fieldset fieldset fieldset fieldset fieldset
+{
+    background-color: #F7F7F7;
+}
+
+.limpar {
+    clear: both;
+}
+
+.clicavel {
+    cursor: pointer;
+}
+
+.escondido {
+    display: none;
+}
+
+@media print {    
+    .escondeNaImpressao, .escondeNaImpressao * {
+        display: none !important;
+    }
+}

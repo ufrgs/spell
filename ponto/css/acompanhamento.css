@@ -1,0 +1,96 @@
+/* 
+    Created on : 09/11/2015, 16:00:30
+*/
+.alinhaDireita {
+    text-align: right;
+}
+
+h2 {
+    padding-left: 0;
+}
+
+#divProgressos {
+    float: right;
+    width: calc(50% - 30px);
+    margin-bottom: 10px;
+}
+
+.progresso {
+    display: inline-block;
+    margin: 0 5px;
+}
+
+.progresso label {
+    display: block;
+}
+
+.progresso .circulo {
+    margin: 5px 0;
+    text-align: center;
+}
+
+.progresso .circulo span {
+    float: right;
+    display: block;
+    width: 120px;
+    margin-left: -120px;
+    margin-top: 40px;
+}
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    .progresso .circulo span {
+        margin-top: -80px;
+    }
+}
+
+#divRegistros {
+    padding-top: 160px;
+}
+
+#tabelaRegistros a {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#tabelaRegistros a i {
+    visibility: hidden;
+}
+
+#tabelaRegistros i.aviso {
+    visibility: visible;
+    padding: 0 15px;
+    color: orange;
+}
+
+#tabelaRegistros a:hover i {
+    visibility: visible;
+}
+
+.modelo1 tr td {
+    padding: 5px 10px;
+}
+
+.jornadaTotal {
+    display: inline-block;
+    width: 46px;
+    font-weight: bold;
+}
+
+#abasTipoAcompanhamento {
+    margin: 5px 0;
+    border-bottom: 1px solid #ccc;
+}
+
+#abasTipoAcompanhamento .aba {
+    display: inline-block;
+    margin: 0 10px -1px;
+    padding: 5px 30px;
+    border: 1px solid #ccc;
+    border-bottom: none;
+    border-radius: 10px 10px 0 0;
+    background-color: #efefef;
+}
+
+#abasTipoAcompanhamento .aba.ativa {
+    border-bottom: 1px solid #fff;
+    background-color: #fff;
+}

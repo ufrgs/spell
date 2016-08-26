@@ -1,0 +1,123 @@
+/* CSS Document */
+
+/* Labels */
+
+label.esquerdaAlinhado {
+	width: 230px;
+	display: block;
+	float: left;
+	text-align: right;
+	margin-right: 5px;
+    padding-top: 3px;
+    width: 100px;
+    color: #25365A;
+}
+
+label.esquerdaAlinhado.maior {
+    width: 150px;
+}
+
+label.esquerdaAlinhado.bemGrande {
+    width: 200px;
+}
+
+label.esquerdaAlinhado.paraTexto {
+	padding-top: 0px !important;
+}
+
+label.direita {
+    margin: 0;
+    padding: 3px 10px 0 0;
+    color: #25365A;
+}
+
+.dadoRotulado {
+    display: inline-block;
+    padding: 3px 0;
+}
+
+input, textarea, select {
+    margin: 2px 0;
+    padding: 3px;
+	border: 1px solid #ababab;
+}
+
+input.semRotuloEsquerda, select.semRotuloEsquerda, textarea.semRotuloEsquerda, button.semRotuloEsquerda {
+    margin-left: 105px;
+}
+
+input.semRotuloEsquerda.maior, select.semRotuloEsquerda.maior, textarea.semRotuloEsquerda.maior, button.semRotuloEsquerda.maior {
+    margin-left: 155px;
+}
+
+input.semRotuloEsquerda.bemGrande, select.semRotuloEsquerda.bemGrande, textarea.semRotuloEsquerda.bemGrande, button.semRotuloEsquerda.bemGrande {
+    margin-left: 205px;
+}
+
+textarea {
+    line-height: 1.5em;
+}
+
+/* Botao */
+	
+button, .button, input[type=button], input[type=submit] {
+	height: 22px;
+	color: #FFF;
+	font-weight: bold;
+    font-size: 11px;
+	background-color: #9BCDFF;
+	background: url(imgs/fundo_bt.gif) repeat-x;
+	margin: 5px;
+	border-radius: 4px;
+	border: 1px solid #1F63A7;
+	padding-bottom: 4px;
+	padding-left: 8px;
+	padding-right: 8px;
+	cursor: pointer;
+}
+
+button:hover, .button:hover, input[type=button]:hover, input[type=submit]:hover {
+    border: 1px solid #000066;
+    color: #E9F1FD;
+}
+
+button.desabilitado, .button.desabilitado, .botaoDesabilitado, button:disabled, .button:disabled {
+	background-color: #ccc;
+	background: url(visual_ufrgs/fundo_bt_desabilitado.gif) repeat-x top;
+	border: 1px solid #A5C1DC;
+	cursor: default;
+}
+
+button.btPerigo, .button.btPerigo, .btPerigo {
+	background-color: #BD2C34;
+	background: url(visual_ufrgs/fundo_bt_vermelho.gif) repeat-x top;
+	border: 1px solid #A0252C;
+}
+
+button.btPerigo:hover, .button.btPerigo:hover {
+    border: 1px solid #660000;
+    color: #FFE8E8;
+}
+
+button.btSucesso, .button.btSucesso, .btSucesso {
+	background-color: #259C32;
+	background: url(visual_ufrgs/fundo_bt_verde.gif) repeat-x top;
+	border: 1px solid #29963F;
+}
+
+button.btSucesso:hover, .button.btSucesso:hover {
+    border: 1px solid #006600;
+    color: #E8FFE8;
+}
+
+button.btAlerta, .button.btAlerta, .btAlerta {
+	background-color: #C4A515;
+	background: url(visual_ufrgs/fundo_bt_amarelo.gif) repeat-x top;
+	border: 1px solid #998118;
+	color: #000;
+}
+
+button.btAlerta:hover, .button.btAlerta:hover {
+    border: 1px solid #706012;
+    color: #222;
+}
