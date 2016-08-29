@@ -11,14 +11,12 @@ class RelatorioController extends BaseController
     public function actionIndex()
     {
         $orgaosChefia = Helper::getHierarquiaOrgaosChefia(Yii::app()->user->id_pessoa);
+        $orgaosChefia = Helper::coalesce(implode(',', $orgaosChefia), 0);
         $orgaos = Orgao::model()->findAll(array(
             'select' => "id_orgao, sigla_orgao, nome_orgao",
             'condition' => "id_orgao in (
-                :orgaos_chefia
+                $orgaosChefia
             )",
-            'params' => array(
-                ':orgaos_chefia' => implode(',', $orgaosChefia),
-            ),
             'order' => 'nome_orgao'
         ));
         if (!empty($orgaos)) {
@@ -73,6 +71,7 @@ class RelatorioController extends BaseController
             $orgao = Orgao::model()->findByPk($_GET['orgao']);
             $orgaosConsultar = Helper::getHierarquiaDescendenteOrgao($orgao->id_orgao);
             $orgaosChefia = Helper::getHierarquiaOrgaosChefia(Yii::app()->user->id_pessoa);
+            $orgaosChefia = Helper::coalesce(implode(',', $orgaosChefia), 0);
             $dataProviderRegistros = new CActiveDataProvider(CargaHorariaMesServidor::model(), array(
                 'criteria' => array(
                     'with' => array(
@@ -85,12 +84,11 @@ class RelatorioController extends BaseController
                     'condition' => "DadoFuncional.data_desligamento is null
                         and DadoFuncional.data_aposentadoria is null
                         and DadoFuncional.orgao_exercicio in (
-                            :orgaos_chefia
+                            $orgaosChefia
                         ) and DadoFuncional.orgao_exercicio in (
                             :orgaos_consultar
                         ) and t.mes = :mes and t.ano = :ano",
                     'params' => array(
-                        ':orgaos_chefia' => implode(',', $orgaosChefia),
                         ':orgaos_consultar' => implode(',', $orgaosConsultar),
                         ':mes' => $mes,
                         ':ano' => $ano,
@@ -138,7 +136,7 @@ class RelatorioController extends BaseController
                     'condition' => "t.data_desligamento is null
                         and t.data_aposentadoria is null
                         and t.orgao_exercicio in (
-                            :orgaos_chefia
+                            $orgaosChefia
                         ) and t.orgao_exercicio in (
                             :orgaos_consultar
                         ) and not exists (
@@ -149,7 +147,6 @@ class RelatorioController extends BaseController
                                 and mes = :mes and ano = :ano
                         )",
                     'params' => array(
-                        ':orgaos_chefia' => implode(',', $orgaosChefia),
                         ':orgaos_consultar' => implode(',', $orgaosConsultar),
                         ':mes' => $mes,
                         ':ano' => $ano,

@@ -230,6 +230,7 @@ class AjusteController extends BaseController
     {
         $orgaosChefia = Helper::getHierarquiaOrgaosChefia(Yii::app()->user->id_pessoa);
         if (!empty($orgaosChefia)) {
+            $orgaosChefia = Helper::coalesce(implode(',', $orgaosChefia), 0);
             $criteria = new CDbCriteria();
             $criteria->with = array(
                 'Pessoa' => array(
@@ -250,11 +251,10 @@ class AjusteController extends BaseController
                 and coalesce(t.indicador_excluido, 'N') = 'N'
                 and t.id_pessoa <> :id_pessoa1
                 and DadoFuncional.orgao_exercicio in (
-                    :orgaos_chefia
+                    $orgaosChefia
                 )";
             $criteria->params = array(
                 ':id_pessoa1' => Yii::app()->user->id_pessoa,
-                ':orgaos_chefia' => implode(',', $orgaosChefia),
             );
 
             $this->render('pedidosAvaliacao', array(
@@ -286,6 +286,7 @@ class AjusteController extends BaseController
     {
         $orgaosChefia = Helper::getHierarquiaOrgaosChefia(Yii::app()->user->id_pessoa);
         if (!empty($orgaosChefia)) {
+            $orgaosChefia = Helper::coalesce(implode(',', $orgaosChefia), 0);
             $criteria = new CDbCriteria();
             $criteria->with = array(
                 'Pessoa' => array(
@@ -306,11 +307,10 @@ class AjusteController extends BaseController
                 and coalesce(t.indicador_excluido, 'N') = 'N'
                 and t.id_pessoa <> :id_pessoa1
                 and DadoFuncional.orgao_exercicio in (
-                    :orgaos_chefia
+                    $orgaosChefia
                 )";
             $criteria->params = array(
                 ':id_pessoa1' => Yii::app()->user->id_pessoa,
-                ':orgaos_chefia' => implode(',', $orgaosChefia),
             );
 
             $this->render('pedidosCertificados', array(
@@ -387,16 +387,16 @@ class AjusteController extends BaseController
             $msg = "Pedido ".($_POST['certifica'] == 'N' ? 'não' : '')." certificado com sucesso!";
             $tipo = $_POST['tipo'];
             $orgaosChefia = Helper::getHierarquiaOrgaosChefia(Yii::app()->user->id_pessoa);
+            $orgaosChefia = Helper::coalesce(implode(',', $orgaosChefia), 0);
             $criteria = array(
                 'condition' => "
                     t.data_hora_certificacao is null 
                     and t.id_pessoa <> :id_pessoa1
                     and DadoFuncional.orgao_exercicio in (
-                        :orgaos_chefia 
+                        $orgaosChefia
                     )",
                 'params' => array(
                     ':id_pessoa1' => Yii::app()->user->id_pessoa,
-                    ':orgaos_chefia' => implode(',', $orgaosChefia),
                 )
             );
             
@@ -451,17 +451,17 @@ class AjusteController extends BaseController
         if (isset($_POST['pedidos']) && is_array($_POST['pedidos']) && in_array($_POST['tipo'], array('Ajuste', 'Abono'))) {
             $tipo = strtolower($_POST['tipo']);
             $orgaosChefia = Helper::getHierarquiaOrgaosChefia(Yii::app()->user->id_pessoa);
+            $orgaosChefia = Helper::coalesce(implode(',', $orgaosChefia), 0);
             $criteria = array(
                 'condition' => "
                     t.data_hora_certificacao is null 
                     and t.id_pessoa <> :id_pessoa1
                     and DadoFuncional.orgao_exercicio in (
-                        :orgaos_chefia
+                        $orgaosChefia
                     )
                     and t.nr_$tipo in (".str_replace("'", "''", implode(",", $_POST['pedidos'])).")",
                 'params' => array(
                     ':id_pessoa1' => Yii::app()->user->id_pessoa,
-                    ':orgaos_chefia' => implode(',', $orgaosChefia),
                 )
             );
             if ($tipo == 'ajuste') {

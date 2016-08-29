@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Máquina: localhost
--- Data de Criação: 18-Ago-2016 às 19:11
+-- Data de Criação: 29-Ago-2016 às 20:55
 -- Versão do servidor: 5.6.13
 -- versão do PHP: 5.4.17
 
@@ -51,7 +51,14 @@ CREATE TABLE IF NOT EXISTS `abono` (
   KEY `id_pessoa_registro` (`id_pessoa_registro`),
   KEY `nr_justificativa` (`nr_justificativa`),
   KEY `matricula` (`matricula`,`nr_vinculo`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+--
+-- Extraindo dados da tabela `abono`
+--
+
+INSERT INTO `abono` (`nr_abono`, `id_pessoa`, `matricula`, `nr_vinculo`, `data_abono`, `periodo_abono`, `justificativa`, `id_pessoa_certificacao`, `data_hora_certificacao`, `indicador_certificado`, `id_pessoa_registro`, `data_hora_registro`, `ip_registro`, `justificativa_certificacao`, `nr_justificativa`, `indicador_excluido`) VALUES
+(1, 4, 121212, 1, '2016-08-25 00:00:00', 480, 'Teste', 3, '2016-08-29 17:54:57', 'S', 4, '2016-08-29 17:54:09', '::1', '', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -84,7 +91,19 @@ CREATE TABLE IF NOT EXISTS `ajuste` (
   KEY `id_pessoa_certificacao` (`id_pessoa_certificacao`),
   KEY `nr_ponto` (`nr_ponto`),
   KEY `nr_justificativa` (`nr_justificativa`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
+
+--
+-- Extraindo dados da tabela `ajuste`
+--
+
+INSERT INTO `ajuste` (`nr_ajuste`, `id_pessoa`, `matricula`, `nr_vinculo`, `data_hora_ponto`, `entrada_saida`, `id_pessoa_registro`, `data_hora_registro`, `ip_registro`, `justificativa`, `id_pessoa_certificacao`, `data_hora_certificacao`, `indicador_certificado`, `nr_ponto`, `nr_justificativa`, `justificativa_certificacao`, `indicador_excluido`) VALUES
+(3, 1, 1234567, 1, '2016-08-16 08:26:00', 'E', 1, '2016-08-19 19:25:22', '::1', 'aebebbngfn', 2, '2016-08-26 19:48:59', 'S', 3, NULL, '', NULL),
+(4, 1, 1234567, 1, '2016-08-16 14:30:00', 'S', 1, '2016-08-19 19:28:45', '::1', 'N', 2, '2016-08-26 19:55:51', 'S', NULL, NULL, NULL, NULL),
+(5, 1, 1234567, 1, '2016-08-19 18:45:00', 'S', 1, '2016-08-19 19:29:17', '::1', 'fdsbhfdhf', 2, '2016-08-26 19:56:27', 'S', 4, NULL, NULL, NULL),
+(6, 1, 1234567, 1, '2016-08-19 08:20:00', 'E', 1, '2016-08-19 19:29:38', '::1', 'dasfsfsd', 2, '2016-08-26 19:56:34', 'S', NULL, NULL, NULL, NULL),
+(7, 1, 1234567, 1, '2016-08-19 13:00:00', 'S', 1, '2016-08-19 19:29:38', '::1', 'dasfsfsd', 2, '2016-08-26 19:56:34', 'S', NULL, NULL, NULL, NULL),
+(8, 1, 1234567, 1, '2016-08-19 14:00:00', 'E', 1, '2016-08-19 19:29:53', '::1', 'dfswgfdsgf', 2, '2016-08-26 19:56:34', 'S', NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -221,7 +240,10 @@ CREATE TABLE IF NOT EXISTS `dado_funcional` (
 --
 
 INSERT INTO `dado_funcional` (`matricula`, `nr_vinculo`, `id_pessoa`, `regime_trabalho`, `id_grupo`, `id_categoria`, `orgao_lotacao`, `orgao_exercicio`, `data_ingresso`, `data_desligamento`, `data_aposentadoria`) VALUES
-(1234567, 1, 1, '40', 1, 1, 2, 3, '2000-01-02 00:00:00', NULL, NULL);
+(121212, 1, 4, '40', 1, 1, 2, 3, '2000-02-01 00:00:00', NULL, NULL),
+(123123, 1, 2, '40', 1, 1, 2, 2, '2000-01-06 00:00:00', NULL, NULL),
+(1234567, 1, 1, '40', 1, 1, 2, 3, '2000-01-02 00:00:00', NULL, NULL),
+(11223344, 1, 3, '40', 1, 1, 1, 1, '2000-01-18 00:00:00', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -236,12 +258,19 @@ CREATE TABLE IF NOT EXISTS `definicoes_orgao` (
   `permite_ocorrencia` char(1) DEFAULT NULL,
   `id_pessoa_atualizacao` int(6) NOT NULL,
   `data_atualizacao` datetime NOT NULL,
-  `hora_inicio_expediente_sab` datetime DEFAULT NULL,
-  `hora_fim_expediente_sab` datetime DEFAULT NULL,
-  `hora_inicio_expediente_dom` datetime DEFAULT NULL,
-  `hora_fim_expediente_dom` datetime DEFAULT NULL,
+  `hora_inicio_expediente_sabado` datetime DEFAULT NULL,
+  `hora_fim_expediente_sabado` datetime DEFAULT NULL,
+  `hora_inicio_expediente_domingo` datetime DEFAULT NULL,
+  `hora_fim_expediente_domingo` datetime DEFAULT NULL,
   PRIMARY KEY (`id_orgao`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `definicoes_orgao`
+--
+
+INSERT INTO `definicoes_orgao` (`id_orgao`, `hora_inicio_expediente`, `hora_fim_expediente`, `permite_ocorrencia`, `id_pessoa_atualizacao`, `data_atualizacao`, `hora_inicio_expediente_sabado`, `hora_fim_expediente_sabado`, `hora_inicio_expediente_domingo`, `hora_fim_expediente_domingo`) VALUES
+(3, '1970-01-01 07:00:00', '1970-01-01 22:00:00', NULL, 1, '2016-08-29 17:12:33', NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -267,7 +296,7 @@ CREATE TABLE IF NOT EXISTS `frequencia` (
 --
 
 INSERT INTO `frequencia` (`nr_frequencia`, `matricula`, `nr_vinculo`, `nr_dias`, `data_frequencia`, `data_fim_frequencia`, `cod_frequencia`) VALUES
-(1, 1234567, 1, 2, '2016-08-29 00:00:00', '2016-08-31 00:00:00', 1);
+(1, 1234567, 1, 3, '2016-08-29 00:00:00', '2016-08-31 00:00:00', 1);
 
 -- --------------------------------------------------------
 
@@ -347,9 +376,9 @@ CREATE TABLE IF NOT EXISTS `orgao` (
 --
 
 INSERT INTO `orgao` (`id_orgao`, `sigla_orgao`, `nome_orgao`, `email`, `matricula_dirigente`, `matricula_substituto`, `id_orgao_superior`) VALUES
-(1, 'UNI', 'Universidade', NULL, NULL, NULL, NULL),
-(2, 'UAC', 'Unidade Acadêmica', NULL, NULL, NULL, 1),
-(3, 'DEPA', 'Departamento de Afazeres', NULL, NULL, NULL, 2);
+(1, 'UNI', 'Universidade', NULL, 11223344, NULL, NULL),
+(2, 'UAC', 'Unidade Acadêmica', NULL, 123123, NULL, 1),
+(3, 'DEPA', 'Departamento de Afazeres', NULL, 1234567, NULL, 2);
 
 -- --------------------------------------------------------
 
@@ -393,7 +422,10 @@ CREATE TABLE IF NOT EXISTS `pessoa` (
 --
 
 INSERT INTO `pessoa` (`id_pessoa`, `nome_pessoa`, `email`, `tipo_foto`) VALUES
-(1, 'Fulano de Tal', 'fulano@email.com', 'gif');
+(1, 'Mário Quintana', 'marioquintana@email.com', 'jpg'),
+(2, 'Érico Veríssimo', 'erico@mail.com', 'jpg'),
+(3, 'Elis Regina', 'elis@mail.com', 'jpg'),
+(4, 'Lya Luft', 'lya@mail.com', 'jpg');
 
 -- --------------------------------------------------------
 
@@ -416,7 +448,7 @@ CREATE TABLE IF NOT EXISTS `ponto` (
   KEY `id_pessoa` (`id_pessoa`),
   KEY `matricula` (`matricula`,`nr_vinculo`),
   KEY `id_pessoa_registro` (`id_pessoa_registro`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
 
 --
 -- Extraindo dados da tabela `ponto`
@@ -425,7 +457,13 @@ CREATE TABLE IF NOT EXISTS `ponto` (
 INSERT INTO `ponto` (`nr_ponto`, `id_pessoa`, `matricula`, `nr_vinculo`, `data_hora_ponto`, `entrada_saida`, `id_pessoa_registro`, `data_hora_registro`, `ip_registro`, `ambiente_registro`) VALUES
 (1, 1, 1234567, 1, '2016-08-16 16:55:49', 'E', 1, '2016-08-16 16:56:19', '::1', 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36'),
 (2, 1, 1234567, 1, '2016-08-16 17:26:10', 'S', 1, '2016-08-16 17:26:40', '::1', 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36'),
-(3, 1, 1234567, 1, '2016-08-16 17:26:24', 'E', 1, '2016-08-16 17:26:54', '::1', 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36');
+(3, 1, 1234567, 1, '2016-08-16 17:26:24', 'E', 1, '2016-08-16 17:26:54', '::1', 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36'),
+(4, 1, 1234567, 1, '2016-08-19 18:45:53', 'E', 1, '2016-08-19 18:46:23', '143.54.235.129', 'Mozilla/5.0 (Linux; Android 5.0; SM-G900M Build/LRX21T) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.98 Mobile Safari/537.36'),
+(5, 4, 121212, 1, '2016-08-24 08:07:32', 'E', 4, '2016-08-29 17:08:02', '::1', 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36'),
+(6, 4, 121212, 1, '2016-08-24 16:21:38', 'S', 4, '2016-08-29 17:08:08', '::1', 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36'),
+(7, 4, 121212, 1, '2016-08-25 07:43:44', 'E', 4, '2016-08-29 17:08:14', '::1', 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36'),
+(8, 4, 121212, 1, '2016-08-25 17:17:50', 'S', 4, '2016-08-29 17:08:20', '::1', 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36'),
+(9, 4, 121212, 1, '2016-08-29 08:20:57', 'E', 4, '2016-08-29 17:08:27', '::1', 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36');
 
 -- --------------------------------------------------------
 
@@ -437,6 +475,9 @@ CREATE TABLE IF NOT EXISTS `repositorio` (
   `cod_repositorio` int(6) NOT NULL AUTO_INCREMENT,
   `nome_arquivo` varchar(255) NOT NULL,
   `chave_repositorio` varchar(12) NOT NULL,
+  `chave_autenticacao` varchar(50) DEFAULT NULL,
+  `data_criacao` datetime NOT NULL,
+  `data_expiracao` datetime DEFAULT NULL,
   PRIMARY KEY (`cod_repositorio`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
@@ -596,8 +637,8 @@ ALTER TABLE `orgao`
 -- Limitadores para a tabela `permissao`
 --
 ALTER TABLE `permissao`
-  ADD CONSTRAINT `permissao_ibfk_2` FOREIGN KEY (`id_orgao`) REFERENCES `orgao` (`id_orgao`),
-  ADD CONSTRAINT `permissao_ibfk_1` FOREIGN KEY (`id_pessoa`) REFERENCES `pessoa` (`id_pessoa`);
+  ADD CONSTRAINT `permissao_ibfk_1` FOREIGN KEY (`id_pessoa`) REFERENCES `pessoa` (`id_pessoa`),
+  ADD CONSTRAINT `permissao_ibfk_2` FOREIGN KEY (`id_orgao`) REFERENCES `orgao` (`id_orgao`);
 
 --
 -- Limitadores para a tabela `ponto`

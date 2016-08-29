@@ -126,8 +126,8 @@ class AcompanhamentoController extends BaseController
     public function actionSubordinados($term)
     {
         $term = strtoupper(str_replace("'", "''", Helper::tiraAcento(trim($term))));
-        $orgaosPermissaoAcompanhamento = Helper::getHierarquiaOrgaosPermissao(Yii::app()->user->id_pessoa, APLICACAO_ACOMPANHAMENTO);
-        $orgaosChefia = Helper::getHierarquiaOrgaosChefia(Yii::app()->user->id_pessoa);
+        $orgaosPermissaoAcompanhamento = Helper::coalesce(implode(',', Helper::getHierarquiaOrgaosPermissao(Yii::app()->user->id_pessoa, APLICACAO_ACOMPANHAMENTO)), 0);
+        $orgaosChefia = Helper::coalesce(implode(',', Helper::getHierarquiaOrgaosChefia(Yii::app()->user->id_pessoa)), 0);
         $pessoas = Pessoa::model()->with(array(
             'DadoFuncional' => array(
                 'select' => '',
@@ -142,20 +142,18 @@ class AcompanhamentoController extends BaseController
                 and t.id_pessoa <> :id_pessoa
                 and (
                     DadoFuncional.orgao_exercicio in (
-                        :orgaos_chefia
+                        $orgaosChefia
                     ) 
                     or DadoFuncional.orgao_exercicio in (
-                        :orgaos_acompanhamento
+                        $orgaosPermissaoAcompanhamento
                     ) 
                 )",
             'params' => array(
                 ':id_pessoa' => Yii::app()->user->id_pessoa,
-                ':orgaos_chefia' => implode(',', $orgaosChefia),
-                ':orgaos_acompanhamento' => implode(',', $orgaosPermissaoAcompanhamento),
             ),
             'order' => 't.nome_pessoa'
         ));
-
+        
         $opcoes = array();
         if (!empty($pessoas)) {
             foreach ($pessoas as $pessoa) {
@@ -175,7 +173,6 @@ class AcompanhamentoController extends BaseController
         }
 
         print CJSON::encode($opcoes);
-        //Yii::app()->end();
     }
     
     /**
@@ -484,7 +481,7 @@ class AcompanhamentoController extends BaseController
                 }
             }
         } else {
-            $this->render('system.cpd.views.mensagem', array('mensagem' => 'O ponto eletrônico não está liberado para o seu vínculo.', 'classe' => 'Info'));
+            $this->render('/registro/mensagem', array('mensagem' => 'O ponto eletrônico não está liberado para o seu vínculo.', 'classe' => 'Info'));
         }
     }
 }

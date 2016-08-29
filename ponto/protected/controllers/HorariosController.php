@@ -223,14 +223,12 @@ class HorariosController extends BaseController
     private function retornaOrgaosResponsabilidade($id_pessoa)
     {
         $orgaosChefia = Helper::getHierarquiaOrgaosChefia(Yii::app()->user->id_pessoa);
+        $orgaosChefia = Helper::coalesce(implode(',', $orgaosChefia), 0);
         $orgaos = Orgao::model()->findAll(array(
             'select' => 'id_orgao, nome_orgao',
             'condition' => "id_orgao in (
-                :orgaos_chefia
+                $orgaosChefia
             )",
-            'params' => array(
-                ':orgaos_chefia' => implode(',', $orgaosChefia),
-            ),
             'order' => 'nome_orgao'
         ));
         return $orgaos;
@@ -239,8 +237,8 @@ class HorariosController extends BaseController
     private function retornaOrgaoLotacao($id_pessoa)
     {
         $pessoa = DadoFuncional::model()->with('OrgaoExercicio')->find(array(
-            'condition' => "coalesce(DadosFuncionais.data_desligamento, DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL 1 DAY)) > CURRENT_TIMESTAMP() 
-                            and coalesce(DadosFuncionais.data_aposentadoria, DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL 1 DAY)) > CURRENT_TIMESTAMP()
+            'condition' => "coalesce(data_desligamento, DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL 1 DAY)) > CURRENT_TIMESTAMP() 
+                            and coalesce(data_aposentadoria, DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL 1 DAY)) > CURRENT_TIMESTAMP()
                             and id_pessoa = :id_pessoa",
             'params' => array(
                 ':id_pessoa' => $id_pessoa,

@@ -16,7 +16,7 @@
                 <span class="tituloGeral">Ponto Eletrônico &mdash; Acompanhamento e Ajustes</span>
                 <?php
                     if (isset(Yii::app()->session['id_pessoa'])): ?>
-                        <a class="logoff" href="<?=Yii::app()->createUrl("tempLogin/sair")?>"><span style="margin-top: 4px ">Sair</span></a>
+                        <a class="logoff" href="<?=Yii::app()->createUrl("tempLogin/sair")?>"><span style="margin-top: 4px ">Sair (<?=Yii::app()->user->nome_pessoa?>)</span></a>
                 <?  endif; ?>
             </header>
             <main>

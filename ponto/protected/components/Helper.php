@@ -199,7 +199,7 @@ class Helper {
             and coalesce(data_aposentadoria, DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL 1 DAY)) > CURRENT_TIMESTAMP() ', array(
                 ':id_pessoa' => $id_pessoa
             )
-        ); 
+        );
         $orgaosChefia = Orgao::model()->findAll('matricula_dirigente = :matricula1 OR matricula_substituto = :matricula2', array(
             ':matricula1' => $servidor->matricula,
             ':matricula2' => $servidor->matricula,
@@ -220,7 +220,7 @@ class Helper {
         $orgaosDescendentes = array($id_orgao);
         $orgaosInferiores = Orgao::model()->findAll('id_orgao_superior = :id_orgao', array(':id_orgao' => $id_orgao));
         foreach ($orgaosInferiores as $orgao) {
-            array_merge($orgaosDescendentes, self::getHierarquiaDescendenteOrgao($orgao->id_orgao));
+            $orgaosDescendentes = array_merge($orgaosDescendentes, self::getHierarquiaDescendenteOrgao($orgao->id_orgao));
         }
         return $orgaosDescendentes;
     }

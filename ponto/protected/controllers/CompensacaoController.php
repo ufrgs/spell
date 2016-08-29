@@ -201,6 +201,7 @@ class CompensacaoController extends BaseController
         $orgaosChefia = Helper::getHierarquiaOrgaosChefia(Yii::app()->user->id_pessoa);
         if (!empty($orgaosChefia)) {
             // pedidos abertos
+            $orgaosChefia = Helper::coalesce(implode(',', $orgaosChefia), 0);
             $criteriaAbertos = new CDbCriteria();
             $criteriaAbertos->with = array(
                 'Pessoa' => array(
@@ -221,11 +222,10 @@ class CompensacaoController extends BaseController
                 and coalesce(t.indicador_excluido, 'N') = 'N'
                 and t.id_pessoa <> :id_pessoa1
                 and DadoFuncional.orgao_exercicio in (
-                    :orgaos_chefia
+                    $orgaosChefia
                 )";
             $criteriaAbertos->params = array(
                 ':id_pessoa1' => Yii::app()->user->id_pessoa,
-                ':orgaos_chefia' => implode(',', $orgaosChefia),
             );
             
             $criteriaCertificados = new CDbCriteria();
@@ -248,11 +248,10 @@ class CompensacaoController extends BaseController
                 and coalesce(t.indicador_excluido, 'N') = 'N'
                 and t.id_pessoa <> :id_pessoa1
                 and DadoFuncional.orgao_exercicio in (
-                    :orgaos_chefia
+                    $orgaosChefia
                 )";
             $criteriaCertificados->params = array(
                 ':id_pessoa1' => Yii::app()->user->id_pessoa,
-                ':orgaos_chefia' => implode(',', $orgaosChefia),
             );
 
             $this->render('pedidosAvaliacao', array(
@@ -319,16 +318,16 @@ class CompensacaoController extends BaseController
             $erro = false;
             $msg = "Registro de compensação indicador_certificado com sucesso!";
             $orgaosChefia = Helper::getHierarquiaOrgaosChefia(Yii::app()->user->id_pessoa);
+            $orgaosChefia = Helper::coalesce(implode(',', $orgaosChefia), 0);
             $criteria = array(
                 'condition' => "
                     t.data_hora_certificacao is null 
                     and t.id_pessoa <> :id_pessoa1
                     and DadoFuncional.orgao_exercicio in (
-                        :orgaos_chefia
+                        $orgaosChefia
                     )",
                 'params' => array(
                     ':id_pessoa1' => Yii::app()->user->id_pessoa,
-                    ':orgaos_chefia' => implode(',', $orgaosChefia),
                 )
             );
             
@@ -376,17 +375,17 @@ class CompensacaoController extends BaseController
         $msg = "Pedido(s) indicador_certificado(s) com sucesso!";
         if (isset($_POST['pedidos']) && is_array($_POST['pedidos'])) {
             $orgaosChefia = Helper::getHierarquiaOrgaosChefia(Yii::app()->user->id_pessoa);
+            $orgaosChefia = Helper::coalesce(implode(',', $orgaosChefia), 0);
             $criteria = array(
                 'condition' => "
                     t.data_hora_certificacao is null 
                     and t.id_pessoa <> :id_pessoa1
                     and DadoFuncional.orgao_exercicio in (
-                        :orgaos_chefia
+                        $orgaosChefia
                     )
                     and t.nr_compensacao in (".str_replace("'", "''", implode(",", $_POST['pedidos'])).")",
                 'params' => array(
                     ':id_pessoa1' => Yii::app()->user->id_pessoa,
-                    ':orgaos_chefia' => implode(',', $orgaosChefia),
                 )
             );
             $pedidos = Compensacao::model()->with('DadoFuncional')->findAll($criteria);

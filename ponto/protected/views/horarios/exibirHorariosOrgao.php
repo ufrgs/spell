@@ -54,7 +54,7 @@
         <br>
         
         <!-- SABADO -->
-        <?if($aLimitesHorario['Sabado']):?>        
+        <? if(isset($aLimitesHorario['Sabado'])): ?>
             <br>
             <table class="modelo1" style="text-align: center">
                 <thead>
@@ -103,7 +103,7 @@
             <br>
         <?endif?>
         <!-- DOMINGO -->
-        <?if($aLimitesHorario['Domingo']):?>        
+        <? if(isset($aLimitesHorario['Domingo'])): ?>        
             <br>
             <table class="modelo1" style="text-align: center">
                 <thead>
