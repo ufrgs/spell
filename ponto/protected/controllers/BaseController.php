@@ -74,7 +74,7 @@ class BaseController extends CController
             ),
             array(
                 'allow',
-                'users' => array(132034),
+                'users' => array('3'),
                 'controllers' => array('consolida'),
             ),
             array(
@@ -187,7 +187,7 @@ class BaseController extends CController
                     array('label' => 'Consolidação de dados',
                         'url' => array("consolida/index"),
                         'active' => Yii::app()->controller->id == 'consolida',
-                        'visible' => isset(Yii::app()->session['id_pessoa']) && (Yii::app()->session['id_pessoa'] == 132034)),
+                        'visible' => isset(Yii::app()->session['id_pessoa']) && (Yii::app()->session['id_pessoa'] == 3)),
                 ),
             );
         }

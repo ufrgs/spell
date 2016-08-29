@@ -39,6 +39,7 @@ class RelatorioController extends BaseController
     public function actionBuscaUltimos12Meses($orgao)
     {
         $orgaosConsultar = Helper::getHierarquiaDescendenteOrgao($orgao);
+        $orgaosConsultar = Helper::coalesce(implode(',', $orgaosConsultar), 0);
         $sql = "select 
                     distinct CH.ano, CH.mes, CH.data_inicio_mes
                 from orgao O
@@ -49,14 +50,12 @@ class RelatorioController extends BaseController
                         and DF.nr_vinculo = CH.nr_vinculo
                 where
                     O.id_orgao in (
-                        :orgaos_consultar
+                        $orgaosConsultar
                     )
                 order by 
                     CH.data_inicio_mes desc
                 limit 12 ";
-        $periodos = Yii::app()->db->createCommand($sql)->queryAll(true, array(
-            ':orgaos_consultar' => implode(',', $orgaosConsultar),
-        ));
+        $periodos = Yii::app()->db->createCommand($sql)->queryAll(true);
         $this->renderPartial('_periodos', array(
             'periodos' => $periodos,
         ));
@@ -70,6 +69,7 @@ class RelatorioController extends BaseController
             $ano = $periodo[1];
             $orgao = Orgao::model()->findByPk($_GET['orgao']);
             $orgaosConsultar = Helper::getHierarquiaDescendenteOrgao($orgao->id_orgao);
+            $orgaosConsultar = Helper::coalesce(implode(',', $orgaosConsultar), 0);
             $orgaosChefia = Helper::getHierarquiaOrgaosChefia(Yii::app()->user->id_pessoa);
             $orgaosChefia = Helper::coalesce(implode(',', $orgaosChefia), 0);
             $dataProviderRegistros = new CActiveDataProvider(CargaHorariaMesServidor::model(), array(
@@ -86,10 +86,9 @@ class RelatorioController extends BaseController
                         and DadoFuncional.orgao_exercicio in (
                             $orgaosChefia
                         ) and DadoFuncional.orgao_exercicio in (
-                            :orgaos_consultar
+                            $orgaosConsultar
                         ) and t.mes = :mes and t.ano = :ano",
                     'params' => array(
-                        ':orgaos_consultar' => implode(',', $orgaosConsultar),
                         ':mes' => $mes,
                         ':ano' => $ano,
                     ),
@@ -138,7 +137,7 @@ class RelatorioController extends BaseController
                         and t.orgao_exercicio in (
                             $orgaosChefia
                         ) and t.orgao_exercicio in (
-                            :orgaos_consultar
+                            $orgaosConsultar
                         ) and not exists (
                             select 1 from ch_mes_servidor
                             where
@@ -147,7 +146,6 @@ class RelatorioController extends BaseController
                                 and mes = :mes and ano = :ano
                         )",
                     'params' => array(
-                        ':orgaos_consultar' => implode(',', $orgaosConsultar),
                         ':mes' => $mes,
                         ':ano' => $ano,
                     ),

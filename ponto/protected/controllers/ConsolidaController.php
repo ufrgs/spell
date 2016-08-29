@@ -11,7 +11,7 @@ class ConsolidaController extends BaseController
     public function filters()
     {
         return array(
-            array('system.cpd.components.CPDSessao - atualizaAfastamentosJuntaMedica'),
+            array('application.components.Sessao - atualizaAfastamentosJuntaMedica'),
             'accessControl - atualizaAfastamentosJuntaMedica',
         );
     }
@@ -54,14 +54,14 @@ class ConsolidaController extends BaseController
             // para cada servidor, calcula o total de horas trabalhadas (registros, ajustes, abonos) e o total de horas previstas e salva na tabela
             try {
                 if (!CargaHorariaMesServidor::buscaDadosESalva($servidor->matricula, $servidor->nr_vinculo, $mes, $ano, $diasUteisMes)) {
-                    $this->renderPartial("system.cpd.views.mensagem", array(
+                    $this->renderPartial("/registro/mensagem", array(
                         'mensagem' => "$matriculaServidor;$nrVinculo - erro",
                         'classe' => 'Erro'
                     ));
                 }
             }
             catch (Exception $e) {
-                $this->renderPartial('system.cpd.views.mensagem', array(
+                $this->renderPartial('/registro/mensagem', array(
                     'mensagem' => $e->getMessage(),
                     'classe' => 'Erro'
                 ));
@@ -69,7 +69,7 @@ class ConsolidaController extends BaseController
             }
         }
         
-        $this->renderPartial('system.cpd.views.mensagem', array(
+        $this->renderPartial('/registro/mensagem', array(
             'mensagem' => 'Carga horária dos servidores atualizada ('.$mes.'/'.$ano.').',
             'classe' => 'Sucesso'
         ));
@@ -92,7 +92,7 @@ class ConsolidaController extends BaseController
             if (isset($dadosServidor[0], $dadosServidor[1])) {
                 try {
                     if (!CargaHorariaMesServidor::buscaDadosESalva($dadosServidor[0], $dadosServidor[1], $mes, $ano, $diasUteisMes)) {
-                        $this->renderPartial("system.cpd.views.mensagem", array(
+                        $this->renderPartial("/registro/mensagem", array(
                             'mensagem' => "$matriculaServidor;$nrVinculo - erro",
                             'classe' => 'Erro'
                         ));
@@ -100,7 +100,7 @@ class ConsolidaController extends BaseController
                     $processados .= $pessoa.'<br/>';
                 }
                 catch (Exception $e) {
-                    $this->renderPartial('system.cpd.views.mensagem', array(
+                    $this->renderPartial('/registro/mensagem', array(
                         'mensagem' => $e->getMessage().'<br/>'.$processados,
                         'classe' => 'Erro'
                     ));
@@ -108,14 +108,14 @@ class ConsolidaController extends BaseController
                 }
             }
             else {
-                $this->renderPartial('system.cpd.views.mensagem', array(
+                $this->renderPartial('/registro/mensagem', array(
                     'mensagem' => 'Formato do lote incorreto.<br/>'.$processados,
                     'classe' => 'Erro'
                 ));
                 return;
             }
         }
-        $this->renderPartial('system.cpd.views.mensagem', array(
+        $this->renderPartial('/registro/mensagem', array(
             'mensagem' => 'Carga horária dos servidores atualizada ('.$mes.'/'.$ano.').<br/>'.$processados,
             'classe' => 'Sucesso'
         ));
@@ -163,7 +163,7 @@ class ConsolidaController extends BaseController
                 return;
             }
         }
-        $this->renderPartial('system.cpd.views.mensagem', array(
+        $this->renderPartial('/registro/mensagem', array(
             'mensagem' => 'Carga horária dos servidores atualizada.<br/>'.$processados,
             'classe' => 'Sucesso'
         ));

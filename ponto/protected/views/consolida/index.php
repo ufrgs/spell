@@ -1,18 +1,18 @@
-<?php
+ï»¿<?php
 $cs = Yii::app()->getClientScript();
 $cs->registerScriptFile(Yii::app()->baseUrl."/js/consolida.js", CClientScript::POS_END);
 ?>
 <div id="mensagem"></div>
 
 <fieldset>
-    <legend>Consolida carga horária</legend>
+    <legend>Consolida carga horÃ¡ria</legend>
     <label for="ano" class="esquerdaAlinhado">ano</label>
     <select id="ano">
         <? for ($i = date("Y"); $i >= 2016; $i--):
             print '<option value="'.$i.'">'.$i.'</option>';
         endfor; ?>
     </select> &nbsp;
-    <label for="mes">Mês</label>
+    <label for="mes">MÃªs</label>
     <select id="mes">
         <? for ($i = 12; $i >= 1; $i--):
             print '<option value="'.$i.'" '.($i == (date("m") == 1 ? 12 : date("m")-1) ? 'selected="selected"' : '').'>'.$i.'</option>';
