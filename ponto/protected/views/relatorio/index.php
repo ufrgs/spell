@@ -4,7 +4,7 @@ $cs->registerScriptFile(Yii::app()->baseUrl."/js/relatorio.js", CClientScript::P
 
 print CHtml::form(Yii::app()->createUrl('relatorio/exibeCargaHorariaConsolidada'), 'get');
 
-print CHtml::label('Selecione o órgão', 'orgao', array('class' => 'esquerdaAlinhado maior'));
+print CHtml::label('Selecione o Ã³rgÃ£o', 'orgao', array('class' => 'esquerdaAlinhado maior'));
 print CHtml::dropDownList('orgao', '', CHtml::listData($orgaos, 'id_orgao', 'nome_orgao'), array(
     'onchange' => 'selecionaOrgao()',
     'empty' => '------------------'

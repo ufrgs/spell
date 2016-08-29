@@ -2,7 +2,7 @@
 <form method="POST">
     
     <?php
-        echo CHtml::label('Selecione o órgão', 'Orgaos', array('class' => 'esquerdaAlinhado maior'));
+        echo CHtml::label('Selecione o Ã³rgÃ£o', 'Orgaos', array('class' => 'esquerdaAlinhado maior'));
         echo CHtml::dropDownList(
             'Orgaos', 
             isset($_POST['Orgaos']) ? $_POST['Orgaos'] : '',

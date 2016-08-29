@@ -1,5 +1,5 @@
 function servidores() {
-    $("#mensagem").html('<img src="/Design/visual_ufrgs/bigLoader.gif" alt="Carregando..."/>');
+    $("#mensagem").html('<img src="/Design/imgs/bigLoader.gif" alt="Carregando..."/>');
     $.ajax({
         url: HOME + "consolida/cargaHorariaServidores",
         type: "GET",
@@ -18,7 +18,7 @@ function servidores() {
 }
 
 function lote() {
-    $("#mensagem").html('<img src="/Design/visual_ufrgs/bigLoader.gif" alt="Carregando..."/>');
+    $("#mensagem").html('<img src="/Design/imgs/bigLoader.gif" alt="Carregando..."/>');
     $.ajax({
         url: HOME + "consolida/cargaHorariaLote",
         type: "GET",

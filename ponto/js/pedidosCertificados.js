@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    $("#modal").dialog({title: "Informações do Pedido", autoOpen: false, width: 600, height: 450});
+    $("#modal").dialog({title: "InformaÃ§Ãµes do Pedido", autoOpen: false, width: 600, height: 450});
 });
 
 function verPedido(nr, tipo) {

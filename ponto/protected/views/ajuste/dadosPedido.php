@@ -88,7 +88,7 @@
                     <td class="centro">?</td>
                 </tr>
         <? endif;
-            mostraTotalTrabalhado($jornadaDiaria, array(), date("d/m/Y", strtotime($ultimoRegistro))) ?>
+            Helper::mostraTotalTrabalhado($jornadaDiaria, array(), date("d/m/Y", strtotime($ultimoRegistro))) ?>
             </tbody>
         </table>
     </fieldset>

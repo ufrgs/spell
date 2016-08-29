@@ -228,8 +228,8 @@ class AjusteController extends BaseController
     
     public function actionPedidosAvaliacao()
     {
-        $orgaosChefiados = RestricaoRelogio::getOrgaosChefia(Yii::app()->session['id_pessoa']);
-        if (!empty($orgaosChefiados)) {
+        $orgaosChefia = Helper::getHierarquiaOrgaosChefia(Yii::app()->user->id_pessoa);
+        if (!empty($orgaosChefia)) {
             $criteria = new CDbCriteria();
             $criteria->with = array(
                 'Pessoa' => array(
@@ -248,22 +248,13 @@ class AjusteController extends BaseController
             $criteria->condition = "
                 t.data_hora_certificacao is null 
                 and coalesce(t.indicador_excluido, 'N') = 'N'
-                and t.id_pessoa <> :CodPessoa1
+                and t.id_pessoa <> :id_pessoa1
                 and DadoFuncional.orgao_exercicio in (
-                    select id_orgao from fn_hierarquia_orgao_funcoes_pessoa (:id_pessoa2) 
-                    union
-                    select id_orgao from fn_permissoes (:id_pessoa3, 'RH', 'rh702',null) 
-                    union
-                    select id_orgao 
-                    from TABELAS_AUXILIARES..ADOrgaoDirigenteExercicio TAUX
-                        inner join SERVIDOR S on S.matricula = TAUX.matricula  
-                    where S.id_pessoa = :id_pessoa4 
+                    :orgaos_chefia
                 )";
             $criteria->params = array(
-                ':CodPessoa1' => Yii::app()->user->id_pessoa,
-                ':id_pessoa2' => Yii::app()->user->id_pessoa,
-                ':id_pessoa3' => Yii::app()->user->id_pessoa,
-                ':id_pessoa4' => Yii::app()->user->id_pessoa,
+                ':id_pessoa1' => Yii::app()->user->id_pessoa,
+                ':orgaos_chefia' => implode(',', $orgaosChefia),
             );
 
             $this->render('pedidosAvaliacao', array(
@@ -293,8 +284,8 @@ class AjusteController extends BaseController
     
     public function actionPedidosCertificados()
     {
-        $orgaosChefiados = RestricaoRelogio::getOrgaosChefia(Yii::app()->session['id_pessoa']);
-        if (!empty($orgaosChefiados)) {
+        $orgaosChefia = Helper::getHierarquiaOrgaosChefia(Yii::app()->user->id_pessoa);
+        if (!empty($orgaosChefia)) {
             $criteria = new CDbCriteria();
             $criteria->with = array(
                 'Pessoa' => array(
@@ -313,22 +304,13 @@ class AjusteController extends BaseController
             $criteria->condition = "
                 t.data_hora_certificacao is not null 
                 and coalesce(t.indicador_excluido, 'N') = 'N'
-                and t.id_pessoa <> :CodPessoa1
+                and t.id_pessoa <> :id_pessoa1
                 and DadoFuncional.orgao_exercicio in (
-                    select id_orgao from fn_hierarquia_orgao_funcoes_pessoa (:id_pessoa2) 
-                    union
-                    select id_orgao from fn_permissoes (:id_pessoa3, 'RH', 'rh702',null) 
-                    union
-                    select id_orgao 
-                    from TABELAS_AUXILIARES..ADOrgaoDirigenteExercicio TAUX
-                        inner join SERVIDOR S on S.matricula = TAUX.matricula  
-                    where S.id_pessoa = :id_pessoa4 
+                    :orgaos_chefia
                 )";
             $criteria->params = array(
-                ':CodPessoa1' => Yii::app()->user->id_pessoa,
-                ':id_pessoa2' => Yii::app()->user->id_pessoa,
-                ':id_pessoa3' => Yii::app()->user->id_pessoa,
-                ':id_pessoa4' => Yii::app()->user->id_pessoa,
+                ':id_pessoa1' => Yii::app()->user->id_pessoa,
+                ':orgaos_chefia' => implode(',', $orgaosChefia),
             );
 
             $this->render('pedidosCertificados', array(
@@ -402,27 +384,19 @@ class AjusteController extends BaseController
     {
         if (isset($_POST['nrPedido']) && is_numeric($_POST['nrPedido']) && in_array($_POST['certifica'], array('S', 'N'))) {
             $erro = false;
-            $msg = "Pedido ".($_POST['certifica'] == 'N' ? 'não' : '')." indicador_certificado com sucesso!";
+            $msg = "Pedido ".($_POST['certifica'] == 'N' ? 'não' : '')." certificado com sucesso!";
             $tipo = $_POST['tipo'];
+            $orgaosChefia = Helper::getHierarquiaOrgaosChefia(Yii::app()->user->id_pessoa);
             $criteria = array(
                 'condition' => "
                     t.data_hora_certificacao is null 
-                    and t.id_pessoa <> :CodPessoa1
+                    and t.id_pessoa <> :id_pessoa1
                     and DadoFuncional.orgao_exercicio in (
-                        select id_orgao from fn_hierarquia_orgao_funcoes_pessoa (:id_pessoa2) 
-                        union
-                        select id_orgao from fn_permissoes (:id_pessoa3, 'RH', 'rh702',null) 
-                        union
-                        select id_orgao 
-                        from TABELAS_AUXILIARES..ADOrgaoDirigenteExercicio TAUX
-                            inner join SERVIDOR S on S.matricula = TAUX.matricula  
-                        where S.id_pessoa = :id_pessoa4 
+                        :orgaos_chefia 
                     )",
                 'params' => array(
-                    ':CodPessoa1' => Yii::app()->user->id_pessoa,
-                    ':id_pessoa2' => Yii::app()->user->id_pessoa,
-                    ':id_pessoa3' => Yii::app()->user->id_pessoa,
-                    ':id_pessoa4' => Yii::app()->user->id_pessoa,
+                    ':id_pessoa1' => Yii::app()->user->id_pessoa,
+                    ':orgaos_chefia' => implode(',', $orgaosChefia),
                 )
             );
             
@@ -473,32 +447,24 @@ class AjusteController extends BaseController
     public function actionCertificaVarios()
     {
         $erro = false;
-        $msg = "Pedido(s) indicador_certificado(s) com sucesso!";
+        $msg = "Pedido(s) certificado(s) com sucesso!";
         if (isset($_POST['pedidos']) && is_array($_POST['pedidos']) && in_array($_POST['tipo'], array('Ajuste', 'Abono'))) {
-            $tipo = $_POST['tipo'];
+            $tipo = strtolower($_POST['tipo']);
+            $orgaosChefia = Helper::getHierarquiaOrgaosChefia(Yii::app()->user->id_pessoa);
             $criteria = array(
                 'condition' => "
                     t.data_hora_certificacao is null 
-                    and t.id_pessoa <> :CodPessoa1
+                    and t.id_pessoa <> :id_pessoa1
                     and DadoFuncional.orgao_exercicio in (
-                        select id_orgao from fn_hierarquia_orgao_funcoes_pessoa (:id_pessoa2) 
-                        union
-                        select id_orgao from fn_permissoes (:id_pessoa3, 'RH', 'rh702',null) 
-                        union
-                        select id_orgao 
-                        from TABELAS_AUXILIARES..ADOrgaoDirigenteExercicio TAUX
-                            inner join SERVIDOR S on S.matricula = TAUX.matricula  
-                        where S.id_pessoa = :id_pessoa4 
+                        :orgaos_chefia
                     )
-                    and t.nr_seq$tipo in (".str_replace("'", "''", implode(",", $_POST['pedidos'])).")",
+                    and t.nr_$tipo in (".str_replace("'", "''", implode(",", $_POST['pedidos'])).")",
                 'params' => array(
-                    ':CodPessoa1' => Yii::app()->user->id_pessoa,
-                    ':id_pessoa2' => Yii::app()->user->id_pessoa,
-                    ':id_pessoa3' => Yii::app()->user->id_pessoa,
-                    ':id_pessoa4' => Yii::app()->user->id_pessoa,
+                    ':id_pessoa1' => Yii::app()->user->id_pessoa,
+                    ':orgaos_chefia' => implode(',', $orgaosChefia),
                 )
             );
-            if ($tipo == 'Ajuste') {
+            if ($tipo == 'ajuste') {
                 $pedidos = Ajuste::model()->with('DadoFuncional')->findAll($criteria);
             }
             else {
@@ -513,7 +479,7 @@ class AjusteController extends BaseController
 
                     if ($pedido->save(true, array('indicador_certificado', 'id_pessoa_certificacao', 'data_hora_certificacao'))) {
                         // se a certificacao esta acontecendo apos o fechamento do mes do pedido, recalcula o total de horas
-                        if (date('m') > date('m', strtotime(($tipo == 'Ajuste' ? $pedido->data_hora_ponto : $pedido->data_abono)))) {
+                        if (date('m') > date('m', strtotime(($tipo == 'ajuste' ? $pedido->data_hora_ponto : $pedido->data_abono)))) {
                             $mesAnterior = (date('m') != 1 ? date('m')-1 : 12);
                             $anoAnterior = (date('m') != 1 ? date('Y') : date('Y')-1);
                             CargaHorariaMesServidor::buscaDadosESalva($pedido->matricula, $pedido->nr_vinculo, $mesAnterior, $anoAnterior);

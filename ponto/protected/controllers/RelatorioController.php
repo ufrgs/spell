@@ -10,22 +10,14 @@ class RelatorioController extends BaseController
 {
     public function actionIndex()
     {
-        $orgaos = Orgao::model()->with('OrgaoUfrgs')->findAll(array(
-            'select' => "t.id_orgao, sigla_orgao, nome_orgao",
-            'condition' => "OrgaoUfrgs.StatusOrgao = 'A' and t.id_orgao in (
-                select id_orgao from fn_hierarquia_orgao_funcoes_pessoa (:CodPessoa1)
-                union
-                select id_orgao from fn_permissoes (:id_pessoa2, 'RH', 'rh003', null) 
-                union
-                select id_orgao 
-                from TABELAS_AUXILIARES..ADOrgaoDirigenteExercicio TAUX
-                    inner join SERVIDOR S on S.matricula = TAUX.matricula  
-                where S.id_pessoa = :id_pessoa3
+        $orgaosChefia = Helper::getHierarquiaOrgaosChefia(Yii::app()->user->id_pessoa);
+        $orgaos = Orgao::model()->findAll(array(
+            'select' => "id_orgao, sigla_orgao, nome_orgao",
+            'condition' => "id_orgao in (
+                :orgaos_chefia
             )",
             'params' => array(
-                ':CodPessoa1' => Yii::app()->session['id_pessoa'],
-                ':id_pessoa2' => Yii::app()->session['id_pessoa'],
-                ':id_pessoa3' => Yii::app()->session['id_pessoa'],
+                ':orgaos_chefia' => implode(',', $orgaosChefia),
             ),
             'order' => 'nome_orgao'
         ));
@@ -48,8 +40,9 @@ class RelatorioController extends BaseController
      */
     public function actionBuscaUltimos12Meses($orgao)
     {
+        $orgaosConsultar = Helper::getHierarquiaDescendenteOrgao($orgao);
         $sql = "select 
-                    distinct top(12) CH.ano, CH.mes, CH.data_inicio_mes
+                    distinct CH.ano, CH.mes, CH.data_inicio_mes
                 from orgao O
                     join dado_funcional DF on
                         O.id_orgao = DF.orgao_exercicio
@@ -58,12 +51,13 @@ class RelatorioController extends BaseController
                         and DF.nr_vinculo = CH.nr_vinculo
                 where
                     O.id_orgao in (
-                        select id_orgao from fn_orgao_descendente(:id_orgao)
+                        :orgaos_consultar
                     )
                 order by 
-                    CH.data_inicio_mes desc ";
+                    CH.data_inicio_mes desc
+                limit 12 ";
         $periodos = Yii::app()->db->createCommand($sql)->queryAll(true, array(
-            ':id_orgao' => $orgao,
+            ':orgaos_consultar' => implode(',', $orgaosConsultar),
         ));
         $this->renderPartial('_periodos', array(
             'periodos' => $periodos,
@@ -77,6 +71,8 @@ class RelatorioController extends BaseController
             $mes = $periodo[0];
             $ano = $periodo[1];
             $orgao = Orgao::model()->findByPk($_GET['orgao']);
+            $orgaosConsultar = Helper::getHierarquiaDescendenteOrgao($orgao->id_orgao);
+            $orgaosChefia = Helper::getHierarquiaOrgaosChefia(Yii::app()->user->id_pessoa);
             $dataProviderRegistros = new CActiveDataProvider(CargaHorariaMesServidor::model(), array(
                 'criteria' => array(
                     'with' => array(
@@ -89,26 +85,16 @@ class RelatorioController extends BaseController
                     'condition' => "DadoFuncional.data_desligamento is null
                         and DadoFuncional.data_aposentadoria is null
                         and DadoFuncional.orgao_exercicio in (
-                            select id_orgao from fn_hierarquia_orgao_funcoes_pessoa (:CodPessoa1)
-                            union
-                            select id_orgao from fn_permissoes (:id_pessoa2, 'RH', 'rh003', null) 
-                            union
-                            select id_orgao 
-                            from TABELAS_AUXILIARES..ADOrgaoDirigenteExercicio TAUX
-                                inner join SERVIDOR S on S.matricula = TAUX.matricula  
-                            where S.id_pessoa = :id_pessoa3
+                            :orgaos_chefia
                         ) and DadoFuncional.orgao_exercicio in (
-                            select id_orgao from fn_orgao_descendente(:id_orgao)
+                            :orgaos_consultar
                         ) and t.mes = :mes and t.ano = :ano",
                     'params' => array(
-                        ':CodPessoa1' => Yii::app()->session['id_pessoa'],
-                        ':id_pessoa2' => Yii::app()->session['id_pessoa'],
-                        ':id_pessoa3' => Yii::app()->session['id_pessoa'],
-                        ':id_orgao' => $orgao->id_orgao,
+                        ':orgaos_chefia' => implode(',', $orgaosChefia),
+                        ':orgaos_consultar' => implode(',', $orgaosConsultar),
                         ':mes' => $mes,
                         ':ano' => $ano,
                     ),
-                    //'order' => 'OrgaoExercicio.nome_orgao, Pessoa.nome_pessoa'
                 ),
                 'pagination' => false,
                 'sort' => array(
@@ -152,28 +138,19 @@ class RelatorioController extends BaseController
                     'condition' => "t.data_desligamento is null
                         and t.data_aposentadoria is null
                         and t.orgao_exercicio in (
-                        select id_orgao from fn_hierarquia_orgao_funcoes_pessoa (:CodPessoa1)
-                        union
-                        select id_orgao from fn_permissoes (:id_pessoa2, 'RH', 'rh003', null) 
-                        union
-                        select id_orgao 
-                        from TABELAS_AUXILIARES..ADOrgaoDirigenteExercicio TAUX
-                            inner join SERVIDOR S on S.matricula = TAUX.matricula  
-                        where S.id_pessoa = :id_pessoa3
-                    ) and t.orgao_exercicio in (
-                        select id_orgao from fn_orgao_descendente(:id_orgao)
-                    ) and not exists (
-                        select 1 from ch_mes_servidor
-                        where
-                            matricula = t.matricula
-                            and nr_vinculo = t.nr_vinculo
-                            and mes = :mes and ano = :ano
-                    )",
+                            :orgaos_chefia
+                        ) and t.orgao_exercicio in (
+                            :orgaos_consultar
+                        ) and not exists (
+                            select 1 from ch_mes_servidor
+                            where
+                                matricula = t.matricula
+                                and nr_vinculo = t.nr_vinculo
+                                and mes = :mes and ano = :ano
+                        )",
                     'params' => array(
-                        ':CodPessoa1' => Yii::app()->session['id_pessoa'],
-                        ':id_pessoa2' => Yii::app()->session['id_pessoa'],
-                        ':id_pessoa3' => Yii::app()->session['id_pessoa'],
-                        ':id_orgao' => $orgao->id_orgao,
+                        ':orgaos_chefia' => implode(',', $orgaosChefia),
+                        ':orgaos_consultar' => implode(',', $orgaosConsultar),
                         ':mes' => $mes,
                         ':ano' => $ano,
                     ),

@@ -62,7 +62,7 @@ class RestricaoController extends BaseController
     public function actionOrgaos($term)
     {
         $term = strtoupper(str_replace("'", "''", Helper::tiraAcento(trim($term))));
-        $orgaos = Orgao::model()->with('OrgaoUfrgs')->findAll("NomeConsulta like '%$term%' or upper(sigla_orgao) like '%$term%'");
+        $orgaos = Orgao::model()->with('OrgaoUfrgs')->findAll("nome_pessoa like '%$term%' or upper(sigla_orgao) like '%$term%'");
 
         $opcoes = array();
         if (!empty($orgaos)) {
@@ -92,7 +92,7 @@ class RestricaoController extends BaseController
         $pessoas = Pessoa::model()->with('DadoFuncional')->findAll("
             coalesce(DadoFuncional.data_desligamento, DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL 1 DAY)) > CURRENT_TIMESTAMP() 
             and coalesce(DadoFuncional.data_aposentadoria, DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL 1 DAY)) > CURRENT_TIMESTAMP()
-            and (t.NomeConsulta like '%$term%' or convert(varchar(6), t.id_pessoa) = '$term')");
+            and (t.nome_pessoa like '%$term%' or convert(varchar(6), t.id_pessoa) = '$term')");
 
         $opcoes = array();
         if (!empty($pessoas)) {

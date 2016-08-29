@@ -1,30 +1,13 @@
 <?php
 
-/**
- * Derivação da classe CController do Yii Framework para reaproveitamento de 
- * código. Todos os controladores da aplicação são extensões desta classe.
- * 
- * Aqui são definidas as regras de acesso das páginas, configuração do menu 
- * lateral da aplicação e métodos utilitários para os controladores.
- */
 class BaseController extends CController
 {
-
     /**
-     * Atributo que representa o menu da aplicacao. É instanciado no método 
-     * privado setMenu().
-     * 
-     * @var array Instância do menu da aplicação
+     * Menu da aplicacao. Definido em setMenu().
+     * @var array
      */
     public $menu = array();
 
-    /**
-     * Método do Yii Framework para adição de filtros nas actions. É executado
-     * automaticamente antes de cada chamada a um controller para validar a 
-     * sessão do usuário.
-     *
-     * @return array Implementações da classe {@see CFilter}
-     */
     public function filters()
     {
         return array(
@@ -33,12 +16,7 @@ class BaseController extends CController
         );
     }
 
-    /**
-     * Método do Yii Framework para definição das regras de acesso as páginas.
-     * 
-     * @link http://www.yiiframework.com/doc/guide/1.1/en/topics.auth#access-control-filter
-     * @return array Regras de segurança para a acesso as páginas
-     */
+    //Mais informacoes em http://www.yiiframework.com/doc/guide/1.1/en/topics.auth#access-control-filter
     public function accessRules()
     {
         return array(
@@ -83,15 +61,6 @@ class BaseController extends CController
         );
     }
 
-    /**
-     * Método do Yii Framework para permitir a execução de código antes da 
-     * execução de uma action.
-     * 
-     * Aqui são carregados os arquivos necessários para exibição do layout da 
-     * aplicação como os arquivos HTML, CSS e JavaScript.
-     * 
-     * @param CAction $action A action do controller que foi requisitada
-     */
     public function beforeAction($action)
     {
         // Para depuração de theme em application
@@ -100,17 +69,13 @@ class BaseController extends CController
         $this->layout = 'main';
         Yii::app()->getClientScript()->registerCoreScript('jquery');
         Yii::app()->getClientScript()->registerCoreScript('jquery.ui');
-        Yii::app()->getClientScript()->registerCssFile(Yii::app()->baseUrl . "/css/estilos.css");
-        Yii::app()->getClientScript()->registerCssFile(Yii::app()->baseUrl . "/css/font-awesome/css/font-awesome.min.css");
+        Yii::app()->getClientScript()->registerCssFile(Yii::app()->baseUrl."/css/estilos.css");
+        Yii::app()->getClientScript()->registerCssFile(Yii::app()->baseUrl."/css/font-awesome/css/font-awesome.min.css");
         Yii::app()->getClientScript()->registerScript('home', 'var HOME = "' . Yii::app()->baseUrl . '/";', CClientScript::POS_HEAD);
 
         return parent::beforeAction($action);
     }
 
-    /**
-     * Método utilitário para exibição de uma página com erros. É chamado quando
-     * o controller registra algum erro de execução e precisa mostra-lo na tela.
-     */
     public function actionError()
     {
         if ($error = Yii::app()->errorHandler->error) {
@@ -121,18 +86,14 @@ class BaseController extends CController
         }
     }
 
-    /**
-     * Método para montagem do menu lateral exibido nas telas da aplicação.
-     */
     private function setMenu()
     {
-        // Variável que faz o controle de qual menu está ativo
+        #Variavel que faz o controle de qual menu esta ativo
         $actionId = Yii::app()->controller->id . '/' . Yii::app()->controller->action->id;
 
         if (isset(Yii::app()->session['id_pessoa'])) {
+            #Monta a listagem de menus da aplicacao
             $orgaosChefia = RestricaoRelogio::getOrgaosChefia(Yii::app()->session['id_pessoa']);
-
-            // Monta a listagem de menus da aplicacao
             $this->menu = array(
                 'label' => 'Opções disponíveis',
                 'items' => array(
@@ -193,17 +154,6 @@ class BaseController extends CController
         }
     }
 
-    /**
-     * Método utilitário para verificar se o usuário logado pode ou não bater 
-     * ponto.
-     * 
-     * O método verifica se o identificador único do usuário passado por 
-     * parâmetro corresponde a um objeto {@see Pessoa} e se o mesmo faz parte 
-     * de um {@see Orgao} válido.
-     * 
-     * @param int $codPessoa Chave primária da classe {@link Pessoa}
-     * @return boolean TRUE or FALSE
-     */
     public function pessoaPodeBaterPonto($codPessoa)
     {
         $dadoFuncional = DadoFuncional::model()->find(array('id_pessoa' => $codPessoa));
@@ -225,9 +175,7 @@ class BaseController extends CController
         return !empty($query);
     }
 
-    /**
-     * Método para desabilitar a Yii Debug Toolbar
-     */
+    // Desativa o Yii Debug Toolbar
     protected function desabilitaYiiToolbar()
     {
         foreach (Yii::app()->log->routes as $r) {
@@ -236,4 +184,5 @@ class BaseController extends CController
             }
         }
     }
+
 }

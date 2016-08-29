@@ -19,7 +19,7 @@ $(document).ready(function () {
             $("#modal").dialog("open");
         }
     });
-    $("#modal").dialog({width: 500, height: 200, title: "Restrição de IPs", autoOpen: false});
+    $("#modal").dialog({width: 500, height: 200, title: "RestriÃ§Ã£o de IPs", autoOpen: false});
 });
 
 function alteraRestricao(nr, nome, ipv4, ipv6) {
@@ -52,7 +52,7 @@ function salvarRestricao() {
 }
 
 function excluiRestricao(nr) {
-    if (confirm("Tem certeza que deseja exluir essa restrição?")) {
+    if (confirm("Tem certeza que deseja exluir essa restriÃ§Ã£o?")) {
         $.ajax({
             type: 'POST',
             url: HOME + 'restricao/excluir',

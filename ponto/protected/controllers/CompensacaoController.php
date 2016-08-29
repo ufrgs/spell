@@ -198,8 +198,8 @@ class CompensacaoController extends BaseController
     
     public function actionPedidosAvaliacao()
     {
-        $orgaosChefiados = RestricaoRelogio::getOrgaosChefia(Yii::app()->session['id_pessoa']);
-        if (!empty($orgaosChefiados)) {
+        $orgaosChefia = Helper::getHierarquiaOrgaosChefia(Yii::app()->user->id_pessoa);
+        if (!empty($orgaosChefia)) {
             // pedidos abertos
             $criteriaAbertos = new CDbCriteria();
             $criteriaAbertos->with = array(
@@ -219,22 +219,13 @@ class CompensacaoController extends BaseController
             $criteriaAbertos->condition = "
                 t.data_hora_certificacao is null 
                 and coalesce(t.indicador_excluido, 'N') = 'N'
-                and t.id_pessoa <> :CodPessoa1
+                and t.id_pessoa <> :id_pessoa1
                 and DadoFuncional.orgao_exercicio in (
-                    select id_orgao from fn_hierarquia_orgao_funcoes_pessoa (:id_pessoa2) 
-                    union
-                    select id_orgao from fn_permissoes (:id_pessoa3, 'RH', 'rh702',null) 
-                    union
-                    select id_orgao 
-                    from TABELAS_AUXILIARES..ADOrgaoDirigenteExercicio TAUX
-                        inner join SERVIDOR S on S.matricula = TAUX.matricula  
-                    where S.id_pessoa = :id_pessoa4 
+                    :orgaos_chefia
                 )";
             $criteriaAbertos->params = array(
-                ':CodPessoa1' => Yii::app()->user->id_pessoa,
-                ':id_pessoa2' => Yii::app()->user->id_pessoa,
-                ':id_pessoa3' => Yii::app()->user->id_pessoa,
-                ':id_pessoa4' => Yii::app()->user->id_pessoa,
+                ':id_pessoa1' => Yii::app()->user->id_pessoa,
+                ':orgaos_chefia' => implode(',', $orgaosChefia),
             );
             
             $criteriaCertificados = new CDbCriteria();
@@ -255,22 +246,13 @@ class CompensacaoController extends BaseController
             $criteriaCertificados->condition = "
                 t.data_hora_certificacao is not null 
                 and coalesce(t.indicador_excluido, 'N') = 'N'
-                and t.id_pessoa <> :CodPessoa1
+                and t.id_pessoa <> :id_pessoa1
                 and DadoFuncional.orgao_exercicio in (
-                    select id_orgao from fn_hierarquia_orgao_funcoes_pessoa (:id_pessoa2) 
-                    union
-                    select id_orgao from fn_permissoes (:id_pessoa3, 'RH', 'rh702',null) 
-                    union
-                    select id_orgao 
-                    from TABELAS_AUXILIARES..ADOrgaoDirigenteExercicio TAUX
-                        inner join SERVIDOR S on S.matricula = TAUX.matricula  
-                    where S.id_pessoa = :id_pessoa4 
+                    :orgaos_chefia
                 )";
             $criteriaCertificados->params = array(
-                ':CodPessoa1' => Yii::app()->user->id_pessoa,
-                ':id_pessoa2' => Yii::app()->user->id_pessoa,
-                ':id_pessoa3' => Yii::app()->user->id_pessoa,
-                ':id_pessoa4' => Yii::app()->user->id_pessoa,
+                ':id_pessoa1' => Yii::app()->user->id_pessoa,
+                ':orgaos_chefia' => implode(',', $orgaosChefia),
             );
 
             $this->render('pedidosAvaliacao', array(
@@ -336,26 +318,17 @@ class CompensacaoController extends BaseController
         if (isset($_POST['nrPedido']) && is_numeric($_POST['nrPedido']) && in_array($_POST['certifica'], array('S', 'N'))) {
             $erro = false;
             $msg = "Registro de compensação indicador_certificado com sucesso!";
-            
+            $orgaosChefia = Helper::getHierarquiaOrgaosChefia(Yii::app()->user->id_pessoa);
             $criteria = array(
                 'condition' => "
                     t.data_hora_certificacao is null 
-                    and t.id_pessoa <> :CodPessoa1
+                    and t.id_pessoa <> :id_pessoa1
                     and DadoFuncional.orgao_exercicio in (
-                        select id_orgao from fn_hierarquia_orgao_funcoes_pessoa (:id_pessoa2) 
-                        union
-                        select id_orgao from fn_permissoes (:id_pessoa3, 'RH', 'rh702',null) 
-                        union
-                        select id_orgao 
-                        from TABELAS_AUXILIARES..ADOrgaoDirigenteExercicio TAUX
-                            inner join SERVIDOR S on S.matricula = TAUX.matricula  
-                        where S.id_pessoa = :id_pessoa4 
+                        :orgaos_chefia
                     )",
                 'params' => array(
-                    ':CodPessoa1' => Yii::app()->user->id_pessoa,
-                    ':id_pessoa2' => Yii::app()->user->id_pessoa,
-                    ':id_pessoa3' => Yii::app()->user->id_pessoa,
-                    ':id_pessoa4' => Yii::app()->user->id_pessoa,
+                    ':id_pessoa1' => Yii::app()->user->id_pessoa,
+                    ':orgaos_chefia' => implode(',', $orgaosChefia),
                 )
             );
             
@@ -402,26 +375,18 @@ class CompensacaoController extends BaseController
         $erro = false;
         $msg = "Pedido(s) indicador_certificado(s) com sucesso!";
         if (isset($_POST['pedidos']) && is_array($_POST['pedidos'])) {
+            $orgaosChefia = Helper::getHierarquiaOrgaosChefia(Yii::app()->user->id_pessoa);
             $criteria = array(
                 'condition' => "
                     t.data_hora_certificacao is null 
-                    and t.id_pessoa <> :CodPessoa1
+                    and t.id_pessoa <> :id_pessoa1
                     and DadoFuncional.orgao_exercicio in (
-                        select id_orgao from fn_hierarquia_orgao_funcoes_pessoa (:id_pessoa2) 
-                        union
-                        select id_orgao from fn_permissoes (:id_pessoa3, 'RH', 'rh702',null) 
-                        union
-                        select id_orgao 
-                        from TABELAS_AUXILIARES..ADOrgaoDirigenteExercicio TAUX
-                            inner join SERVIDOR S on S.matricula = TAUX.matricula  
-                        where S.id_pessoa = :id_pessoa4 
+                        :orgaos_chefia
                     )
                     and t.nr_compensacao in (".str_replace("'", "''", implode(",", $_POST['pedidos'])).")",
                 'params' => array(
-                    ':CodPessoa1' => Yii::app()->user->id_pessoa,
-                    ':id_pessoa2' => Yii::app()->user->id_pessoa,
-                    ':id_pessoa3' => Yii::app()->user->id_pessoa,
-                    ':id_pessoa4' => Yii::app()->user->id_pessoa,
+                    ':id_pessoa1' => Yii::app()->user->id_pessoa,
+                    ':orgaos_chefia' => implode(',', $orgaosChefia),
                 )
             );
             $pedidos = Compensacao::model()->with('DadoFuncional')->findAll($criteria);

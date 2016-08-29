@@ -14,6 +14,6 @@ $cs->registerScriptFile(Yii::app()->baseUrl."/js/circle-progress.js", CClientScr
 <input type="hidden" id="abaAtiva" value="<?=$abaAtiva?>" />
 <div id="abasTipoAcompanhamento" <?=(empty($acompanhamento) ? 'style="display:none"' : '')?>>
     <span name="acompanhamento" class="aba clicavel <?=($abaAtiva == 'acompanhamento' ? 'ativa' : '')?>" onclick="mudaAba('acompanhamento')">Tabela</span>
-    <span name="calendario" class="aba clicavel <?=($abaAtiva == 'calendario' ? 'ativa' : '')?>" onclick="mudaAba('calendario')">Calend·rio</span>
+    <span name="calendario" class="aba clicavel <?=($abaAtiva == 'calendario' ? 'ativa' : '')?>" onclick="mudaAba('calendario')">Calend√°rio</span>
 </div>
 <div id="acompanhamento"><?=$acompanhamento?></div>

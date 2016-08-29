@@ -1,9 +1,9 @@
 
 $(document).ready(function() {
     // modal do pedido
-    $("#divPedido").dialog({title: "Registro de CompensaÁ„o", width: 650, height: 350, autoOpen:false, modal:true});
+    $("#divPedido").dialog({title: "Registro de Compensa√ß√£o", width: 650, height: 350, autoOpen:false, modal:true});
     // modal da certificacao
-    $("#modal").dialog({title: "InformaÁıes do Pedido", autoOpen: false, width: 600, height: 450});
+    $("#modal").dialog({title: "Informa√ß√µes do Pedido", autoOpen: false, width: 600, height: 450});
     
     $("#data").datepicker({dateFormat:"dd/mm/yy", minDate: 0, stepMonths: 0, changeMonth: false,});
     $("#data").mask("99/99/9999");
@@ -27,49 +27,49 @@ function enviaSolicitacao() {
         msg += "Selecione o dia para o ajuste. <br/>";
     }
     else {
-        // testa se È um dia v·lido
+        // testa se e um dia valido
         var auxData = $("#data").val().split("/");
         auxData = auxData[2] + "/" + auxData[1] + "/" + auxData[0];
         if (!Date.parse(auxData)) {
-            msg += "Escreva um dia v·lido. <br/>";
+            msg += "Escreva um dia v√°lido. <br/>";
         }
         else {
-            // testa se o dia È menor que o atual
+            // testa se o dia e menor que o atual
             var hoje = new Date();
             hoje.setHours(0,0,0,0);
             auxData = new Date(auxData);
             if (auxData < hoje) {
-                msg += "A compensaÁ„o n„o pode ser registrada para uma data que j· passou. <br/>";
+                msg += "A compensa√ß√£o n√£o pode ser registrada para uma data que j√° passou. <br/>";
             }
         }
     }
     if ($("#hora").val() == "") {
-        msg += "Selecione o tempo (horas) de compensaÁ„o. <br/>";
+        msg += "Selecione o tempo (horas) de compensa√ß√£o. <br/>";
     }
     else {
-        // testa se È um hor·rio v·lido
+        // testa se e um horario valido
         if (!/^(([0-1]?[0-9])|([2][0-3])):([0-5]?[0-9])$/i.test($("#hora").val())) {
-            msg += "Escreva um hor·rio v·lido. <br/>";
+            msg += "Escreva um hor√°rio v√°lido. <br/>";
         }
     }
-    // verifica se n„o est· pedindo mais compensaÁ„o do que tem saldo de horas
+    // verifica se nao esta pedindo mais compensacao do que tem saldo de horas
     var minutos = $("#hora").val().split(":");
     minutos = parseInt(minutos[0]*60) + parseInt(minutos[1]);
     if (minutos > $("#saldoMinutos").val()) {
-        msg += "O tempo selecionado È maior do que o saldo de horas ainda n„o utilizado ("+$("#saldoFormatado").val()+"). <br/>";
+        msg += "O tempo selecionado √© maior do que o saldo de horas ainda n√£o utilizado ("+$("#saldoFormatado").val()+"). <br/>";
     }
     if ($("#justificativa").val() == "") {
-        msg += "Justifique o seu registro de compensaÁ„o. <br/>";
+        msg += "Justifique o seu registro de compensa√ß√£o. <br/>";
     }
     if ($("#justificativa").val().length > 512) {
-        msg += "Digite no m·ximo 512 caracteres na justificativa (atualmente "+$("#justificativa").val().length+")."
+        msg += "Digite no m√°ximo 512 caracteres na justificativa (atualmente "+$("#justificativa").val().length+")."
     }
     if (msg != "") {
         $("#mensagens").html(msg).slideDown();
     }
     else {
         var formData = new FormData($('form')[0]);
-        $("#botaoEnviar").html('<img src="/Design/visual_ufrgs/smallLoader.gif"/> Enviando...');
+        $("#botaoEnviar").html('<img src="/Design/imgs/smallLoader.gif"/> Enviando...');
         $("progress").css('width', '100%').show();
         $.ajax({
             type: 'POST',
@@ -107,7 +107,7 @@ function enviaSolicitacao() {
 }
 
 function excluir(nr) {
-    if (confirm("Tem certeza que deseja excluir esse registro de compensaÁ„o?")) {
+    if (confirm("Tem certeza que deseja excluir esse registro de compensa√ß√£o?")) {
         $.ajax({
             type: 'POST',
             url: HOME + 'compensacao/excluirPedido',
@@ -166,7 +166,7 @@ function verPedidoCertificado(nr) {
 function certificarPedido(certifica) {
     if ($("#nrPedido").val() != '') {
         if ((certifica == 'N') && ($("#justificativa").val().length < 3)) {
-            $("#lblJustificativa").html("justificativa n„o pode ser vazia").addClass('textoVermelho');
+            $("#lblJustificativa").html("justificativa n√£o pode ser vazia").addClass('textoVermelho');
             $("#justificativa").css('border', '1px solid #c00');
         }
         else {

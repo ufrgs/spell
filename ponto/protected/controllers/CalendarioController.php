@@ -59,7 +59,7 @@ class CalendarioController extends BaseController
                 'joinType' => 'inner join'
             )
         ))->findByPk($id_pessoa, array(
-            'select' => 't.id_pessoa, t.nome_pessoa, t.NomeConsulta',
+            'select' => 't.id_pessoa, t.nome_pessoa, t.nome_pessoa',
             'condition' => "
                 t.id_pessoa <> :id_pessoa
                 $restricaoChefia ",

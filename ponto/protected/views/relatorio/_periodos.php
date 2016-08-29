@@ -1,5 +1,5 @@
 <? if (!empty($periodos)): ?>
-    <label class="esquerdaAlinhado maior" for="periodo">Selecione o período</label>
+    <label class="esquerdaAlinhado maior" for="periodo">Selecione o perÃ­odo</label>
     <select id="periodo" name="periodo">
     <? foreach ($periodos as $periodo): ?>
         <option value="<?=$periodo['mes']?>/<?=$periodo['ano']?>"><?=$periodo['mes']?>/<?=$periodo['ano']?></option>
@@ -8,5 +8,5 @@
 
     <button class="semRotuloEsquerda maior">Exibir</button>
 <? else: ?>
-    <fieldset class="fieldInfo">Nenhum período disponível para esse órgão.</fieldset>
+    <fieldset class="fieldInfo">Nenhum perÃ­odo disponÃ­vel para esse Ã³rgÃ£o.</fieldset>
 <? endif; ?>

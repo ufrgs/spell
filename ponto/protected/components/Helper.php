@@ -167,6 +167,50 @@ class Helper {
     }
     
     /**
+     * Retorna um array com a hierarquia de órgaos que libera a id_aplicacao para a pessoa
+     * @param int $id_pessoa
+     * @param int $id_aplicacao
+     * @return array
+     */
+    public static function getHierarquiaOrgaosPermissao($id_pessoa, $id_aplicacao) 
+    {
+        $orgaos = array();
+        $permissao = Permissao::model()->find('id_pessoa = :id_pessoa AND id_aplicacao = :id_aplicacao AND data_expiracao IS NULL', array(
+            ':id_pessoa' => $id_pessoa,
+            ':id_aplicacao' => $id_aplicacao,
+        ));
+        if (!empty($permissao)) {
+            $orgaos = self::getHierarquiaDescendenteOrgao($permissao->id_orgao);
+        }
+        return $orgaos;
+    }
+    
+    /**
+     * Retorna um array com a hierarquia de órgaos que a pessoa tem chefia
+     * @param int $id_pessoa
+     * @return array
+     */
+    public static function getHierarquiaOrgaosChefia($id_pessoa) 
+    {
+        $orgaos = array();
+        $servidor = DadoFuncional::model()->find(
+            'id_pessoa = :id_pessoa
+            and coalesce(data_desligamento, DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL 1 DAY)) > CURRENT_TIMESTAMP() 
+            and coalesce(data_aposentadoria, DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL 1 DAY)) > CURRENT_TIMESTAMP() ', array(
+                ':id_pessoa' => $id_pessoa
+            )
+        ); 
+        $orgaosChefia = Orgao::model()->findAll('matricula_dirigente = :matricula1 OR matricula_substituto = :matricula2', array(
+            ':matricula1' => $servidor->matricula,
+            ':matricula2' => $servidor->matricula,
+        ));
+        foreach ($orgaosChefia as $orgao) {
+            $orgaos = array_merge($orgaos, self::getHierarquiaDescendenteOrgao($orgao->id_orgao));
+        }
+        return $orgaos;
+    }
+    
+    /**
      * Retorna um array com os id_orgao descendentes 
      * @param int $id_orgao
      * @return array
@@ -196,15 +240,19 @@ class Helper {
         } 
         return $orgaosAscendentes;
     }
+    
+    /**
+     * returns $val_1 in case $val_1 is different from NULL or ''. Otherwise, returns $val_2
+     * @param mixed $val_1
+     * @param midex $val_2
+     * @return boolean
+     */
+    public static function coalesce($val_1, $val_2)
+    {
+        $strVal_1 = strval($val_1);
+        if ($val_1 != NULL && trim($strVal_1) != '' && trim($strVal_1) != "''")
+            return $val_1;
+        else
+            return $val_2;
+    }
 }
-
-// returns $val_1 in case $val_1 is different from NULL or ''. Otherwise, returns $val_2
-function coalesce($val_1, $val_2)
-{
-    $strVal_1 = strval($val_1);
-    if ($val_1 != NULL && trim($strVal_1) != '' && trim($strVal_1) != "''")
-        return $val_1;
-    else
-        return $val_2;
-}
-

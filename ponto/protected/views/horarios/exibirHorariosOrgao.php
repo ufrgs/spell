@@ -1,6 +1,6 @@
 <?if ($empty===true):?>
 <div>
-    <p><strong>N„o h· hor·rio de expediente definido para o seu Ûrg„o de exercÌcio.</strong></p>
+    <p><strong>N√£o h√° hor√°rio de expediente definido para o seu √≥rg√£o de exerc√≠cio.</strong></p>
 </div>
 <?else:?>
 <div>
@@ -10,42 +10,51 @@
     ?>
     </strong></p>
     
-    <!-- DIAS ⁄TEIS -->
+    <!-- DIAS UTEIS -->
     <br>
-    <form method="POST" action="<?=Yii::app()->createUrl('horarios/salvarHorarios')?>">
+    <div id="divMensagemRetorno"></div>
+    <form method="POST" id="formHorarios" action="<?=Yii::app()->createUrl('horarios/salvarHorarios')?>">
         <table class="modelo1" style="text-align: center">
             <thead>
                 <tr>
-                    <th colspan="3">Dias ˙teis</th>
+                    <th colspan="3">Dias √∫teis</th>
                 </tr>
                 <tr>
                     <th style="width: 75px"></th>
-                    <th style="width: 200px">InÌcio do Expediente</th>
+                    <th style="width: 200px">In√≠cio do Expediente</th>
                     <th style="width: 200px">Fim do Expediente</th>
                 </tr>
             </thead>
             <tr>
                 <td>Atual:</td>
-                <td><?= Helper::HorarioOrgao($definicao->HoraInicioExpediente_hora) ?></td>
-                <td><?= Helper::HorarioOrgao($definicao->HoraFimExpediente_hora) ?></td>
+                <td><?= Helper::HorarioOrgao($definicao->hora_inicio_expediente_hora) ?></td>
+                <td><?= Helper::HorarioOrgao($definicao->hora_fim_expediente_hora) ?></td>
             </tr>
             <? if($podeEditar): ?>
             <tr>
-                <td>Novo:</td>
+                <td rowspan="2">Novo:</td>
                 <td>
-                    <input type="text" size="5" name="DefinicoesOrgao[HoraInicioExpediente_hora]" class="hora" value="<?=$definicao->HoraInicioExpediente_hora?>" onchange="validaCampo(this)"/> <br/>
+                    <input type="text" size="5" id="inhora_inicio_expediente" name="DefinicoesOrgao[hora_inicio_expediente_hora]" class="hora" value="<?=$definicao->hora_inicio_expediente_hora?>" onchange="validaCampo(this)"/> <br/>
                 </td>
                 <td>
-                    <input type="text" size="5" name="DefinicoesOrgao[HoraFimExpediente_hora]" class="hora" value="<?=$definicao->HoraFimExpediente_hora?>" onchange="validaCampo(this)"/> <br/>
+                    <input type="text" size="5" id="inhora_fim_expediente" name="DefinicoesOrgao[hora_fim_expediente_hora]" class="hora" value="<?=$definicao->hora_fim_expediente_hora?>" onchange="validaCampo(this)"/> <br/>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="hora">
+                    <span style="float:left; width: 10%; display: block;"><?=$aLimitesHorario['hora_inicio_expediente']?></span>
+                    <div style="margin-left:7px;float:left; width: 76%; display: block;" id="sliderHorarioExpediente"></div>
+                    <span style="margin-left:7px; float:left; width: 10%; display: block;"><?=$aLimitesHorario['hora_fim_expediente']?></span>
+                    <input type="hidden" value="<?=$aLimitesHorario['hora_inicio_expediente']?>" id="inLimitehora_inicio_expediente">
+                    <input type="hidden" value="<?=$aLimitesHorario['hora_fim_expediente']?>" id="inLimitehora_fim_expediente">
                 </td>
             </tr>
             <? endif; ?>
         </table>
         <br>
         
-        <!-- S¡BADO -->
-        <?if((!$podeEditar)&&(!$definicao->sabado)):?>
-        <?else:?>
+        <!-- SABADO -->
+        <?if($aLimitesHorario['Sabado']):?>        
             <br>
             <table class="modelo1" style="text-align: center">
                 <thead>
@@ -54,37 +63,47 @@
                             <?if($podeEditar): 
                                 echo(CHtml::checkBox('checkboxSabado', $definicao->sabado, array("onClick" => "checkSabado()")));
                             endif;?>
-                            S·bado
+                            S√°bado
                         </th>
                     </tr>
                     <tr>                
                         <th style="width: 75px"></th>
-                        <th style="width: 200px">InÌcio do Expediente</th>
+                        <th style="width: 200px">In√≠cio do Expediente</th>
                         <th style="width: 200px">Fim do Expediente</th>
                     </tr>
                 </thead>
                 <tr>
                     <td>Atual:</td>
-                    <td><?= Helper::HorarioOrgao($definicao->HoraInicioExpedienteSabado_hora) ?></td>
-                    <td><?= Helper::HorarioOrgao($definicao->HoraFimExpedienteSabado_hora) ?></td>
+                    <td><?= Helper::HorarioOrgao($definicao->hora_inicio_expediente_sabado_hora) ?></td>
+                    <td><?= Helper::HorarioOrgao($definicao->hora_fim_expediente_sabado_hora) ?></td>
                 </tr>
-                <tr>
-                    <? if($podeEditar): ?>
-                    <td>Novo:</td>
-                    <td>
-                        <input type="text" size="5" name="DefinicoesOrgao[HoraInicioExpedienteSabado_hora]" class="sabado" value="<?=$definicao->HoraInicioExpedienteSabado_hora?>" onchange="validaCampo(this)"/>
-                    </td>
-                    <td>
-                        <input type="text" size="5" name="DefinicoesOrgao[HoraFimExpedienteSabado_hora]" class="sabado" value="<?=$definicao->HoraFimExpedienteSabado_hora?>" onchange="validaCampo(this)"/>
-                    </td>
-                    <? endif; ?>
-                </tr>
+                <? if($podeEditar): ?>
+                    <tr>                    
+                        <td rowspan="2">Novo:</td>
+                        <td>
+                            <input type="text" size="5" name="DefinicoesOrgao[hora_inicio_expediente_sabado_hora]" id="inhora_inicio_expediente_sabado" class="sabado" value="<?=$definicao->hora_inicio_expediente_sabado_hora?>" onchange="validaCampo(this)"/>
+                        </td>
+                        <td>
+                            <input type="text" size="5" name="DefinicoesOrgao[hora_fim_expediente_sabado_hora]" id="inhora_fim_expediente_sabado" class="sabado" value="<?=$definicao->hora_fim_expediente_sabado_hora?>" onchange="validaCampo(this)"/>
+                        </td>
+
+
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="hora">
+                            <span style="float:left; width: 10%; display: block;"><?=$aLimitesHorario['hora_inicio_expediente_sabado']?></span>
+                            <div style="margin-left:7px;float:left; width: 76%; display: block;" id="sliderHorarioSabado"></div>
+                            <span style="margin-left:7px; float:left; width: 10%; display: block;"><?=$aLimitesHorario['hora_fim_expediente_sabado']?></span>
+                            <input type="hidden" value="<?=$aLimitesHorario['hora_inicio_expediente_sabado']?>" id="inLimitehora_inicio_expediente_sabado">
+                            <input type="hidden" value="<?=$aLimitesHorario['hora_fim_expediente_sabado']?>" id="inLimitehora_fim_expediente_sabado">
+                        </td>
+                    </tr>
+                <? endif; ?>
             </table>
             <br>
         <?endif?>
         <!-- DOMINGO -->
-        <?if((!$podeEditar)&&(!$definicao->domingo)):?>
-        <?else:?>
+        <?if($aLimitesHorario['Domingo']):?>        
             <br>
             <table class="modelo1" style="text-align: center">
                 <thead>
@@ -98,30 +117,41 @@
                     </tr>
                     <tr>
                         <th style="width: 75px"></th>
-                        <th style="width: 200px">InÌcio do Expediente</th>
+                        <th style="width: 200px">In√≠cio do Expediente</th>
                         <th style="width: 200px">Fim do Expediente</th>
                     </tr>
                 </thead>
                 <tr>
                     <td>Atual:</td>
-                    <td><?= Helper::HorarioOrgao($definicao->HoraInicioExpedienteDomingo_hora) ?></td>
-                    <td><?= Helper::HorarioOrgao($definicao->HoraFimExpedienteDomingo_hora) ?></td>
+                    <td><?= Helper::HorarioOrgao($definicao->hora_inicio_expediente_domingo_hora) ?></td>
+                    <td><?= Helper::HorarioOrgao($definicao->hora_fim_expediente_domingo_hora) ?></td>
                 </tr>
-                <tr>
-                    <? if($podeEditar): ?>
-                    <td>Novo:</td>
-                    <td>
-                        <input type="text" size="5" name="DefinicoesOrgao[HoraInicioExpedienteDomingo_hora]" class="domingo" value="<?=$definicao->HoraInicioExpedienteDomingo_hora?>" onchange="validaCampo(this)"/> 
-                    </td>
-                    <td>
-                        <input type="text" size="5" name="DefinicoesOrgao[HoraFimExpedienteDomingo_hora]" class="domingo" value="<?=$definicao->HoraFimExpedienteDomingo_hora?>" onchange="validaCampo(this)"/> 
-                    </td>
-                    <? endif; ?>
-                </tr>
+                <? if($podeEditar): ?>
+                    <tr>
+                    
+                        <td rowspan="2">Novo:</td>
+                        <td>
+                            <input type="text" size="5" name="DefinicoesOrgao[hora_inicio_expediente_domingo_hora]" id="inhora_inicio_expediente_domingo" class="domingo" value="<?=$definicao->hora_inicio_expediente_domingo_hora?>" onchange="validaCampo(this)"/> 
+                        </td>
+                        <td>
+                            <input type="text" size="5" name="DefinicoesOrgao[hora_fim_expediente_domingo_hora]" id="inhora_fim_expediente_domingo" class="domingo" value="<?=$definicao->hora_fim_expediente_domingo_hora?>" onchange="validaCampo(this)"/> 
+                        </td>                    
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="hora">
+                            <span style="float:left; width: 10%; display: block;"><?=$aLimitesHorario['hora_inicio_expediente_domingo']?></span>
+                            <div style="margin-left:7px;float:left; width: 76%; display: block;" id="sliderHorarioDomingo"></div>
+                            <span style="margin-left:7px; float:left; width: 10%; display: block;"><?=$aLimitesHorario['hora_fim_expediente_domingo']?></span>
+                            <input type="hidden" value="<?=$aLimitesHorario['hora_inicio_expediente_domingo']?>" id="inLimitehora_inicio_expediente_domingo">
+                            <input type="hidden" value="<?=$aLimitesHorario['hora_fim_expediente_domingo']?>" id="inLimitehora_fim_expediente_domingo">
+                        </td>
+                    </tr>
+                <? endif; ?>
             </table>
         <?endif?>
         <div>
             <input type="hidden" name="Orgao" id="Orgao" value="<?=$orgao->id_orgao?>" />
+            <input type="hidden" name="podeEditar" value="<?=$podeEditar?>" />
             <?php
                 if ($podeEditar)
                 {

@@ -76,9 +76,9 @@ class GerenciaController extends BaseController
                 'joinType' => 'inner join'
             )
         ))->findAll(array(
-            'select' => 't.id_pessoa, t.nome_pessoa, t.NomeConsulta',
+            'select' => 't.id_pessoa, t.nome_pessoa, t.nome_pessoa',
             'condition' => "
-                ( t.NomeConsulta like '%$term%' or convert(varchar(6), t.id_pessoa) = '$term' )
+                ( t.nome_pessoa like '%$term%' or convert(varchar(6), t.id_pessoa) = '$term' )
                 and t.id_pessoa <> :id_pessoa",
             'params' => array(
                 ':id_pessoa' => Yii::app()->user->id_pessoa,

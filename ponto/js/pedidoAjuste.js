@@ -2,7 +2,7 @@
 $(document).ready(function() {
     $("#divPedido").dialog({title: "Pedido de ajuste", width: 650, height: 350, autoOpen:false, modal:true});
     if ($("#nrPonto").val() != '') {
-        // se È correÁ„o de registro, n„o mostra abono e perÌodo
+        // se e correcao de registro, nao mostra abono e periodo
         $("label[for=tipoA]").hide();
         $("#tipoA").hide();
         $("label[for=tipoP]").hide();
@@ -81,18 +81,18 @@ function enviaSolicitacao() {
         msg += "Selecione o dia para o ajuste. <br/>";
     }
     else {
-        // testa se È um dia v·lido
+        // testa se e um dia valido
         var auxData = $("#data").val().split("/");
         auxData = auxData[2] + "/" + auxData[1] + "/" + auxData[0];
         if (!Date.parse(auxData)) {
-            msg += "Escreva um dia v·lido. <br/>";
+            msg += "Escreva um dia v√°lido. <br/>";
         }
         else {
-            // testa se o dia È maior que o atual
+            // testa se o dia e maior que o atual
             var hoje = new Date();
             auxData = new Date(auxData);
             if (auxData > hoje) {
-                msg += "O ajuste n„o pode ser solicitado para uma data futura. <br/>";
+                msg += "O ajuste n√£o pode ser solicitado para uma data futura. <br/>";
             }
         }
     }
@@ -100,34 +100,34 @@ function enviaSolicitacao() {
         msg += "Selecione a hora para o ajuste. <br/>";
     }
     else {
-        // testa se È um hor·rio v·lido
+        // testa se e um horario valido
         if (!/^(([0-1]?[0-9])|([2][0-3])):([0-5]?[0-9])$/i.test($("#hora").val())) {
-            msg += "Escreva um hor·rio v·lido. <br/>";
+            msg += "Escreva um hor√°rio v√°lido. <br/>";
         }
     }
     if ($("input[name=tipo]:checked").val() == "P") {
         if ($("#horaSaida").val() == "") {
-            msg += "Selecione a hora de saÌda para o ajuste. <br/>";
+            msg += "Selecione a hora de sa√≠da para o ajuste. <br/>";
         }
         else if (!/^(([0-1]?[0-9])|([2][0-3])):([0-5]?[0-9])$/i.test($("#horaSaida").val())) {
-            msg += "Escreva um hor·rio de saÌda v·lido. <br/>";
+            msg += "Escreva um hor√°rio de sa√≠da v√°lido. <br/>";
         }
     }
     if (($("#justificativa").val() == "") || (($("#justificativa").val() == "o") && $("#outraJustificativa").val() == "")) {
         msg += "Justifique o seu pedido de ajuste. <br/>";
     }
     if (($("#justificativa").val() == "o") && ($("#outraJustificativa").val().length > 2048)) {
-        msg += "Digite no m·ximo 2048 caracteres na justificativa (atualmente "+$("#outraJustificativa").val().length+")."
+        msg += "Digite no m√°ximo 2048 caracteres na justificativa (atualmente "+$("#outraJustificativa").val().length+")."
     }
     if ($("#registroAnterior").val() == ($("input[name=tipo]:checked").val()+$("#data").val()+$("#hora").val())) {
-        msg += "VocÍ n„o alterou o dia e hor·rio para solicitar o ajuste.";
+        msg += "Voc√™ n√£o alterou o dia e hor√°rio para solicitar o ajuste.";
     }
     if (msg != "") {
         $("#mensagens").html(msg).slideDown();
     }
     else {
         var formData = new FormData($('form')[0]);
-        $("#botaoEnviar").html('<img src="/Design/visual_ufrgs/smallLoader.gif"/> Enviando...');
+        $("#botaoEnviar").html('<img src="/Design/imgs/smallLoader.gif"/> Enviando...');
         $("progress").css('width', '100%').show();
         $.ajax({
             type: 'POST',

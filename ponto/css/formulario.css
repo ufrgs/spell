@@ -83,14 +83,14 @@ button:hover, .button:hover, input[type=button]:hover, input[type=submit]:hover 
 
 button.desabilitado, .button.desabilitado, .botaoDesabilitado, button:disabled, .button:disabled {
 	background-color: #ccc;
-	background: url(visual_ufrgs/fundo_bt_desabilitado.gif) repeat-x top;
+	background: url(imgs/fundo_bt_desabilitado.gif) repeat-x top;
 	border: 1px solid #A5C1DC;
 	cursor: default;
 }
 
 button.btPerigo, .button.btPerigo, .btPerigo {
 	background-color: #BD2C34;
-	background: url(visual_ufrgs/fundo_bt_vermelho.gif) repeat-x top;
+	background: url(imgs/fundo_bt_vermelho.gif) repeat-x top;
 	border: 1px solid #A0252C;
 }
 
@@ -101,7 +101,7 @@ button.btPerigo:hover, .button.btPerigo:hover {
 
 button.btSucesso, .button.btSucesso, .btSucesso {
 	background-color: #259C32;
-	background: url(visual_ufrgs/fundo_bt_verde.gif) repeat-x top;
+	background: url(imgs/fundo_bt_verde.gif) repeat-x top;
 	border: 1px solid #29963F;
 }
 
@@ -112,7 +112,7 @@ button.btSucesso:hover, .button.btSucesso:hover {
 
 button.btAlerta, .button.btAlerta, .btAlerta {
 	background-color: #C4A515;
-	background: url(visual_ufrgs/fundo_bt_amarelo.gif) repeat-x top;
+	background: url(imgs/fundo_bt_amarelo.gif) repeat-x top;
 	border: 1px solid #998118;
 	color: #000;
 }

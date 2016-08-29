@@ -5,7 +5,6 @@ class HorariosController extends BaseController
     
     public function beforeAction($action) {
         
-        Yii::app()->getClientScript()->registerScriptFile("/Funcoes/jquery/jquery.maskedinput-1.2.2.js", CClientScript::POS_END);
         Yii::app()->getClientScript()->registerScriptFile(Yii::app()->baseUrl.'/js/horarioOrgao.js', CClientScript::POS_END);
        
         return parent::beforeAction($action);
@@ -15,114 +14,63 @@ class HorariosController extends BaseController
     {
         $id_pessoa = Yii::app()->session['id_pessoa'];
         $controle = $empty = false;
-        $orgaos = Orgao::model()->with('OrgaoUfrgs')->findAll(array(
-            'select' => 't.id_orgao, t.nome_orgao',
-            'condition' => "t.id_orgao in (
-                select id_orgao from fn_hierarquia_orgao_funcoes_pessoa (:CodPessoa1)
-                union
-                select id_orgao from fn_permissoes (:id_pessoa2, 'RH', 'rh003', null) 
-                    union
-                select id_orgao 
-                from TABELAS_AUXILIARES..ADOrgaoDirigenteExercicio TAUX
-                    inner join SERVIDOR S on S.matricula = TAUX.matricula  
-                where S.id_pessoa = :id_pessoa3
-            ) and OrgaoUfrgs.DataExtincaoOrgao is null",
-            'params' => array(
-                ':CodPessoa1' => $id_pessoa,
-                ':id_pessoa2' => $id_pessoa,
-                ':id_pessoa3' => $id_pessoa,
-            ),
-            'order' => 'nome_orgao'
-        ));
-
-        if ($orgaos == NULL || empty ($orgaos))
+        $orgaos = $this->retornaOrgaosResponsabilidade($id_pessoa);
+        if ($orgaos == NULL || empty ($orgaos)) //Pessoa não possui orgaos sob sua responsabilidade 
         {
-            $orgao      =   Orgao::model()->find(array(
-                'condition'     =>  "
-                    id_orgao in (
-                    select O.id_orgao
-                    from dado_funcional D
-                    join orgao O on
-                        D.orgao_exercicio = O.id_orgao
-                    where D.id_pessoa = :id_pessoa
-                        and coalesce(D.data_aposentadoria, DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL 1 DAY)) > CURRENT_TIMESTAMP()
-                        and coalesce(D.data_desligamento, DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL 1 DAY)) > CURRENT_TIMESTAMP())"
-            ,
-                'params' => array(
-                    ':id_pessoa' => $id_pessoa,
-                    )
-            ));
-            $definicao   =   new DefinicoesOrgao();
-            
-            if (is_null($orgao))
+            $orgao = $this->retornaOrgaoLotacao($id_pessoa);
+            $definicao   =   new DefinicoesOrgao();            
+            if (!is_null($orgao))
             {
-                $empty      =   true;
-            }
-            
-            else
-            {
-                $definicao  =   DefinicoesOrgao::model()->find('id_orgao = '.$orgao->id_orgao);
-                if(is_null($definicao)){
-                    $empty  =   true;                    
-                }
-            }
-            
+                $definicao  =   DefinicoesOrgao::model()->find('id_orgao = '.$orgao->id_orgao);                
+            }            
+            $empty = is_null($definicao) || is_null($orgao);            
             $this->render('exibirHorariosOrgao', array('orgao' => $orgao, 'definicao' => $definicao, 'podeEditar' => false, 'empty' => $empty));
-        }        
-        else
+        }
+        else //possui orgaos sobre sua responsabilidade 
         {
-            $definicao = $orgao = null;
-            
-            if(isset($_REQUEST['Orgaos'])) {
-                $orgaos = Orgao::model()->with('OrgaoUfrgs')->findAll(array(
-                    'select' => 't.id_orgao, t.nome_orgao',
-                    'condition' => "t.id_orgao in (
-                        select id_orgao from fn_hierarquia_orgao_funcoes_pessoa (:CodPessoa1)
-                        union
-                        select id_orgao from fn_permissoes (:id_pessoa2, 'RH', 'rh003', null) 
-                            union
-                        select id_orgao 
-                        from TABELAS_AUXILIARES..ADOrgaoDirigenteExercicio TAUX
-                            inner join SERVIDOR S on S.matricula = TAUX.matricula  
-                        where S.id_pessoa = :id_pessoa3
-                    ) and OrgaoUfrgs.DataExtincaoOrgao is null",
-                    'params' => array(
-                        ':CodPessoa1' => $id_pessoa,
-                        ':id_pessoa2' => $id_pessoa,
-                        ':id_pessoa3' => $id_pessoa,
-                    ),
-                    'order' => 'nome_orgao'
-                ));
-                if (is_null($orgaos) || empty($orgaos)){
-                    $empty      =   true;
-                    $this->render('exibirHorariosOrgao', array('orgao' => $orgao, 'definicao' => $definicao, 'podeEditar' => false, 'empty' => $empty));
-                    
+            $definicao = $orgao = null;            
+            if(isset($_REQUEST['Orgaos'])) { //selecionou um dos orgaos sob responsabilidade 
+                $orgaos = $this->retornaOrgaosResponsabilidade($id_pessoa);
+                $controle  = true;
+                $orgao     = Orgao::model()->find('t.id_orgao = '.$_REQUEST["Orgaos"]);
+                $definicao = DefinicoesOrgao::model()->find('t.id_orgao = '.$_REQUEST["Orgaos"]);
+                $defOrgaoSuperior = DefinicoesOrgao::model()->find('t.id_orgao = '.$orgao->getAttribute("id_orgao_superior"));
+                $aLimitesHorario['hora_inicio_expediente'] = "00:00";
+                $aLimitesHorario['hora_fim_expediente'] = "23:59";
+                $aLimitesHorario['Sabado'] = true;
+                $aLimitesHorario['Domingo'] = true;
+                $aLimitesHorario['hora_inicio_expediente_sabado'] = "00:00";
+                $aLimitesHorario['hora_fim_expediente_sabado'] = "23:59";
+                $aLimitesHorario['hora_inicio_expediente_domingo'] = "00:00";
+                $aLimitesHorario['hora_fim_expediente_domingo'] = "23:59";
+                if (!is_null($defOrgaoSuperior) || !empty($defOrgaoSuperior)){
+                    $aLimitesHorario['hora_inicio_expediente'] = $defOrgaoSuperior->getAttribute("hora_inicio_expediente_hora");
+                    $aLimitesHorario['hora_fim_expediente'] = $defOrgaoSuperior->getAttribute("hora_fim_expediente_hora");
+                    $aLimitesHorario['Sabado'] = $defOrgaoSuperior->getAttribute("sabado");                    
+                    $aLimitesHorario['Domingo'] = $defOrgaoSuperior->getAttribute("domingo");
+                    $aLimitesHorario['hora_inicio_expediente_sabado'] = $defOrgaoSuperior->getAttribute("hora_inicio_expediente_sabado_hora");
+                    $aLimitesHorario['hora_fim_expediente_sabado'] = $defOrgaoSuperior->getAttribute("hora_fim_expediente_sabado_hora");
+                    $aLimitesHorario['hora_inicio_expediente_domingo'] = $defOrgaoSuperior->getAttribute("hora_inicio_expediente_domingo_hora");
+                    $aLimitesHorario['hora_fim_expediente_domingo'] = $defOrgaoSuperior->getAttribute("hora_fim_expediente_domingo_hora");
                 }
-                else{
-                    $controle  = true;
-                    $orgao     = Orgao::model()->find('t.id_orgao = '.$_REQUEST["Orgaos"]);
-                    $definicao = DefinicoesOrgao::model()->find('t.id_orgao = '.$_REQUEST["Orgaos"]);
-                    if(is_null($definicao)){
-                        $definicao = new DefinicoesOrgao();
-                    }
-                             
-                    $this->renderPartial('exibirHorariosOrgao', array('orgaos' => $orgaos, 'orgao' => $orgao, 'definicao' => $definicao, 'podeEditar' => true, 'empty' => $empty));
+                if(is_null($definicao)){
+                    $definicao = new DefinicoesOrgao();
                 }
-            }
-            if ($controle==false){
+                $this->renderPartial('exibirHorariosOrgao', array('orgaos' => $orgaos, 'orgao' => $orgao, 'definicao' => $definicao,'aLimitesHorario'=>$aLimitesHorario, 'podeEditar' => true, 'empty' => $empty));                
+            }else{
                 $this->render('horariosOrgaos', array('orgaos' => $orgaos, 'definicao'=> $definicao, 'orgao' => $orgao));
             }
         }
     }
-           
+          
     public function actionSalvarHorarios()
-    {
+    {   
         if (isset($_POST['Orgao'])){
             $msg="";
             $postDefinicoes = $_POST['DefinicoesOrgao'];
             $orgao     = Orgao::model()->find('t.id_orgao = '.$_POST['Orgao']);            
             $definicao = DefinicoesOrgao::model()->find('t.id_orgao = '.$orgao->id_orgao);
-            $defOrgaoSuperior = DefinicoesOrgao::model()->find('t.id_orgao = '.$orgao->getAttribute("CodOrgaoHierarquicamSuperior"));            
+            $defOrgaoSuperior = DefinicoesOrgao::model()->find('t.id_orgao = '.$orgao->getAttribute("id_orgao_superior"));
             
             if (is_null($definicao)){
                 $definicao = new DefinicoesOrgao();
@@ -132,28 +80,28 @@ class HorariosController extends BaseController
             $definicao->data_atualizacao = new CDbExpression("CURRENT_TIMESTAMP()");
             $definicao->id_pessoa_atualizacao = Yii::app()->session['id_pessoa'];
             
-            //Verifica se o horario informado esta de acordo com o horario do orgao superior
+            //Verifica se o horário informado está de acordo com o horário do Órgão superior
             if (!is_null($defOrgaoSuperior)){
-                if($postDefinicoes['HoraInicioExpediente_hora'] < $defOrgaoSuperior->HoraInicioExpediente_hora || $postDefinicoes['HoraFimExpediente_hora'] > $defOrgaoSuperior->HoraFimExpediente_hora){
+                if($postDefinicoes['hora_inicio_expediente_hora'] < $defOrgaoSuperior->hora_inicio_expediente_hora || $postDefinicoes['hora_fim_expediente_hora'] > $defOrgaoSuperior->hora_fim_expediente_hora){
                     $msg .= "O horário informado não está de acordo com o horário do órgão hierarquicamente superior.";
                 }
             }
             
-            if (!($postDefinicoes['HoraInicioExpediente_hora']=="") && !($postDefinicoes['HoraFimExpediente_hora']=="")){                
-                $hora_inicio_expediente = $postDefinicoes['HoraInicioExpediente_hora'];
-                $hora_fim_expediente = $postDefinicoes['HoraFimExpediente_hora'];                
-                $definicao->HoraInicioExpediente_hora = $hora_inicio_expediente;
-                $definicao->HoraFimExpediente_hora = $hora_fim_expediente;
+            if (!($postDefinicoes['hora_inicio_expediente_hora']=="") && !($postDefinicoes['hora_fim_expediente_hora']=="")){                
+                $hora_inicio_expediente = $postDefinicoes['hora_inicio_expediente_hora'];
+                $hora_fim_expediente = $postDefinicoes['hora_fim_expediente_hora'];                
+                $definicao->hora_inicio_expediente_hora = $hora_inicio_expediente;
+                $definicao->hora_fim_expediente_hora = $hora_fim_expediente;
             }
             else {
                 $msg.="Hora inválida";
             }
             
-            if (isset($postDefinicoes['HoraInicioExpedienteSabado_hora']) && isset($postDefinicoes['HoraFimExpedienteSabado_hora'])){
+            if (isset($postDefinicoes['hora_inicio_expediente_sabado_hora']) && isset($postDefinicoes['hora_fim_expediente_sabado_hora'])){
                 if(!is_null($defOrgaoSuperior)){
-                    if(!($defOrgaoSuperior->HoraInicioExpedienteSabado_hora == "") || !($defOrgaoSuperior->HoraFimExpedienteSabado_hora == ""))
+                    if(!($defOrgaoSuperior->hora_inicio_expediente_sabado_hora == "") || !($defOrgaoSuperior->hora_fim_expediente_sabado_hora == ""))
                     {
-                        if($postDefinicoes['HoraInicioExpedienteSabado_hora'] < $defOrgaoSuperior->HoraInicioExpedienteSabado_hora || $postDefinicoes['HoraFimExpedienteSabado_hora'] > $defOrgaoSuperior->HoraFimExpedienteSabado_hora){
+                        if($postDefinicoes['hora_inicio_expediente_sabado_hora'] < $defOrgaoSuperior->hora_inicio_expediente_sabado_hora || $postDefinicoes['hora_fim_expediente_sabado_hora'] > $defOrgaoSuperior->hora_fim_expediente_sabado_hora){
                             $msg .= "O horário informado não está de acordo com o horário do órgão hierarquicamente superior para sábado.";
                         }
                     }else{
@@ -161,11 +109,11 @@ class HorariosController extends BaseController
                     }
                 }
                 
-                if ((!($postDefinicoes['HoraInicioExpedienteSabado_hora']=="") && !($postDefinicoes['HoraFimExpedienteSabado_hora']==""))){
-                    $hora_inicio_expediente_sab = $postDefinicoes['HoraInicioExpedienteSabado_hora'];
-                    $hora_fim_expediente_sab = $postDefinicoes['HoraFimExpedienteSabado_hora'];
-                    $definicao->HoraInicioExpedienteSabado_hora = $hora_inicio_expediente_sab;
-                    $definicao->HoraFimExpedienteSabado_hora = $hora_fim_expediente_sab;               
+                if ((!($postDefinicoes['hora_inicio_expediente_sabado_hora']=="") && !($postDefinicoes['hora_fim_expediente_sabado_hora']==""))){
+                    $hora_inicio_expediente_sabado = $postDefinicoes['hora_inicio_expediente_sabado_hora'];
+                    $hora_fim_expediente_sabado = $postDefinicoes['hora_fim_expediente_sabado_hora'];
+                    $definicao->hora_inicio_expediente_sabado_hora = $hora_inicio_expediente_sabado;
+                    $definicao->hora_fim_expediente_sabado_hora = $hora_fim_expediente_sabado;               
                 }
                 else {
                     $msg.="Hora de sábado inválida";
@@ -173,15 +121,15 @@ class HorariosController extends BaseController
             }
             
             else{
-                $definicao->HoraInicioExpedienteSabado_hora =  null;
-                $definicao->HoraFimExpedienteSabado_hora =  null;
+                $definicao->hora_inicio_expediente_sabado_hora =  null;
+                $definicao->hora_fim_expediente_sabado_hora =  null;
             }
             
-            if (isset($postDefinicoes['HoraInicioExpedienteDomingo_hora']) && isset($postDefinicoes['HoraFimExpedienteDomingo_hora'])){
+            if (isset($postDefinicoes['hora_inicio_expediente_domingo_hora']) && isset($postDefinicoes['hora_fim_expediente_domingo_hora'])){
                 if(!is_null($defOrgaoSuperior)){
-                    if(!($defOrgaoSuperior->HoraInicioExpedienteDomingo_hora == "") || !($defOrgaoSuperior->HoraFimExpedienteDomingo_hora == ""))
+                    if(!($defOrgaoSuperior->hora_inicio_expediente_domingo_hora == "") || !($defOrgaoSuperior->hora_fim_expediente_domingo_hora == ""))
                     {
-                        if($postDefinicoes['HoraInicioExpedienteDomingo_hora'] < $defOrgaoSuperior->HoraInicioExpedienteDomingo_hora || $postDefinicoes['HoraFimExpedienteDomingo_hora'] > $defOrgaoSuperior->HoraFimExpedienteDomingo_hora){
+                        if($postDefinicoes['hora_inicio_expediente_domingo_hora'] < $defOrgaoSuperior->hora_inicio_expediente_domingo_hora || $postDefinicoes['hora_fim_expediente_domingo_hora'] > $defOrgaoSuperior->hora_fim_expediente_domingo_hora){
                             $msg .= "O horário informado não está de acordo com o horário do órgão hierarquicamente superior para Domingo.";
                         }
                     }else{
@@ -189,11 +137,11 @@ class HorariosController extends BaseController
                     }
                 }
                 
-                if (!($postDefinicoes['HoraInicioExpedienteDomingo_hora']=="") && !($postDefinicoes['HoraFimExpedienteDomingo_hora']=="")){
-                    $hora_inicio_expediente_dom = $postDefinicoes['HoraInicioExpedienteDomingo_hora'];
-                    $hora_fim_expediente_dom = $postDefinicoes['HoraFimExpedienteDomingo_hora'];
-                    $definicao->HoraInicioExpedienteDomingo_hora = $hora_inicio_expediente_dom;
-                    $definicao->HoraFimExpedienteDomingo_hora = $hora_fim_expediente_dom;               
+                if (!($postDefinicoes['hora_inicio_expediente_domingo_hora']=="") && !($postDefinicoes['hora_fim_expediente_domingo_hora']=="")){
+                    $hora_inicio_expediente_domingo = $postDefinicoes['hora_inicio_expediente_domingo_hora'];
+                    $hora_fim_expediente_domingo = $postDefinicoes['hora_fim_expediente_domingo_hora'];
+                    $definicao->hora_inicio_expediente_domingo_hora = $hora_inicio_expediente_domingo;
+                    $definicao->hora_fim_expediente_domingo_hora = $hora_fim_expediente_domingo;               
                 }
                 else {
                     $msg.="Hora de domingo inválida";
@@ -201,21 +149,22 @@ class HorariosController extends BaseController
             }
             
             else{
-                $definicao->HoraInicioExpedienteDomingo_hora = null;
-                $definicao->HoraFimExpedienteDomingo_hora = null;               
+                $definicao->hora_inicio_expediente_domingo_hora = null;
+                $definicao->hora_fim_expediente_domingo_hora = null;               
             }
             if ($msg==""){
                 if ($definicao->save()) {
-                    $orgaos     = Orgao::model()->findAll(array(
-                        "condition" => "id_orgao in(
-                            select id_orgao 
-                            from fn_orgao_descendente(:id_orgao)
-                            where id_orgao not in (
-                                select id_orgao from definicoes_orgao
-                            ))",
+                    $orgaosDescendentes = Helper::getHierarquiaDescendenteOrgao($orgao->id_orgao);
+                    $orgaos = Orgao::model()->findAll(array(
+                        "condition" => "id_orgao <> :id_orgao
+                            AND id_orgao IN (
+                                :orgaos_descendentes
+                            )",
                         'params' => array(
                             ':id_orgao' => $orgao->id_orgao,
-                            )));
+                            ':orgaos_descendentes' => implode(',', $orgaosDescendentes),
+                        )
+                    ));
 
                     if(!empty($orgaos) || !is_null($orgaos)){
                         foreach ($orgaos as $org) {
@@ -227,41 +176,76 @@ class HorariosController extends BaseController
 
                             if (isset($hora_inicio_expediente) && isset($hora_fim_expediente)){
                                 if(!($hora_inicio_expediente=="") && !($hora_fim_expediente=="")){
-                                    $def->HoraInicioExpediente_hora = $hora_inicio_expediente;
-                                    $def->HoraFimExpediente_hora = $hora_fim_expediente;               
+                                    $def->hora_inicio_expediente_hora = $hora_inicio_expediente;
+                                    $def->hora_fim_expediente_hora = $hora_fim_expediente;               
                                 }
                             }
 
-                            if (isset($hora_inicio_expediente_sab) && isset($hora_fim_expediente_sab)){
-                                if(!($hora_inicio_expediente_sab=="") && !($hora_fim_expediente_sab=="")){
-                                    $def->HoraInicioExpedienteSabado_hora = $hora_inicio_expediente_sab;
-                                    $def->HoraFimExpedienteSabado_hora = $hora_fim_expediente_sab;               
+                            if (isset($hora_inicio_expediente_sabado) && isset($hora_fim_expediente_sabado)){
+                                if(!($hora_inicio_expediente_sabado=="") && !($hora_fim_expediente_sabado=="")){
+                                    $def->hora_inicio_expediente_sabado_hora = $hora_inicio_expediente_sabado;
+                                    $def->hora_fim_expediente_sabado_hora = $hora_fim_expediente_sabado;               
                                 }
                             }
 
-                            if (isset($hora_inicio_expediente_dom) && isset($hora_fim_expediente_dom)){
-                                if(!($hora_inicio_expediente_dom=="") && !($hora_fim_expediente_dom=="")){
-                                    $def->HoraInicioExpedienteDomingo_hora = $hora_inicio_expediente_dom;
-                                    $def->HoraFimExpedienteDomingo_hora = $hora_fim_expediente_dom;               
+                            if (isset($hora_inicio_expediente_domingo) && isset($hora_fim_expediente_domingo)){
+                                if(!($hora_inicio_expediente_domingo=="") && !($hora_fim_expediente_domingo=="")){
+                                    $def->hora_inicio_expediente_domingo_hora = $hora_inicio_expediente_domingo;
+                                    $def->hora_fim_expediente_domingo_hora = $hora_fim_expediente_domingo;               
                                 }
                             }                        
 
-                            if (!$def->save())
-                                Yii::app()->user->setFlash('error', "Ocorreu um erro ao salvar o horário do órgão ".$org->id_orgao);
+                            if (!$def->save()){
+                                echo Yii::app()->user->setFlash('error', "Ocorreu um erro ao salvar o horário do órgão ".$org->id_orgao);
+                            }
                         }
                     }
-                    Yii::app()->user->setFlash('success', "Horário salvo com sucesso!");
+                    $mensagem = array('mensagem'=>utf8_encode("O hor&aacute;rio foi salvo com sucesso."), 'tipo'=>'flash-success');                    
+                    echo json_encode($mensagem);                    
+                    
                 }
-                else {
-                    Yii::app()->user->setFlash('error', "Ocorreu um erro ao salvar o horário.");
+                else {                    
+                    $mensagem = array('mensagem'=>utf8_encode("Ocorreu um erro ao salvar o hor&aacute;rio."), 'tipo'=>'flash-error');                    
+                    echo json_encode($mensagem); 
                 }
             }            
             else {
-                Yii::app()->user->setFlash('error', "Ocorreu um erro ao salvar o horário. ".$msg);
+                $mensagem = array('mensagem'=>utf8_encode("Ocorreu um erro ao salvar o hor&aacute;rio. ".$msg), 'tipo'=>'flash-error');                    
+                echo json_encode($mensagem); 
             }
-            $this->redirect(array('horariosOrgaos', array('Orgaos'=>$orgao->id_orgao)));
         }
-        else
+        else{
             throw new CHttpException(400, "Erro ao processar solicitação");
+        }
+         
     }    
+    
+    private function retornaOrgaosResponsabilidade($id_pessoa)
+    {
+        $orgaosChefia = Helper::getHierarquiaOrgaosChefia(Yii::app()->user->id_pessoa);
+        $orgaos = Orgao::model()->findAll(array(
+            'select' => 'id_orgao, nome_orgao',
+            'condition' => "id_orgao in (
+                :orgaos_chefia
+            )",
+            'params' => array(
+                ':orgaos_chefia' => implode(',', $orgaosChefia),
+            ),
+            'order' => 'nome_orgao'
+        ));
+        return $orgaos;
+    }
+    
+    private function retornaOrgaoLotacao($id_pessoa)
+    {
+        $pessoa = DadoFuncional::model()->with('OrgaoExercicio')->find(array(
+            'condition' => "coalesce(DadosFuncionais.data_desligamento, DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL 1 DAY)) > CURRENT_TIMESTAMP() 
+                            and coalesce(DadosFuncionais.data_aposentadoria, DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL 1 DAY)) > CURRENT_TIMESTAMP()
+                            and id_pessoa = :id_pessoa",
+            'params' => array(
+                ':id_pessoa' => $id_pessoa,
+            )
+        ));
+        return $pessoa->OrgaoExercicio;
+    }
 }

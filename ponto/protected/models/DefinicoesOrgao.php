@@ -6,8 +6,8 @@
  * The followings are the available columns in table 'definicoes_orgao':
  * @property string $id_orgao
  * @property string $hora_inicio_expediente
- * @property string $hora_inicio_expediente_sab
- * @property string $hora_inicio_expediente_dom
+ * @property string $hora_inicio_expediente_sabado
+ * @property string $hora_inicio_expediente_domingo
  * @property string $hora_fim_expediente
  * @property string $permite_ocorrencia
  * @property string $id_pessoa_atualizacao
@@ -15,12 +15,12 @@
  */
 class DefinicoesOrgao extends CActiveRecord
 {
-    public $HoraInicioExpediente_hora = null;
-    public $HoraInicioExpedienteSabado_hora = null;
-    public $HoraInicioExpedienteDomingo_hora = null;
-    public $HoraFimExpediente_hora = null;
-    public $HoraFimExpedienteSabado_hora = null;
-    public $HoraFimExpedienteDomingo_hora = null;
+    public $hora_inicio_expediente_hora = null;
+    public $hora_inicio_expediente_sabado_hora = null;
+    public $hora_inicio_expediente_domingo_hora = null;
+    public $hora_fim_expediente_hora = null;
+    public $hora_fim_expediente_sabado_hora = null;
+    public $hora_fim_expediente_domingo_hora = null;
     public $sabado = null;
     public $domingo = null;
         
@@ -41,12 +41,12 @@ class DefinicoesOrgao extends CActiveRecord
                 ),
                 'HoraInicioSabadoBehavior' => array(
                     'class' => 'ConversorDataBehavior',
-                    'atributoOriginal' => 'hora_inicio_expediente_sab',
+                    'atributoOriginal' => 'hora_inicio_expediente_sabado',
                     'atributoData' => false
                 ),
                 'HoraInicioDomingoBehavior' => array(
                     'class' => 'ConversorDataBehavior',
-                    'atributoOriginal' => 'hora_inicio_expediente_dom',
+                    'atributoOriginal' => 'hora_inicio_expediente_domingo',
                     'atributoData' => false
                 ),
                 'HoraFimBehavior' => array(
@@ -56,12 +56,12 @@ class DefinicoesOrgao extends CActiveRecord
                 ),
                 'HoraFimSabadoBehavior' => array(
                     'class' => 'ConversorDataBehavior',
-                    'atributoOriginal' => 'hora_fim_expediente_sab',
+                    'atributoOriginal' => 'hora_fim_expediente_sabado',
                     'atributoData' => false
                 ),
                 'HoraFimDomingoBehavior' => array(
                     'class' => 'ConversorDataBehavior',
-                    'atributoOriginal' => 'hora_fim_expediente_dom',
+                    'atributoOriginal' => 'hora_fim_expediente_domingo',
                     'atributoData' => false
                 ),
             );            
@@ -79,14 +79,14 @@ class DefinicoesOrgao extends CActiveRecord
 			array('id_orgao', 'length', 'max'=>5),
 			array('permite_ocorrencia', 'length', 'max'=>1),
 			array('id_pessoa_atualizacao', 'length', 'max'=>6),
-			array('hora_inicio_expediente, hora_inicio_expediente_sab, '
-                            . 'hora_inicio_expediente_dom, hora_fim_expediente, '
-                            . 'hora_fim_expediente_sab, hora_fim_expediente_dom', 'safe'),
+			array('hora_inicio_expediente, hora_inicio_expediente_sabado, '
+                            . 'hora_inicio_expediente_domingo, hora_fim_expediente, '
+                            . 'hora_fim_expediente_sabado, hora_fim_expediente_domingo', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id_orgao, hora_inicio_expediente, hora_inicio_expediente_sab, '
-                            . 'hora_inicio_expediente_dom, hora_fim_expediente, hora_fim_expediente_sab, '
-                            . 'hora_fim_expediente_dom, permite_ocorrencia, id_pessoa_atualizacao, '
+			array('id_orgao, hora_inicio_expediente, hora_inicio_expediente_sabado, '
+                            . 'hora_inicio_expediente_domingo, hora_fim_expediente, hora_fim_expediente_sabado, '
+                            . 'hora_fim_expediente_domingo, permite_ocorrencia, id_pessoa_atualizacao, '
                             . 'data_atualizacao', 'safe', 'on'=>'search'),
 		);
 	}
@@ -111,11 +111,11 @@ class DefinicoesOrgao extends CActiveRecord
 		return array(
 			'id_orgao' => 'Cod Orgao',
 			'hora_inicio_expediente' => 'Hora Inicio Expediente',
-                        'hora_inicio_expediente_sab' => 'Hora Inicio Expediente Sábado',
-                        'hora_inicio_expediente_dom' => 'Hora Inicio Expediente Domingo',
+                        'hora_inicio_expediente_sabado' => 'Hora Inicio Expediente Sábado',
+                        'hora_inicio_expediente_domingo' => 'Hora Inicio Expediente Domingo',
 			'hora_fim_expediente' => 'Hora Fim Expediente',
-                        'hora_fim_expediente_sab' => 'Hora Fim Expediente Sábado',
-                        'hora_fim_expediente_dom' => 'Hora Fim Expediente Domingo',
+                        'hora_fim_expediente_sabado' => 'Hora Fim Expediente Sábado',
+                        'hora_fim_expediente_domingo' => 'Hora Fim Expediente Domingo',
 			'permite_ocorrencia' => 'Indicador Permite Ocorrencia',
 			'id_pessoa_atualizacao' => 'Cod Pessoa Ultima Atu',
 			'data_atualizacao' => 'Data Hora Ultima Atu',
@@ -142,11 +142,11 @@ class DefinicoesOrgao extends CActiveRecord
 
 		$criteria->compare('id_orgao',$this->id_orgao,false);
 		$criteria->compare('hora_inicio_expediente',$this->hora_inicio_expediente,false);
-        $criteria->compare('hora_inicio_expediente_sab',$this->hora_inicio_expediente_sab,false);
-        $criteria->compare('hora_inicio_expediente_dom',$this->hora_inicio_expediente_dom,false);
+        $criteria->compare('hora_inicio_expediente_sabado',$this->hora_inicio_expediente_sabado,false);
+        $criteria->compare('hora_inicio_expediente_domingo',$this->hora_inicio_expediente_domingo,false);
 		$criteria->compare('hora_fim_expediente',$this->hora_fim_expediente,false);
-        $criteria->compare('hora_fim_expediente_sab',$this->hora_fim_expediente_sab,false);
-        $criteria->compare('hora_fim_expediente_dom',$this->hora_fim_expediente_dom,false);
+        $criteria->compare('hora_fim_expediente_sabado',$this->hora_fim_expediente_sabado,false);
+        $criteria->compare('hora_fim_expediente_domingo',$this->hora_fim_expediente_domingo,false);
 		$criteria->compare('permite_ocorrencia',$this->permite_ocorrencia,false);
 		$criteria->compare('id_pessoa_atualizacao',$this->id_pessoa_atualizacao,false);
 		$criteria->compare('data_atualizacao',$this->data_atualizacao,false);
@@ -173,8 +173,8 @@ class DefinicoesOrgao extends CActiveRecord
         
         public function afterFind() {
             
-            if (isset($this->hora_inicio_expediente_sab) && 
-                    !is_null($this->hora_inicio_expediente_sab)){
+            if (isset($this->hora_inicio_expediente_sabado) && 
+                    !is_null($this->hora_inicio_expediente_sabado)){
                 $this->sabado = true;
             }
             
@@ -182,8 +182,8 @@ class DefinicoesOrgao extends CActiveRecord
                 $this->sabado = false;
             }
             
-            if (isset($this->hora_inicio_expediente_dom) &&
-                    !is_null($this->hora_inicio_expediente_dom)){
+            if (isset($this->hora_inicio_expediente_domingo) &&
+                    !is_null($this->hora_inicio_expediente_domingo)){
                 $this->domingo = true;
             }
             

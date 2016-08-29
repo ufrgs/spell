@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    $("#modal").dialog({title: "Informações do Pedido", autoOpen: false, width: 600, height: 450});
+    $("#modal").dialog({title: "InformaÃ§Ãµes do Pedido", autoOpen: false, width: 600, height: 450});
 });
 
 function verPedido(nr, tipo) {
@@ -21,7 +21,7 @@ function verPedido(nr, tipo) {
 function certificarPedido(certifica, tipo) {
     if ($("#nrAjuste").val() != '') {
         if ((certifica == 'N') && ($("#justificativa").val().length < 3)) {
-            $("#lblJustificativa").html("justificativa não pode ser vazia").addClass('textoVermelho');
+            $("#lblJustificativa").html("justificativa nÃ£o pode ser vazia").addClass('textoVermelho');
             $("#justificativa").css('border', '1px solid #c00');
         }
         else {
