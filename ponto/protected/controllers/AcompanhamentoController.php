@@ -1,19 +1,34 @@
 <?php
 
-/*
-  Document   : AcompanhamentoController
-  Created on : 09/11/2015, 13:51:36
-  Author     : thiago
+/**
+ * Controlador utilizado para permitir ao usuário visualizar seus dados pessoais.
+ * 
+ * Aqui são definidas as rotas para exibição das informações sobre o usuário, 
+ * como nome, cargo e os registros de horários.
  */
 class AcompanhamentoController extends BaseController
 {
 
+    /**
+     * Método responsável por exibir a tela princial do sistema. Pode ser 
+     * visualizada através do menu Acompanhamento de Registros.
+     */
     public function actionIndex()
     {
         // print_r(Yii::app()->user); die;
         $this->exibeAcompanhamento(Yii::app()->user->id_pessoa);
     }
     
+    /**
+     * Action reponsável por habilitar o acompanhamento de horários de um 
+     * servidor por seu chefe.
+     * 
+     * O método verifica se o id do usuário autenticado está associado à chefia 
+     * de um órgão. Se houver ao menos um órgão associado a opção Acompanhamento
+     * da Chefia será exibida no menu.
+     * 
+     * Caso o usuário não possua o cargo de chefia é exibida uma mensagem de erro.
+     */
     public function actionAcompanhamentoChefia() 
     {
         $orgaosChefiados = RestricaoRelogio::getOrgaosChefia(Yii::app()->session['id_pessoa']);
@@ -25,14 +40,24 @@ class AcompanhamentoController extends BaseController
                     (isset(Yii::app()->session['CodPessoaAcompanhamentoPonto']) ? Yii::app()->session['CodPessoaAcompanhamentoPonto'] : '')),
                 'abaAtiva' => 'acompanhamento',
             ));
-        }
-        else {
+        } else {
             // nao e chefe
             $this->render('system.cpd.views.mensagem', array('mensagem' => 'Você não possui cargo de chefia.', 'classe' => 'Info'));
         }
     }
     
-    public function actionPessoa() {
+    /**
+     * Action utilizada para permitir que um gerente visuaize os registros de um
+     * funcionário específico passando seu id.
+     * 
+     * O id do funcionário deve ser passado utilizando o método POST e sendo 
+     * referenciado com a chave "p".
+     * 
+     * Caso o usuário que requisitou os dados não tenha permissão para acessar
+     * os registros de outro funcionário uma mensagem de erro é exibida.
+     */
+    public function actionPessoa()
+        {
         $id_pessoa = intval($_POST['p']);
         
         $restricaoChefia = "";
@@ -72,13 +97,32 @@ class AcompanhamentoController extends BaseController
             }
             Yii::app()->session['CodPessoaAcompanhamentoPonto'] = $pessoa->id_pessoa;
             print $this->exibeAcompanhamento($id_pessoa, true);
-        }
-        else {
+        } else {
             // nao tem permissao
             print $this->renderPartial('system.cpd.views.mensagem', array('mensagem' => 'Você não tem permissão para ver os registros desse servidor.', 'classe' => 'Info'), true);
         }
     }
     
+    /**
+     * Action responsável por buscar todas os usuários subordinados com nome ou 
+     * id parecido com um termo passado por parâmetro.
+     * 
+     * A comparação é feita no banco de dados utilizando o operador LIKE.
+     * 
+     * Os resultados são devolvidos em formato JSON utilizando a instrução
+     * <code>print CJSON::encode($opcoes)</code> como no exemplo abaixo:
+     * 
+     * <code>
+     * {
+     *  "id": 0,
+     *  "label": "0 - Nome",
+     *  "text": "0 - Nome"
+     * }
+     * </code>
+     * 
+     * @param string $term Texto a ser usado na comparação com o nome e o id
+     * @return string JSON contendo os resultados encontrados
+     */
     public function actionSubordinados($term)
     {
         $term = strtoupper(str_replace("'", "''", Helper::tiraAcento(trim($term))));
@@ -134,6 +178,22 @@ class AcompanhamentoController extends BaseController
         //Yii::app()->end();
     }
     
+    /**
+     * Método utilizado para reaproveitamento de código. Ele busca os dados 
+     * básicos do usuário através de sua chave primária e mostra suas informações 
+     * na tela.
+     * 
+     * Caso nenhum objeto da classe {@see Pessoa} seja encontrada a partir do
+     * valor do parâmetro $id_pessoa uma mensagem de erro é exibida.
+     * 
+     * Por padrão o valor do parâmetro $viaAjax é FALSE, indicando que uma 
+     * requisição síncrona será feita. Dessa forma é utilizado o método render 
+     * para mostrar a tela. Caso o parâmetro tenha valor TRUE o processo será
+     * feito de forma assíncrona utilizando o método renderPartial.
+     * 
+     * @param int $id_pessoa Chave primária da classe {@see Pessoa}
+     * @param boolean $viaAjax Variável para definir o tipo de requisição
+     */
     private function exibeAcompanhamento($id_pessoa, $viaAjax = false) 
     {    
         $pessoa = Pessoa::model()->with(array(
@@ -290,8 +350,7 @@ class AcompanhamentoController extends BaseController
                             'id_pessoa' => $registro->id_pessoa,
                             'tempoIntervalo' => $tempoIntervalo,
                         );
-                    }
-                    else { // se e um registro de saida
+                    } else { // se e um registro de saida
                         if ($ultimoTipoRegistro == 'S') { //Saida-Saida 
                             if ($mudouDia && ($ultimoDia != 0)){ // mudou o dia, zera a jornada diaria
                                 $jornadaMensal += $jornadaDiaria;
@@ -308,8 +367,7 @@ class AcompanhamentoController extends BaseController
                                 'id_pessoa' => $registro->id_pessoa,
                                 'tempoIntervalo' => '?',
                             );
-                        }
-                        elseif ($mudouDia) { //saida apos entrada, mas em outro dia
+                        } elseif ($mudouDia) { //saida apos entrada, mas em outro dia
                             // como mudou o dia, vai gerar registros para os dois dias que o servidor passou em trabalho
                             // fecha um registro de saida as 23:59 do primeiro dia
                             $jornadaDoTurno = (strtotime(date("Y-m-d", strtotime($ultimoRegistro))." 23:59:59")-strtotime($ultimoRegistro)) /60;
@@ -339,8 +397,7 @@ class AcompanhamentoController extends BaseController
                         if ($ultimoTipoRegistro == 'E') {
                             $jornadaDoTurno = (strtotime($registro->data_hora_ponto)-strtotime($ultimoRegistro))/60;
                             $jornadaDiaria += $jornadaDoTurno; 
-                        }
-                        else {
+                        } else {
                             $jornadaDoTurno = '?';
                         }
                         $dia = intval(date('d', strtotime($registro->data_hora_ponto)));
@@ -411,13 +468,10 @@ class AcompanhamentoController extends BaseController
                 );
                 if (!$viaAjax) {
                     $this->render('index', $dados);
-                }
-                else {
+                } else {
                     return $this->renderPartial('index', $dados, true);
                 }
-                
-            }
-            else {
+            } else {
                 // mais de um vinculo
                 $dados = array(
                     'pessoa' => $pessoa,
@@ -425,13 +479,11 @@ class AcompanhamentoController extends BaseController
                 );
                 if (!$viaAjax) {
                     $this->render('index', $dados);
-                }
-                else {
+                } else {
                     return $this->renderPartial('index', $dados, true);
                 }
             }
-        }
-        else {
+        } else {
             $this->render('system.cpd.views.mensagem', array('mensagem' => 'O ponto eletrônico não está liberado para o seu vínculo.', 'classe' => 'Info'));
         }
     }
