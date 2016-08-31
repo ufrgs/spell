@@ -7,3 +7,4 @@ themes/classic/views/
 yii
 /.gitignore
 assets
+/ponto/nbproject/
