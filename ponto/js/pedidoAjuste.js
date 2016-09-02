@@ -24,21 +24,21 @@ $(document).ready(function() {
         $("#divHoraSaida").slideUp();
         $("#divHorasAbono").slideUp();
         $("#lblHora").html("Hora:");
-        $(".opt_A").show();
-        $(".opt_T").hide();
-        $(".opt_P").hide();
+        $(".opt_A").prop('disabled', false).show();
+        $(".opt_T").prop('disabled', true).hide();
+        $(".opt_P").prop('disabled', true).hide();
         if (tipo == "P") {
             $("#divHoraSaida").slideDown();
             $("#lblHora").html("Hora de Entrada:");
-            $(".opt_A").hide();
-            $(".opt_T").hide();
-            $(".opt_P").show();
+            $(".opt_A").prop('disabled', true).hide();
+            $(".opt_T").prop('disabled', true).hide();
+            $(".opt_P").prop('disabled', false).show();
         }
         else if (tipo == "A") {
             $("#lblHora").html("Tempo a abonar:");
-            $(".opt_A").hide();
-            $(".opt_P").hide();
-            $(".opt_T").show();
+            $(".opt_A").prop('disabled', true).hide();
+            $(".opt_P").prop('disabled', true).hide();
+            $(".opt_T").prop('disabled', false).show();
         }
     });
     

@@ -62,19 +62,18 @@ if (count($pessoa->DadosFuncionais) == 1): ?>
 
     <h2>Registros</h2>
    
-    <label for="ano">ano:</label>
+    <label for="ano">Ano:</label>
     <select id="ano">
         <? foreach ($anos as $ano): ?>
             <option value="<?=$ano?>" <?=($ano == $anoSelecionado ? 'selected="selected"' : '')?>><?=$ano?></option>
         <? endforeach; ?>
     </select> &nbsp;
-    <label for="mes">mes:</label>
+    <label for="mes">Mês:</label>
     <select id="mes">
         <? foreach ($meses as $mes): ?>
             <option value="<?=$mes?>" <?=($mes == $mesSelecionado ? 'selected="selected"' : '')?>><?=$mes?></option>
         <? endforeach; ?>
     </select>
-    
     <? if (!empty($registrosDia)): ?>
         <table id="tabelaRegistros" class="modelo1">
             <thead>
@@ -88,8 +87,8 @@ if (count($pessoa->DadosFuncionais) == 1): ?>
             </thead>
             <tbody>
             <? for ($i = 1; $i <= $diaUltimoRegistro; $i++):
-                // se nao existe registro, abono ou compensacao no dia, nao mostra
-                if (empty($registrosDia[$i]['Registros']) && ($registrosDia[$i]['MinutosAbono'] == 0) && ($registrosDia[$i]['MinutosCompensacao'] == 0)):
+                // se nao existe registro, abono ou compensacao no dia, nao mostra 
+                if (empty($registrosDia[$i]['Registros']) && (@$registrosDia[$i]['MinutosAbono'] == 0) && (@$registrosDia[$i]['MinutosCompensacao'] == 0)):
                     continue;    
                 endif;
                 ?>

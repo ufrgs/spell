@@ -42,7 +42,7 @@ class AcompanhamentoController extends BaseController
             ));
         } else {
             // nao e chefe
-            $this->render('system.cpd.views.mensagem', array('mensagem' => 'Você não possui cargo de chefia.', 'classe' => 'Info'));
+            $this->render('/registro/mensagem', array('mensagem' => 'Você não possui cargo de chefia.', 'classe' => 'Info'));
         }
     }
     
@@ -99,7 +99,7 @@ class AcompanhamentoController extends BaseController
             print $this->exibeAcompanhamento($id_pessoa, true);
         } else {
             // nao tem permissao
-            print $this->renderPartial('system.cpd.views.mensagem', array('mensagem' => 'Você não tem permissão para ver os registros desse servidor.', 'classe' => 'Info'), true);
+            print $this->renderPartial('/registro/mensagem', array('mensagem' => 'Você não tem permissão para ver os registros desse servidor.', 'classe' => 'Info'), true);
         }
     }
     
@@ -237,7 +237,9 @@ class AcompanhamentoController extends BaseController
                     ':nr_vinculo' => $pessoa->DadosFuncionais->nr_vinculo
                 ));
                 $anoSelecionado = intval(isset($_REQUEST['a']) ? $_REQUEST['a'] : (isset($anos[0]) ? $anos[0] : date("Y")));
-                
+                if ($anoSelecionado > $anos[0]) {
+                    $anoSelecionado = $anos[0];
+                }
                 $meses = array();
                 $sql = "select distinct month(data_hora_ponto) mes
                         from v_ponto_e_ajuste
@@ -251,7 +253,9 @@ class AcompanhamentoController extends BaseController
                     ':ano' => $anoSelecionado,
                 ));
                 $mesSelecionado = intval(isset($_REQUEST['m']) ? $_REQUEST['m'] : (isset($meses[0]) ? $meses[0] : date("m")));
-
+                if ($mesSelecionado > $meses[0]) {
+                    $mesSelecionado = $meses[0];
+                }
                 // busca carga horaria do mes anterior
                 $anoAnterior = ($mesSelecionado != 1 ? $anoSelecionado : $anoSelecionado-1);
                 $mesAnterior = ($mesSelecionado != 1 ? $mesSelecionado-1 : 12);
@@ -274,7 +278,6 @@ class AcompanhamentoController extends BaseController
                 
                 // cria um array com todos os dias do mes
                 $registrosDia = Ponto::getCalendarioMes($mesSelecionado, $anoSelecionado);
-                
                 $abonos = Abono::getAbonosMes($id_pessoa, $pessoa->DadosFuncionais->nr_vinculo, $mesSelecionado, $anoSelecionado);
                 $diasComAbono = $abonos['diasComAbono'];
                 $diasComAbonoPendente = $abonos['diasComAbonoPendente'];
@@ -299,7 +302,6 @@ class AcompanhamentoController extends BaseController
                         $diaUltimoAbonoCompensacao = $i;
                     }
                 }
-                
                 $registros = PontoEAjuste::getRegistrosMes($id_pessoa, $pessoa->DadosFuncionais->nr_vinculo, $mesSelecionado, $anoSelecionado);
                 
                 // preenche o subarray de registros por dia no calendario
@@ -435,7 +437,6 @@ class AcompanhamentoController extends BaseController
                         $horasAfastamentoAteHoje += ($afastamento['NrDiasUteisAteHoje'] * $pessoa->DadosFuncionais->regime_trabalho/5);
                     }
                 }
-                
                 $dados = array(
                     'anos' => $anos,
                     'anoSelecionado' => $anoSelecionado,

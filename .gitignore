@@ -7,3 +7,5 @@ themes/classic/views/
 yii
 /.gitignore
 assets
+runtime
+nbproject
