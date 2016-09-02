@@ -211,7 +211,6 @@ class CompensacaoController extends BaseController
      * 
      * O sucesso ou falha da operação é indicado pela string retornada pelo 
      * método usando o comando <code>print</code>.
-     * 
      */
     public function actionExcluirPedido() 
     {
