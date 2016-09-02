@@ -11,7 +11,7 @@ class Repositorio extends CComponent
      */
     public function enderecoBase()
     {
-        return '';
+        return $_SERVER['DOCUMENT_ROOT'].'';
     }
 
     /**
@@ -165,7 +165,7 @@ class Repositorio extends CComponent
      */
     public function devolveLinkExibicao($tipoDocumento, $chaveIdentificacao, $download = false)
     {
-        return "http://" . $_SERVER['SERVER_NAME'] . "/repositorio/abreArquivo.php?" . $chaveIdentificacao . "&" . $tipoDocumento;
+        return "http://".$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT']."/repositorio/abreArquivo.php?" . $chaveIdentificacao . "&" . $tipoDocumento;
     }
 
     /**
@@ -176,7 +176,7 @@ class Repositorio extends CComponent
      */
     public function devolveCaminhoAcessoDireto($tipoDocumento, $chaveIdentificacao)
     {
-        return "http://" . $_SERVER['SERVER_NAME'] . "/repositorio/abreArquivo.php?" . $chaveIdentificacao . "&" . $tipoDocumento;
+        return "http://".$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT']."/repositorio/abreArquivo.php?" . $chaveIdentificacao . "&" . $tipoDocumento;
     }
 
     /**

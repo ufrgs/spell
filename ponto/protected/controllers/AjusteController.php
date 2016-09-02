@@ -618,7 +618,7 @@ class AjusteController extends BaseController
     private function fazUploadArquivo($arquivos, $i, $ajuste, $tipo)
     {
         $repositorio = new Repositorio;
-        $identificadorRepositorio = $repositorio->upload(92, $arquivos["name"][$i], file_get_contents($arquivos["tmp_name"][$i]), $arquivos["type"][$i]);
+        $identificadorRepositorio = $repositorio->upload($arquivos["name"][$i], file_get_contents($arquivos["tmp_name"][$i]), $arquivos["type"][$i]);
         if ($identificadorRepositorio != '') {
             $anexo = new ArquivoAjuste();
             if ($tipo != 'A') {

@@ -127,7 +127,7 @@ function enviaSolicitacao() {
     }
     else {
         var formData = new FormData($('form')[0]);
-        $("#botaoEnviar").html('<img src="/Design/imgs/smallLoader.gif"/> Enviando...');
+        $("#botaoEnviar").html('<img src="/ponto/css/imgs/smallLoader.gif"/> Enviando...');
         $("progress").css('width', '100%').show();
         $.ajax({
             type: 'POST',

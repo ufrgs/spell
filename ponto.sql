@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Máquina: localhost
--- Data de Criação: 01-Set-2016 às 11:36
+-- Data de Criação: 02-Set-2016 às 21:44
 -- Versão do servidor: 5.6.13
 -- versão do PHP: 5.4.17
 
@@ -91,7 +91,7 @@ CREATE TABLE IF NOT EXISTS `ajuste` (
   KEY `id_pessoa_certificacao` (`id_pessoa_certificacao`),
   KEY `nr_ponto` (`nr_ponto`),
   KEY `nr_justificativa` (`nr_justificativa`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=14 ;
 
 --
 -- Extraindo dados da tabela `ajuste`
@@ -103,7 +103,11 @@ INSERT INTO `ajuste` (`nr_ajuste`, `id_pessoa`, `matricula`, `nr_vinculo`, `data
 (5, 1, 1234567, 1, '2016-08-19 18:45:00', 'S', 1, '2016-08-19 19:29:17', '::1', 'fdsbhfdhf', 2, '2016-08-26 19:56:27', 'S', 4, NULL, NULL, NULL),
 (6, 1, 1234567, 1, '2016-08-19 08:20:00', 'E', 1, '2016-08-19 19:29:38', '::1', 'dasfsfsd', 2, '2016-08-26 19:56:34', 'S', NULL, NULL, NULL, NULL),
 (7, 1, 1234567, 1, '2016-08-19 13:00:00', 'S', 1, '2016-08-19 19:29:38', '::1', 'dasfsfsd', 2, '2016-08-26 19:56:34', 'S', NULL, NULL, NULL, NULL),
-(8, 1, 1234567, 1, '2016-08-19 14:00:00', 'E', 1, '2016-08-19 19:29:53', '::1', 'dfswgfdsgf', 2, '2016-08-26 19:56:34', 'S', NULL, NULL, NULL, NULL);
+(8, 1, 1234567, 1, '2016-08-19 14:00:00', 'E', 1, '2016-08-19 19:29:53', '::1', 'dfswgfdsgf', 2, '2016-08-26 19:56:34', 'S', NULL, NULL, NULL, NULL),
+(9, 1, 1234567, 1, '2016-09-01 08:00:00', 'E', 1, '2016-09-02 15:48:52', '::1', 'gdfhgfhg', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(10, 1, 1234567, 1, '2016-09-01 17:00:00', 'S', 1, '2016-09-02 15:48:52', '::1', 'gdfhgfhg', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(12, 1, 1234567, 1, '2016-09-02 08:00:00', 'E', 1, '2016-09-02 18:41:07', '::1', NULL, NULL, NULL, NULL, NULL, 8, NULL, 'S'),
+(13, 1, 1234567, 1, '2016-09-02 08:00:00', 'E', 1, '2016-09-02 18:41:25', '::1', NULL, NULL, NULL, NULL, NULL, 8, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -121,7 +125,14 @@ CREATE TABLE IF NOT EXISTS `arquivo_ajuste` (
   KEY `nr_ajuste` (`nr_ajuste`),
   KEY `nr_abono` (`nr_abono`),
   KEY `cod_repositorio` (`cod_repositorio`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+
+--
+-- Extraindo dados da tabela `arquivo_ajuste`
+--
+
+INSERT INTO `arquivo_ajuste` (`nr_arquivo_ajuste`, `nr_ajuste`, `nr_abono`, `cod_repositorio`, `descricao_arquivo`) VALUES
+(2, 13, NULL, 'F727BC55D5AA', 'dou.24.pdf');
 
 -- --------------------------------------------------------
 
@@ -348,7 +359,21 @@ CREATE TABLE IF NOT EXISTS `justificativa_ajuste` (
   `texto_justificativa` varchar(255) NOT NULL,
   `tipo_justificativa` char(1) DEFAULT NULL,
   PRIMARY KEY (`nr_justificativa`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
+
+--
+-- Extraindo dados da tabela `justificativa_ajuste`
+--
+
+INSERT INTO `justificativa_ajuste` (`nr_justificativa`, `texto_justificativa`, `tipo_justificativa`) VALUES
+(1, 'Consulta na área da saúde', 'T'),
+(2, 'Acompanhamento de parente em consulta na área da saúde', 'T'),
+(3, 'Capacitação', 'T'),
+(4, 'Atividade fora do local de exercício', 'P'),
+(5, 'Falha técnica da máquina de registro de ponto', 'A'),
+(6, 'Atividade de Campo', 'P'),
+(7, 'Participação em Juri', 'P'),
+(8, 'Falta de energia elétrica', 'A');
 
 -- --------------------------------------------------------
 
@@ -929,7 +954,14 @@ CREATE TABLE IF NOT EXISTS `repositorio` (
   `data_criacao` datetime NOT NULL,
   `data_expiracao` datetime DEFAULT NULL,
   PRIMARY KEY (`cod_repositorio`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+
+--
+-- Extraindo dados da tabela `repositorio`
+--
+
+INSERT INTO `repositorio` (`cod_repositorio`, `nome_arquivo`, `chave_repositorio`, `chave_autenticacao`, `data_criacao`, `data_expiracao`) VALUES
+(3, 'dou.24.pdf', 'F727BC55D5AA', NULL, '2016-09-02 18:41:25', NULL);
 
 -- --------------------------------------------------------
 
