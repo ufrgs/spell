@@ -452,7 +452,7 @@ class CompensacaoController extends BaseController
      * 
      * Tem o mesmo funcionamento do método 
      * {@see CompensacaoController::actionCertificaPedido()}, mas aplicado a mais 
-     * de um documento.
+     * de uma compensação.
      */
     public function actionCertificaVarios()
     {
