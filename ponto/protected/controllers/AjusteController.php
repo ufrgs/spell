@@ -20,7 +20,8 @@ class AjusteController extends BaseController
 {
 
     /**
-     * Action utilizada para exibição da página princial do painel de pedidos. 
+     * Action utilizada para exibição da página princial do painel de pedidos.
+     * 
      * Esse método busca todos os pedidos feitos pelo usuário e os exibe na tela.
      */
     public function actionPedido()
