@@ -1,13 +1,30 @@
 <?php
 
-/*
-  Document   : AjusteController
-  Created on : 11/11/2015, 14:08:37
-  Author     : thiago
+/**
+ * Controlador utilizado para permitir ao usuário visualizar seus registros de 
+ * compensações.
+ * 
+ * Aqui são definidas as rotas para exibição das informações sobre o usuário, 
+ * como nome, cargo, registros de horários e a lista de compensações feitas pelo
+ * mesmo.
+ * 
+ * Caso o usuário tenha um cargo de chefia o mesmo poderá certificar os pedidos
+ * solicitados pelos servidores através das actions definidas nessa classe.
+ * 
+ * @author UFRGS <cpd-dss@ufrgs.br>
+ * @package cpd\sldif
+ * @version v1.0
+ * @since v1.0
  */
 class CompensacaoController extends BaseController
 {
 
+    /**
+     * Action utilizada para listagem dos pedidos de comensação.
+     * 
+     * O método busca todos os registros relacionados ao usuário logado e os
+     * exibe na tela usando o método <code>render()</code>.
+     */
     public function actionPedido()
     {
         $pessoa = Pessoa::model()->with(array(
@@ -72,6 +89,18 @@ class CompensacaoController extends BaseController
         }
     }
 
+    /**
+     * Action utilizada para receber um pedido de alteração no horário do usuário.
+     * 
+     * Os dados solicitados devem ser enviados via método POST com os seguintes 
+     * parâmetros:  data, hora, justificativa, nrVinculo (número do vínculo).
+     * 
+     * O método retorna um objeto JSON usando a instrução <code>print</code>
+     * contendo os atributos <code>erro</code> caso tenha ocorrido algum e 
+     * <code>mensagem</code> contendo o resultado da operação.
+     * 
+     * @todo Criar um procedimento para avisar a chefia quando um pedido for salvo.
+     */
     public function actionEnviarPedido()
     {
         $msg = "";
@@ -110,7 +139,7 @@ class CompensacaoController extends BaseController
 
             $saldoDisponivelCompensacao = $saldoMesAnterior + ($saldoMesAntesAnterior < 0 ? $saldoMesAntesAnterior : 0);
 
-            $command = Yii::app()->db->cache(10)->createCommand(); // cache de 10 segundos
+            $command = Yii::app()->db->cache(10)->createCommand(); // Cache de 10 segundos
             $compensacaoAteHoje = $command
                 ->select('sum(periodo_compensacao)')
                 ->from('compensacao')
@@ -129,7 +158,7 @@ class CompensacaoController extends BaseController
             
             $saldoMinutos = $saldoDisponivelCompensacao - intval($compensacaoAteHoje);
             
-            // periodo em minutos
+            // Período em minutos
             $aux = explode(":", $_POST['hora']);
             $periodoCompensacao = $aux[0]*60 + $aux[1];
             if ($saldoMinutos >= $periodoCompensacao) {
@@ -174,6 +203,17 @@ class CompensacaoController extends BaseController
         ));
     }
 
+    /**
+     * Action para exclução de um pedido de compensação.
+     * 
+     * O método deve receber o parâmetro "nr" via método POST para realizar uma
+     * busca por um objeto da classe {@see Compensacao} com uma chave primária
+     * correspondente.
+     * 
+     * O sucesso ou falha da operação é indicado pela string retornada pelo 
+     * método usando o comando <code>print</code>.
+     * 
+     */
     public function actionExcluirPedido() 
     {
         if (isset($_POST['nr'])) { 
@@ -196,12 +236,20 @@ class CompensacaoController extends BaseController
         }
     }
     
+    /**
+     * Action utilizada pelos servidores com cargos de chefia para controle das
+     * certificações de compensações.
+     * 
+     * Esse método mostra todos pedidos aguardando certificação quando clicado
+     * no menu Certificação de Compensações.
+     */
     public function actionPedidosAvaliacao()
     {
         $orgaosChefia = Helper::getHierarquiaOrgaosChefia(Yii::app()->user->id_pessoa);
         if (!empty($orgaosChefia)) {
-            // pedidos abertos
             $orgaosChefia = Helper::coalesce(implode(',', $orgaosChefia), 0);
+
+            // Critério para buscar pedidos abertos
             $criteriaAbertos = new CDbCriteria();
             $criteriaAbertos->with = array(
                 'Pessoa' => array(
@@ -274,11 +322,17 @@ class CompensacaoController extends BaseController
             ));
         }
         else {
-            // nao e chefe
             $this->render('/registro/mensagem', array('mensagem' => 'Você não possui cargo de chefia.', 'classe' => 'Info'));
         }
     }
 
+    /**
+     * Action utilizada para visualização dos dados de um pedido
+     * 
+     * Esse método recebe a chave primário do pedido pelo parâmetro "nr" passado
+     * via método POST e mostra os dados do pedido e os registros do dia na tela 
+     * usando método <code>renderPartial()</code> e o comando <code>print</code>.
+     */
     public function actionDadosPedido()
     {
         $nrCompensacao = $_POST['nr'];
@@ -305,6 +359,13 @@ class CompensacaoController extends BaseController
         print $this->renderPartial('dadosPedido', array('pedido' => $pedido, 'registrosDoDia' => $registrosDoDia), true);
     }
 
+    /**
+     * Action para exibição dos dados de um pedido de compensação certificado.
+     * 
+     * Esse método é utilizado para renderização de um modal com os dados do 
+     * pedido utilizando o método <code>renderPartial()</code> junto com a 
+     * instrução <code>print</code>.
+     */
     public function actionDadosPedidoCertificado()
     {
         $nrCompensacao = $_POST['nr'];
@@ -312,6 +373,22 @@ class CompensacaoController extends BaseController
         print $this->renderPartial('dadosPedidoCertificado', array('pedido' => $pedido), true);
     }
     
+    /**
+     * Action responsável por certificar um pedido único de compensação.
+     * 
+     * O método recebe as informações do pedido via método POST. São necessários 
+     * os parâmetros nrPedido (número do pedido), certifica ('S' ou 'N') e 
+     * justificativa.
+     * 
+     * Os valores desses parâmetros serão utilizados para garantir que um pedido 
+     * válido está sendo certificado. Caso não seja válido uma mensagem de erro
+     * é exibida na tela.
+     * 
+     * Esse método retorna um objeto JSON contendo um código de erro (caso haja)
+     * e uma mensagem que indica ao usuário o que aconteceu.
+     * 
+     * @return string Objeto JSON contendo mensagem de sucesso ou erro.
+     */
     public function actionCertificaPedido()
     {
         if (isset($_POST['nrPedido']) && is_numeric($_POST['nrPedido']) && in_array($_POST['certifica'], array('S', 'N'))) {
@@ -369,6 +446,14 @@ class CompensacaoController extends BaseController
         ));
     }
 
+    /**
+     * Action responsável por certifiar vários pedidos de compensação de uma 
+     * única vez.
+     * 
+     * Tem o mesmo funcionamento do método 
+     * {@see CompensacaoController::actionCertificaPedido()}, mas aplicado a mais 
+     * de um documento.
+     */
     public function actionCertificaVarios()
     {
         $erro = false;
@@ -397,7 +482,7 @@ class CompensacaoController extends BaseController
                     $pedido->data_hora_certificacao = new CDbExpression("CURRENT_TIMESTAMP()");
 
                     if ($pedido->save(true, array('indicador_certificado', 'id_pessoa_certificacao', 'data_hora_certificacao'))) {
-                        // se a certificacao esta acontecendo apos o fechamento do mes do pedido, recalcula o total de horas
+                        // Se a certificação está acontecendo após o fechamento do mês do pedido, recalcula o total de horas
                         if (date('m') > date('m', strtotime($pedido->data_compensacao))) {
                             $mesAnterior = (date('m') != 1 ? date('m')-1 : 12);
                             $anoAnterior = (date('m') != 1 ? date('Y') : date('Y')-1);

@@ -6,6 +6,11 @@
  * 
  * Aqui são definidas as regras de acesso das páginas, configuração do menu 
  * lateral da aplicação e métodos utilitários para os controladores.
+ * 
+ * @author UFRGS <cpd-dss@ufrgs.br>
+ * @package cpd\sldif
+ * @version v1.0
+ * @since v1.0
  */
 class BaseController extends CController
 {
@@ -23,7 +28,7 @@ class BaseController extends CController
      * automaticamente antes de cada chamada a um controller para validar a 
      * sessão do usuário.
      *
-     * @return array Implementações da classe {@see CFilter}
+     * @return array Implementações da classe CFilter
      */
     public function filters()
     {
@@ -201,7 +206,7 @@ class BaseController extends CController
      * parâmetro corresponde a um objeto {@see Pessoa} e se o mesmo faz parte 
      * de um {@see Orgao} válido.
      * 
-     * @param int $codPessoa Chave primária da classe {@link Pessoa}
+     * @param int $codPessoa Chave primária da classe Pessoa
      * @return boolean TRUE or FALSE
      */
     public function pessoaPodeBaterPonto($codPessoa)

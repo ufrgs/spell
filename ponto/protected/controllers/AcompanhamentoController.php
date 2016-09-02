@@ -5,6 +5,11 @@
  * 
  * Aqui são definidas as rotas para exibição das informações sobre o usuário, 
  * como nome, cargo e os registros de horários.
+ * 
+ * @author UFRGS <cpd-dss@ufrgs.br>
+ * @package cpd\sldif
+ * @version v1.0
+ * @since v1.0
  */
 class AcompanhamentoController extends BaseController
 {
@@ -188,7 +193,7 @@ class AcompanhamentoController extends BaseController
      * para mostrar a tela. Caso o parâmetro tenha valor TRUE o processo será
      * feito de forma assíncrona utilizando o método renderPartial.
      * 
-     * @param int $id_pessoa Chave primária da classe {@see Pessoa}
+     * @param int $id_pessoa Chave primária da classe Pessoa
      * @param boolean $viaAjax Variável para definir o tipo de requisição
      */
     private function exibeAcompanhamento($id_pessoa, $viaAjax = false) 

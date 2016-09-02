@@ -1,13 +1,29 @@
 <?php
 
-/*
-  Document   : AjusteController
-  Created on : 11/11/2015, 14:08:37
-  Author     : thiago
+/**
+ * Controlador utilizado para permitir ao usuário solicitar alterações nos 
+ * horários registrados.
+ * 
+ * Aqui são implementados os métodos para alteração nos períodos de entrada e 
+ * saída, abonos de horas e visualizar os pedidos feitos.
+ * 
+ * Também são implementados os recursos para usuários com cargo de chefia, 
+ * permitindo que os mesmos façam a análise e certificação dos dos pedidos 
+ * realizados pelos servidores.
+ * 
+ * @author UFRGS <cpd-dss@ufrgs.br>
+ * @package cpd\sldif
+ * @version v1.0
+ * @since v1.0
  */
 class AjusteController extends BaseController
 {
 
+    /**
+     * Action utilizada para exibição da página princial do painel de pedidos.
+     * 
+     * Esse método busca todos os pedidos feitos pelo usuário e os exibe na tela.
+     */
     public function actionPedido()
     {
         $pessoa = Pessoa::model()->with(array(
@@ -61,6 +77,18 @@ class AjusteController extends BaseController
         }
     }
 
+    /**
+     * Action utilizada para receber um pedido de alteração no horário do usuário.
+     * 
+     * Os dados solicitados devem ser enviados via método POST com os seguintes 
+     * parâmetros: tipo, data, hora, justificativa.
+     * 
+     * Caso o usuário queira adicionar uma outra justificativa também deve-se
+     * enviar o parâmetro outraJustificativa contendo o texto inserido por ele.
+     * 
+     * Esse método também processa os arquivos anexados no pedido que estejam 
+     * guardados na variável superglobal <code>$_FILES['anexos']['name']</code>.
+     */
     public function actionEnviarPedido()
     {
         $msg = "";
@@ -197,6 +225,15 @@ class AjusteController extends BaseController
         ));
     }
 
+    /**
+     * Action utilizada para remover um pedido da lista de alterações não concluida.
+     * 
+     * Esse método recebe via POST os parâmetros "nr" (número do pedido)
+     * e "tipo" (tipo do pedido - ajuste ou abono).
+     * 
+     * Se um pedido válido for encontrado e o mesmo ainda não estiver certificado
+     * o pedido é excluido. Caso contrário uma mensagem de erro é exibida na tela.
+     */
     public function actionExcluirPedido() 
     {
         if (isset($_POST['nr'], $_POST['tipo']) && in_array($_POST['tipo'], array('ajuste', 'abono'))) { 
@@ -226,6 +263,13 @@ class AjusteController extends BaseController
         }
     }
     
+    /**
+     * Action utilizada pelos servidores com cargos de chefia para controle das
+     * certificações dos pedidos.
+     * 
+     * Esse método mostra todos pedidos aguardando certificação quando clicado
+     * no menu Certificação de Ajustes.
+     */
     public function actionPedidosAvaliacao()
     {
         $orgaosChefia = Helper::getHierarquiaOrgaosChefia(Yii::app()->user->id_pessoa);
@@ -282,6 +326,15 @@ class AjusteController extends BaseController
         }
     }
     
+    /**
+     * Action utilizada para exibir os pedidos de ajuste ou abono já certificados.
+     * 
+     * Esse método somente é acessível para usuários que possuem algum cargo 
+     * gerencial em algum órgão. Caso o usuário seja apenas servidor uma 
+     * mensagem de erro é mostrada na tela.
+     * 
+     * O recurso fica disponível no menu Pedidos Certificados.
+     */
     public function actionPedidosCertificados()
     {
         $orgaosChefia = Helper::getHierarquiaOrgaosChefia(Yii::app()->user->id_pessoa);
@@ -338,6 +391,16 @@ class AjusteController extends BaseController
         }
     }
 
+    /**
+     * Action utilizada pra mostrar um modal com informações de um pedido.
+     * 
+     * É utilizado para mostrar ao certificador os dados enviados pelo usuários
+     * sobre a alteração desejada.
+     * 
+     * Nesse mesmo modal o certificador poderá certificar ou não um pedido, mas 
+     * essa funcionalidade é implementada no método 
+     * {@see AjusteController::actionCertificaPedido()}.
+     */
     public function actionDadosPedido()
     {
         $nrAjuste = $_POST['nr'];
@@ -368,6 +431,13 @@ class AjusteController extends BaseController
         print $this->renderPartial('dadosPedido', array('pedido' => $pedido, 'tipo' => ucwords($_POST['tipo']), 'registrosDoDia' => $registrosDoDia), true);
     }
 
+    /**
+     * Action utilizada para mostrar um modal com informações de um pedido já
+     * certificado.
+     * 
+     * O recurso fica disponível no menu Pedidos Certificados e somente é 
+     * acessível por usuários com permissão de chefia.
+     */
     public function actionDadosPedidoCertificado()
     {
         $nrAjuste = $_POST['nr'];
@@ -380,6 +450,22 @@ class AjusteController extends BaseController
         print $this->renderPartial('dadosPedidoCertificado', array('pedido' => $pedido, 'tipo' => ucwords($_POST['tipo'])), true);
     }
     
+    /**
+     * Action responsável por certificar um pedido único.
+     * 
+     * O método recebe as informações do pedido via método POST. São necessários 
+     * os parâmetros nrPedido (número do pedido), certifica ('S' ou 'N') e 
+     * justificativa.
+     * 
+     * Os valores desses parâmetros serão utilizados para garantir que um pedido 
+     * válido está sendo certificado. Caso não seja válido uma mensagem de erro
+     * é exibida na tela.
+     * 
+     * Esse método retorna um objeto JSON contendo um código de erro (caso haja)
+     * e uma mensagem que indica ao usuário o que aconteceu.
+     * 
+     * @return string Objeto JSON contendo mensagem de sucesso ou erro.
+     */
     public function actionCertificaPedido()
     {
         if (isset($_POST['nrPedido']) && is_numeric($_POST['nrPedido']) && in_array($_POST['certifica'], array('S', 'N'))) {
@@ -444,6 +530,13 @@ class AjusteController extends BaseController
         ));
     }
 
+    /**
+     * Action responsável por certifiar vários pedidos de uma única vez.
+     * 
+     * Tem o mesmo funcionamento do método 
+     * {@see AjusteController::actionCertificaPedido()}, mas aplicado a mais 
+     * de um documento.
+     */
     public function actionCertificaVarios()
     {
         $erro = false;
@@ -508,6 +601,20 @@ class AjusteController extends BaseController
         ));
     }
     
+    /**
+     * Método auxiliar utilizado para processar os arquivos anexados a um pedido
+     * de alteração feito pelo usuário. O mesmo é utilizado pelo método 
+     * actionPedidosAvaliacao().
+     * 
+     * O método instancia um objeto da classe {@link Repositorio} e envia os
+     * arquivos selecionados pelo usuário para o endereço definido no objeto.
+     * 
+     * @param array $arquivos Arquivo armazenado na superglocal $_FILE
+     * @param int $i Indice do arquivo na lista de anexos
+     * @param CActiveRecord $ajuste Instância de um objeto da classe Abono ou da classe Ajuste
+     * @param char $tipo Chave primário da classe Abono ou da classe Ajuste
+     * @return boolean Retorna TRUE se o anexo foi salvo com sucesso. Caso contrário retorna FALSE
+     */
     private function fazUploadArquivo($arquivos, $i, $ajuste, $tipo)
     {
         $repositorio = new Repositorio;

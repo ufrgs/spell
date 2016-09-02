@@ -1,18 +1,44 @@
 <?php
 
-/*
-  Document   : CalendarioController
-  Created on : 07/06/2016
-  Author     : thiago
+/**
+ * Controlador utilizado para permitir ao usuário visualizar seus horários em
+ * formato de calendário.
+ * 
+ * Aqui é implementada a listagem e filtragem de horários por um determinado
+ * período. Também são mostrados quantias gerais relacionados aos horários como
+ * saldo de horas do mês anterior, total de horas no mês e carga horária 
+ * prevista.
+ * 
+ * @author UFRGS <cpd-dss@ufrgs.br>
+ * @package cpd\sldif
+ * @version v1.0
+ * @since v1.0
  */
 class CalendarioController extends BaseController
 {
 
+    /**
+     * Action utilizada para listagem da tela principal do calendário.
+     * 
+     * Aqui é feita uma chamada ao método privado exibeCalendario() para melhoria
+     * na legibilidade do código.
+     */
     public function actionIndex()
     {
         $this->exibeCalendario(Yii::app()->user->id_pessoa);
     }
     
+    /**
+     * Action utilizada para alguém com cargo de chefia visualizar os horários
+     * de um funcionário.
+     * 
+     * Esse método verifica se o usuário logado possui cargo de chefia em algum 
+     * órgão. Em caso positivo é feita uma requisição para o controlador
+     * AcompanhamentoController e exibida a tela para listagem de horários do
+     * servidor selecionado pela chefia.
+     * 
+     * Uma mensagem de erro é exibida caso o usuário não tenha cargo de chefia.
+     */
     public function actionAcompanhamentoChefia() 
     {
         $orgaosChefiados = RestricaoRelogio::getOrgaosChefia(Yii::app()->session['id_pessoa']);
@@ -29,7 +55,17 @@ class CalendarioController extends BaseController
             $this->render('/registro/mensagem', array('mensagem' => 'Você não possui cargo de chefia.', 'classe' => 'Info'));
         }
     }
-    
+ 
+    /**
+     * Action utilizada para permitir que um gerente visuaize os registros de um
+     * funcionário específico passando seu id para um campo de busca.
+     * 
+     * O id do funcionário deve ser passado utilizando o método POST e sendo 
+     * referenciado com a chave "p".
+     * 
+     * Caso o usuário que requisitou os dados não tenha permissão para acessar
+     * os registros de outro funcionário uma mensagem de erro é exibida.
+     */
     public function actionPessoa() {
         $id_pessoa = intval($_POST['p']);
         
@@ -75,11 +111,26 @@ class CalendarioController extends BaseController
             print $this->exibeCalendario($id_pessoa, true);
         }
         else {
-            // nao tem permissao
             $this->render('/registro/mensagem', array('mensagem' => 'Você não tem permissão para ver os registros desse servidor.', 'classe' => 'Info'));
         }
     }
     
+    /**
+     * Método auxiliar para apresentação do calendário na tela.
+     * 
+     * Esse método busca os registros de um usário com base no id passado por 
+     * parâmetro e renderiza a página com tais informações.
+     * 
+     * O método pode fazer isso de forma síncrona ou assíncrona a depender do
+     * valor da variável $viaAjax. Esse parâmetro define de que forma os dados 
+     * serão exibidos na tela. Com valor <code>false</code> é renderizada 
+     * utilizando o método <code>render()</code> e caso contrário é renderizada
+     * com o método <code>renderPartial()</code> para utilização das informações
+     * em um modal.
+     * 
+     * @param int $id_pessoa Chave primária da classe Pessoa
+     * @param boolean $viaAjax Variável para definir o tipo de requisição
+     */
     private function exibeCalendario($id_pessoa, $viaAjax = false) 
     {    
         $pessoa = Pessoa::model()->with(array(
