@@ -62,7 +62,7 @@ class RestricaoController extends BaseController
     public function actionOrgaos($term)
     {
         $term = strtoupper(str_replace("'", "''", Helper::tiraAcento(trim($term))));
-        $orgaos = Orgao::model()->with('OrgaoUfrgs')->findAll("nome_pessoa like '%$term%' or upper(sigla_orgao) like '%$term%'");
+        $orgaos = Orgao::model()->findAll("nome_orgao like '%$term%' COLLATE utf8_general_ci or upper(sigla_orgao) like '%$term%'");
 
         $opcoes = array();
         if (!empty($orgaos)) {
