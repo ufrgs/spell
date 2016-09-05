@@ -65,7 +65,7 @@ class GerenciaController extends BaseController
         }
     }
     
-    public function actionServidoresUFRGS($term)
+    public function actionServidores($term)
     {
         $term = strtoupper(str_replace("'", "''", Helper::tiraAcento(trim($term))));
         $pessoas = Pessoa::model()->with(array(
@@ -78,7 +78,7 @@ class GerenciaController extends BaseController
         ))->findAll(array(
             'select' => 't.id_pessoa, t.nome_pessoa, t.nome_pessoa',
             'condition' => "
-                ( t.nome_pessoa like '%$term%' or convert(varchar(6), t.id_pessoa) = '$term' )
+                ( t.nome_pessoa like '%$term%' COLLATE utf8_general_ci or LTRIM(CAST(t.id_pessoa AS char(12))) = '$term' )
                 and t.id_pessoa <> :id_pessoa",
             'params' => array(
                 ':id_pessoa' => Yii::app()->user->id_pessoa,

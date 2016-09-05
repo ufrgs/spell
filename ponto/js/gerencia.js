@@ -7,7 +7,7 @@ $(document).ready(function() {
     }
     
     $("#acServidor").autocomplete({
-        source: HOME + "gerencia/servidoresUFRGS",
+        source: HOME + "gerencia/servidores",
         minLength: 3,
         delay: 500,
         select: function (event, ui) {
