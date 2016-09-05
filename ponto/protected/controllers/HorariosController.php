@@ -59,9 +59,9 @@ class HorariosController extends BaseController
             if(isset($_REQUEST['Orgaos'])) { // Selecionou um dos órgãos sob responsabilidade 
                 $orgaos = $this->retornaOrgaosResponsabilidade($id_pessoa);
                 $controle  = true;
-                $orgao     = Orgao::model()->find('t.id_orgao = '.$_REQUEST["Orgaos"]);
-                $definicao = DefinicoesOrgao::model()->find('t.id_orgao = '.$_REQUEST["Orgaos"]);
-                $defOrgaoSuperior = DefinicoesOrgao::model()->find('t.id_orgao = '.$orgao->getAttribute("id_orgao_superior"));
+                $orgao     = Orgao::model()->findByPk($_REQUEST['Orgaos']); 
+                $definicao = DefinicoesOrgao::model()->findByPk($orgao->id_orgao);
+                $defOrgaoSuperior = ($orgao->getAttribute("id_orgao_superior") == NULL ? NULL : DefinicoesOrgao::model()->findByPk($orgao->getAttribute("id_orgao_superior")));
                 $aLimitesHorario['hora_inicio_expediente'] = "00:00";
                 $aLimitesHorario['hora_fim_expediente'] = "23:59";
                 $aLimitesHorario['Sabado'] = true;
