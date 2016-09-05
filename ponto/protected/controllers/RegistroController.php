@@ -1,8 +1,32 @@
 <?php
 
+/**
+ * Controlador utilizado para permitir ao usuário bater ponto.
+ * 
+ * Aqui são implementados os métodos para registrar entrada e saída do servidor,
+ * permitir a visualização da jornada de trabalho e visualizar informações 
+ * básicas do servidor como nome, foto e cargo.
+ * 
+ * @author UFRGS <cpd-dss@ufrgs.br>
+ * @package cpd\spela
+ * @version v1.0
+ * @since v1.0
+ */
 class RegistroController extends BaseController
 {
 
+    /**
+     * Método do Yii Framework para permitir a execução de código antes da 
+     * execução de uma action.
+     * 
+     * Aqui são carregados os arquivos necessários para exibição do layout da 
+     * aplicação como os arquivos HTML, CSS e JavaScript.
+     * 
+     * Além das ações mencionadas esse método também verifica a sessão do usuário
+     * para garantir que há uma sessão válida chamada PontoUFRGS no navegador.
+     * 
+     * @param CAction $action A action do controller que foi requisitada.
+     */
     public function beforeAction($action)
     {
         Yii::app()->getClientScript()->registerCoreScript('jquery');
@@ -33,12 +57,29 @@ class RegistroController extends BaseController
         return true;
     }
 
+    /**
+     * Método do Yii Framework para adição de filtros nas actions. É executado
+     * automaticamente antes de cada chamada a um controller para validar a 
+     * sessão do usuário.
+     * 
+     * Está definido neste controller para remover os filtros adicionados na
+     * superclasse {@see BaseController}.
+     *
+     * @return array Array vazio indicando a ausência de filtros
+     */
     public function filters()
     {
         return array(
         );
     }
 
+    /**
+     * Action utilizada para mostrar o painel de controle do ponto eletrônico.
+     * 
+     * Esse método monta a tela que contem os botões para que o servidor possa
+     * registrar seus horários de entrada e saída, bem como visualizar sua 
+     * jornada e informações pessoais básicas.
+     */
     public function actionIndex()
     {
         if (isset(Yii::app()->session['id_pessoa_ponto'])) {
@@ -60,15 +101,15 @@ class RegistroController extends BaseController
 
             if ($pessoa) {
                 if (count($pessoa->DadosFuncionais) == 1) {
-                    // apenas um vinculo
+                    // Apenas um vínculo
                     $pessoa->DadosFuncionais = $pessoa->DadosFuncionais[0];
 
-                    // verifica afastamentos e permissao de IP via funcao do banco
+                    // Verifica afastamentos e permissão de IP via função do banco
                     $testeLiberacao = RestricaoRelogio::verificaLiberacaoPonto(
                         $pessoa->id_pessoa, $pessoa->DadosFuncionais->matricula, $pessoa->DadosFuncionais->nr_vinculo, $_SERVER['REMOTE_ADDR']
                     );
                     if ($testeLiberacao['libera'] || (AMBIENTE == 'dev')) {
-                        // restricoes passaram, pode bater ponto
+                        // Restrições passaram, pode bater ponto
                         $registrosHoje = Ponto::model()->findAll(array(
                             'condition' => "id_pessoa = :id_pessoa and DATE_FORMAT(data_hora_ponto, '%d/%m/%Y') = :Hoje",
                             'params' => array(
@@ -108,32 +149,35 @@ class RegistroController extends BaseController
                         ));
                     }
                     else {
-                        // existe uma restriao para o ponto
+                        // Existe uma restrição para o ponto
                         $this->render('mensagem', array(
                             'mensagem' => $testeLiberacao['mensagem'],
                         ));
                     }
                 }
                 else {
-                    // selecionar vinculo
+                    // Selecionar vínculo
                     $this->render('selecionaVinculo', array(
                         'pessoa' => $pessoa,
                     ));
                 }
             }
             else {
-                // sem vinculo que bata ponto
+                // Sem vínculo que bata ponto
                 $this->render('mensagem', array(
                     'mensagem' => "Você não precisa bater ponto. =)",
                 ));
             }
         }
         else {
-            //tela de login
+            // Redireciona para a tela de login
             $this->actionSair();
         }
     }
 
+    /**
+     * Action utilizada para mostrar a foto do servidor na página do ponto.
+     */
     public function actionFoto()
     {
         if (isset(Yii::app()->session['id_pessoa_ponto'])) {
@@ -152,12 +196,34 @@ class RegistroController extends BaseController
         Yii::app()->end();
     }
 
+    /**
+     * Action utilizada para atualizar o relógio da página do ponto.
+     */
     public function actionAtualizaRelogio()
     {
         $this->desabilitaYiiToolbar();
         print self::getData("H:i");
     }
 
+    /**
+     * Action utilizada para mostrar a jornada do usuário.
+     * 
+     * Esse método busca os registros de horários e os devolve em formato JSON
+     * contendo o ultimo registro feito, a jornada diária e o tempo percorrido 
+     * no ponto atual.
+     * 
+     * Exemplo de resposta em formato JSON:
+     * 
+     * <code>
+     * {
+     *    'ultimoRegistro' => [['hora' => '1000', 'tipo' =>'entrada']],
+     *    'jornadaDiaria' => 480
+     *    'agora' => 1200
+     * }
+     * </code>
+     * 
+     * O método deve receber o parâmetro nrVinculo via método POST.
+     */
     public function actionGetUltimoRegistroEJornada()
     {
         if (isset(Yii::app()->session['id_pessoa_ponto'], $_POST['nrVinculo']) && ($_POST['nrVinculo'] != 0)) {
@@ -192,6 +258,27 @@ class RegistroController extends BaseController
         }
     }
 
+    /**
+     * Action utilizada para salvar o registro feito pelo usuário.
+     * 
+     * Ao clicar nos botões de entrada e saída da tela principal esta action é
+     * chamada e o tempo é salvo no banco de dados.
+     * 
+     * Para poder registrar corretamente o ponto os seguintes parâmetros devem
+     * ser informados via método POST: tipo (E para entrada ou S para saída) e
+     * nrVinculo (indicando o vínculo do servidor com a instituição).
+     * 
+     * Esse método retorna um objeto JSON contendo uma mensagem e um código de
+     * erro.
+     * 
+     * Exemplo de resposta do método:
+     * <code>
+     * {
+     *    'erro' => 0,
+     *    'msg' => 'Bom trabalho!'
+     * }
+     * </code>
+     */
     public function actionRegistraPonto()
     {
         if (isset(Yii::app()->session['id_pessoa_ponto'], $_POST['nrVinculo']) && ($_POST['nrVinculo'] != 0)) {
@@ -257,6 +344,16 @@ class RegistroController extends BaseController
         }
     }
 
+    /**
+     * Action utilizada para autenticar o usuário.
+     * 
+     * Esse método verifica se a credencial (código e senha) inseridos pelo 
+     * usuário é válida. Se for uma sessão é criada e o mesmo é redirecionado
+     * para a página principal.
+     * 
+     * Para a verificação acontecer deve-se passar os parâmetros usuario e senha
+     * via método POST.
+     */
     public function actionLogin()
     {
         if (isset($_POST['usuario'])) {
@@ -284,6 +381,12 @@ class RegistroController extends BaseController
         }
     }
 
+    /**
+     * Action utilizada para realizar o logout do usuário.
+     * 
+     * Método que destrói a sessão do usuário e o redireciona para a página de 
+     * login.
+     */
     public function actionSair()
     {
         Yii::app()->session->setSessionName("PontoUFRGS");
@@ -292,6 +395,18 @@ class RegistroController extends BaseController
         $this->actionLogin();
     }
 
+    /**
+     * Método auxiliar para exibição da hora dependendo da origem.
+     * 
+     * Esse método tem o código necessário para retornar uma data contida no
+     * banco de dados ou gerada pelo servidor usando a função <code>date()</code>
+     * nativa da linguagem PHP, bastando informar o formato desejada.
+     * 
+     * Exemplo de formato para a data: Y-m-d H:i:s
+     * 
+     * @param string $formato Formato desejada para a data
+     * @return string Uma string contendo a data atual no formato requisitado
+     */
     public static function getData($formato)
     {
         /** VIA BANCO
