@@ -95,7 +95,7 @@ class GerenciaController extends BaseController
     /**
      * Action utilizada para pesquisa de servidores da Universidade.
      * 
-     * O método receber uma parâmetro com o termo a ser comparado com o nome e 
+     * O método recebe uma parâmetro com o termo a ser comparado com o nome e 
      * com o código da pessoa usando o comando LIKE da linguaguem SQL.
      * 
      * Os resultadores encontrados serão devolvidos em formato JSON seguindo o
