@@ -1,21 +1,48 @@
 <?php
 
+/**
+ * Controlador utilizado para controle de carga horária dos órgãos.
+ * 
+ * Aqui são implementados os métodos para listagem e alteração dos horários de
+ * dias úteis e finais de semana dos órgãos controlados pelo sistema.
+ * 
+ * @author UFRGS <cpd-dss@ufrgs.br>
+ * @package cpd\spela
+ * @version v1.0
+ * @since v1.0
+ */
 class HorariosController extends BaseController
-{      
+{
     
+    /**
+     * Método do Yii Framework para permitir a execução de código antes da 
+     * execução de uma action.
+     * 
+     * Aqui são carregados os arquivos necessários para exibição do layout da 
+     * aplicação como os arquivos HTML, CSS e JavaScript.
+     * 
+     * @param CAction $action A action do controller que foi requisitada
+     */
     public function beforeAction($action) {
-        
         Yii::app()->getClientScript()->registerScriptFile(Yii::app()->baseUrl.'/js/horarioOrgao.js', CClientScript::POS_END);
        
         return parent::beforeAction($action);
     }
     
+    /**
+     * Action utilizada para listagem de horários de acordo com uma categoria.
+     * 
+     * A seleção da categoria a ser mostrada é feita através do parâmetro 
+     * numérico "Orgãos" passado via método GET.
+     * 
+     * Exemplo de URL: <code>/ponto/horarios/horariosOrgaos?Orgaos=2</code>
+     */
     public function actionHorariosOrgaos()
     {
         $id_pessoa = Yii::app()->session['id_pessoa'];
         $controle = $empty = false;
         $orgaos = $this->retornaOrgaosResponsabilidade($id_pessoa);
-        if ($orgaos == NULL || empty ($orgaos)) //Pessoa não possui orgaos sob sua responsabilidade 
+        if ($orgaos == NULL || empty ($orgaos)) // Pessoa não possui órgãos sob sua responsabilidade 
         {
             $orgao = $this->retornaOrgaoLotacao($id_pessoa);
             $definicao   =   new DefinicoesOrgao();            
@@ -26,10 +53,10 @@ class HorariosController extends BaseController
             $empty = is_null($definicao) || is_null($orgao);            
             $this->render('exibirHorariosOrgao', array('orgao' => $orgao, 'definicao' => $definicao, 'podeEditar' => false, 'empty' => $empty));
         }
-        else //possui orgaos sobre sua responsabilidade 
+        else // Possui órgãos sob sua responsabilidade
         {
             $definicao = $orgao = null;            
-            if(isset($_REQUEST['Orgaos'])) { //selecionou um dos orgaos sob responsabilidade 
+            if(isset($_REQUEST['Orgaos'])) { // Selecionou um dos órgãos sob responsabilidade 
                 $orgaos = $this->retornaOrgaosResponsabilidade($id_pessoa);
                 $controle  = true;
                 $orgao     = Orgao::model()->find('t.id_orgao = '.$_REQUEST["Orgaos"]);
@@ -62,7 +89,16 @@ class HorariosController extends BaseController
             }
         }
     }
-          
+    
+    /**
+     * Action utilizada para salvar os horários alterados na página.
+     * 
+     * Esse método deve receber os parâmetros: Orgao e DefinicoesOrgao via 
+     * método POST.
+     * 
+     * @return string Mensagem de sucesso ou erro em formato JSON contendo o atributo mensagem
+     * @throws CHttpException Excessão disparada caso o parâmetro "Orgao" não tenha sido passado
+     */
     public function actionSalvarHorarios()
     {   
         if (isset($_POST['Orgao'])){
@@ -80,7 +116,7 @@ class HorariosController extends BaseController
             $definicao->data_atualizacao = new CDbExpression("CURRENT_TIMESTAMP()");
             $definicao->id_pessoa_atualizacao = Yii::app()->session['id_pessoa'];
             
-            //Verifica se o horário informado está de acordo com o horário do Órgão superior
+            // Verifica se o horário informado está de acordo com o horário do Órgão superior
             if (!is_null($defOrgaoSuperior)){
                 if($postDefinicoes['hora_inicio_expediente_hora'] < $defOrgaoSuperior->hora_inicio_expediente_hora || $postDefinicoes['hora_fim_expediente_hora'] > $defOrgaoSuperior->hora_fim_expediente_hora){
                     $msg .= "O horário informado não está de acordo com o horário do órgão hierarquicamente superior.";
@@ -218,8 +254,17 @@ class HorariosController extends BaseController
             throw new CHttpException(400, "Erro ao processar solicitação");
         }
          
-    }    
+    }
     
+    /**
+     * Método auxiliar para busca de órgãos sob responsabilidade de uma pessoa.
+     * 
+     * É utilizado no método actionHorariosOrgaos() para reaproveitamento de
+     * código.
+     * 
+     * @param int Chave primária do usuário
+     * @return array Array contendo instâncias da classe Orgao
+     */
     private function retornaOrgaosResponsabilidade($id_pessoa)
     {
         $orgaosChefia = Helper::getHierarquiaOrgaosChefia(Yii::app()->user->id_pessoa);
@@ -234,6 +279,15 @@ class HorariosController extends BaseController
         return $orgaos;
     }
     
+    /**
+     * Método auxiliar para busca horários de pessoas sem chefia.
+     * 
+     * É utilizado no método actionHorariosOrgaos() para reaproveitamento de
+     * código.
+     * 
+     * @param int $id_pessoa Chave primária do usuário
+     * @return Orgao Instância da classe Orgao associada ao usuário
+     */
     private function retornaOrgaoLotacao($id_pessoa)
     {
         $pessoa = DadoFuncional::model()->with('OrgaoExercicio')->find(array(
