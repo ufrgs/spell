@@ -26,7 +26,7 @@ class RelatorioController extends BaseController
         }
         else {
             // nao e chefe
-            $this->render('system.cpd.views.mensagem', array('mensagem' => 'Você não possui cargo de chefia.', 'classe' => 'Info'));
+            $this->render('/registro/mensagem', array('mensagem' => 'Você não possui cargo de chefia.', 'classe' => 'Info'));
         }
     }
     

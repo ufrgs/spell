@@ -1,0 +1,1 @@
+a:5:{s:12:"tipo_arquivo";s:15:"application/pdf";s:12:"nome_arquivo";s:10:"dou.24.pdf";s:18:"chave_autenticacao";N;s:17:"chave_repositorio";s:12:"F727BC55D5AA";s:14:"data_expiracao";s:0:"";}

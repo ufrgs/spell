@@ -34,7 +34,10 @@ class TempLoginController extends BaseController
             $senha = str_replace("'", "''", $_POST['senha']);
 
             if (AMBIENTE == 'producao') {
+                // TODO teste de senha em ambiente de produção
                 if ($erro) {
+                    // TODO registro da falha em log
+                    
                     $this->render('login', array(
                         'usuario' => $usuario,
                         'mensagem' => $result['mensagem'],
@@ -42,7 +45,7 @@ class TempLoginController extends BaseController
                     Yii::app()->end();
                 }
             }
-
+            // TODO registro do acesso com sucesso
             Yii::app()->session['id_pessoa'] = $usuario;
             $this->redirect('/ponto/acompanhamento/index');
         } else if (isset(Yii::app()->session['id_pessoa'])) {

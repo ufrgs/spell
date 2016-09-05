@@ -52,7 +52,7 @@ class CalendarioController extends BaseController
         }
         else {
             // nao e chefe
-            $this->render('system.cpd.views.mensagem', array('mensagem' => 'Você não possui cargo de chefia.', 'classe' => 'Info'));
+            $this->render('/registro/mensagem', array('mensagem' => 'Você não possui cargo de chefia.', 'classe' => 'Info'));
         }
     }
  
@@ -111,7 +111,7 @@ class CalendarioController extends BaseController
             print $this->exibeCalendario($id_pessoa, true);
         }
         else {
-            $this->render('system.cpd.views.mensagem', array('mensagem' => 'Você não tem permissão para ver os registros desse servidor.', 'classe' => 'Info'));
+            $this->render('/registro/mensagem', array('mensagem' => 'Você não tem permissão para ver os registros desse servidor.', 'classe' => 'Info'));
         }
     }
     
@@ -312,7 +312,7 @@ class CalendarioController extends BaseController
             }
         }
         else {
-            $this->render('system.cpd.views.mensagem', array('mensagem' => 'O ponto eletrônico não está liberado para o seu vínculo.', 'classe' => 'Info'));
+            $this->render('/registro/mensagem', array('mensagem' => 'O ponto eletrônico não está liberado para o seu vínculo.', 'classe' => 'Info'));
         }
     }
 }

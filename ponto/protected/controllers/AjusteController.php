@@ -73,7 +73,7 @@ class AjusteController extends BaseController
             }
         }
         else {
-            $this->render('system.cpd.views.mensagem', array('mensagem' => 'O ponto eletrônico não está liberado para o seu vínculo.', 'classe' => 'Info'));
+            $this->render('/registro/mensagem', array('mensagem' => 'O ponto eletrônico não está liberado para o seu vínculo.', 'classe' => 'Info'));
         }
     }
 
@@ -322,7 +322,7 @@ class AjusteController extends BaseController
         }
         else {
             // nao e chefe
-            $this->render('system.cpd.views.mensagem', array('mensagem' => 'Você não possui cargo de chefia.', 'classe' => 'Info'));
+            $this->render('/registro/mensagem', array('mensagem' => 'Você não possui cargo de chefia.', 'classe' => 'Info'));
         }
     }
     
@@ -387,7 +387,7 @@ class AjusteController extends BaseController
         }
         else {
             // nao e chefe
-            $this->render('system.cpd.views.mensagem', array('mensagem' => 'Você não possui cargo de chefia.', 'classe' => 'Info'));
+            $this->render('/registro/mensagem', array('mensagem' => 'Você não possui cargo de chefia.', 'classe' => 'Info'));
         }
     }
 
@@ -618,7 +618,7 @@ class AjusteController extends BaseController
     private function fazUploadArquivo($arquivos, $i, $ajuste, $tipo)
     {
         $repositorio = new Repositorio;
-        $identificadorRepositorio = $repositorio->upload(92, $arquivos["name"][$i], file_get_contents($arquivos["tmp_name"][$i]), $arquivos["type"][$i]);
+        $identificadorRepositorio = $repositorio->upload($arquivos["name"][$i], file_get_contents($arquivos["tmp_name"][$i]), $arquivos["type"][$i]);
         if ($identificadorRepositorio != '') {
             $anexo = new ArquivoAjuste();
             if ($tipo != 'A') {

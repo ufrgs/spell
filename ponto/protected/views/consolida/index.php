@@ -6,7 +6,7 @@ $cs->registerScriptFile(Yii::app()->baseUrl."/js/consolida.js", CClientScript::P
 
 <fieldset>
     <legend>Consolida carga horária</legend>
-    <label for="ano" class="esquerdaAlinhado">ano</label>
+    <label for="ano" class="esquerdaAlinhado">Ano</label>
     <select id="ano">
         <? for ($i = date("Y"); $i >= 2016; $i--):
             print '<option value="'.$i.'">'.$i.'</option>';
