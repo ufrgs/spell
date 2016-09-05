@@ -1,8 +1,29 @@
 <?php
 
+/**
+ * Controlador utilizado para permitir a adição de restrições de IP.
+ * 
+ * O código necessário para controlar o acesso de um órgão ou servidor ao
+ * sistema de ponto eletrônico com base em seu endereço de IP é implementado 
+ * nos métodos desse controlador.
+ * 
+ * Aqui pode ser feita a busca de servidores e órgão e a adição e exclusão de 
+ * restrições.
+ * 
+ * @author UFRGS <cpd-dss@ufrgs.br>
+ * @package cpd\spela
+ * @version v1.0
+ * @since v1.0
+ */
 class RestricaoController extends BaseController
 {
 
+    /**
+     * Action utilizada para listagem das restrições existêntes.
+     * 
+     * Esse método monta a tela com as listas de restrições separadas por órgão
+     * e servidor usando o método <code>render()</code>.
+     */
     public function actionIndex()
     {
         $restricao = new RestricaoRelogio('search');
@@ -16,6 +37,26 @@ class RestricaoController extends BaseController
         ));
     }
     
+    /**
+     * Action utilizada para salvar uma restrição.
+     * 
+     * Esse método pode tanto alterar uma restrição ou criar uma nova.
+     * 
+     * Esta action precisa receber via método POST os seguintes parâmetros: 
+     *    - CodRestricao: Chave primária da classe {@see RestricaoRelogio}
+     *    - id_orgao: Chave primária da classe {@see Orgao}
+     *    - id_pessoa: Chave primário da classe {@see Pessoa}
+     *    - ipv4: IP restrito no formato IPv4
+     *    - ipv6: IP restrito no formato IPv6
+     * 
+     * Para que uma restrição seja criada o parâmetro CodRestricao deve não
+     * ser enviado ou conter valor zero. Caso esta condição não seja cumprida o
+     * método fará uma alteração em uma restrição existente.
+     * 
+     * Um elemento fieldset é retornado usando a instrução <code>print</code>
+     * contendo mensagem e classes indicando sucesso ou fracasso na operação
+     * executado pela action.
+     */
     public function actionSalvar() 
     {
         if (isset($_POST['CodRestricao']) && $_POST['CodRestricao'] != 0) { // alteracao
@@ -45,6 +86,16 @@ class RestricaoController extends BaseController
         }
     }
     
+    /**
+     * Action utilizada para excluir uma restrição.
+     * 
+     * Essa action procura uma restrição que contenha a chave primária igual ao
+     * valor do parâmetro "nr" passado via método POST.
+     * 
+     * Um elemento fieldset é retornado usando a instrução <code>print</code>
+     * contendo mensagem e classes indicando sucesso ou fracasso na operação
+     * executado pela action.
+     */
     public function actionExcluir() 
     {
         if (isset($_POST['nr'])) { 
@@ -59,6 +110,25 @@ class RestricaoController extends BaseController
         }
     }
 
+    /**
+     * Action utilizada para pesquisa de órgãos.
+     * 
+     * O método recebe um parâmetro com o termo a ser comparado com o nome e 
+     * com o código do órgão usando o comando LIKE da linguaguem SQL.
+     * 
+     * Os resultadores encontrados serão devolvidos em formato JSON seguindo o
+     * exemplo:
+     * 
+     * <code>
+     * {
+     *  "id": 0,
+     *  "label": "0 - Nome",
+     *  "text": "0 - Nome"
+     * }
+     * </code>
+     * 
+     * @param string $term Texto a ser usado na comparação com o nome e o id
+     */
     public function actionOrgaos($term)
     {
         $term = strtoupper(str_replace("'", "''", Helper::tiraAcento(trim($term))));
@@ -86,6 +156,25 @@ class RestricaoController extends BaseController
         Yii::app()->end();
     }
 
+    /**
+     * Action utilizada para pesquisa de pessoas.
+     * 
+     * O método recebe um parâmetro com o termo a ser comparado com o nome e 
+     * com o código da pessoa usando o comando LIKE da linguaguem SQL.
+     * 
+     * Os resultadores encontrados serão devolvidos em formato JSON seguindo o
+     * exemplo:
+     * 
+     * <code>
+     * {
+     *  "id": 0,
+     *  "label": "0 - Nome",
+     *  "text": "0 - Nome"
+     * }
+     * </code>
+     * 
+     * @param string $term Texto a ser usado na comparação com o nome e o id
+     */
     public function actionPessoas($term)
     {
         $term = strtoupper(str_replace("'", "''", Helper::tiraAcento(trim($term))));
