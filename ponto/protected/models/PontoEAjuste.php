@@ -142,6 +142,7 @@ class PontoEAjuste extends CActiveRecord
                                 or (tipo = 'R' and not exists (
                                         select 1 from ajuste A
                                         where A.nr_ponto = nr_seq
+                                            and coalesce(A.indicador_excluido, 'N') = 'N'
                                     )
                             )) ";
         if ($consolidado) {
@@ -152,6 +153,7 @@ class PontoEAjuste extends CActiveRecord
                                             select 1 from ajuste A
                                             where A.nr_ponto = nr_seq
                                                 and A.indicador_certificado = 'S'
+                                                and coalesce(A.indicador_excluido, 'N') = 'N'
                                         )
                                 ))";
         }
