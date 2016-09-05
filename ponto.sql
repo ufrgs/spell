@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Máquina: localhost
--- Data de Criação: 02-Set-2016 às 21:44
+-- Data de Criação: 05-Set-2016 às 21:41
 -- Versão do servidor: 5.6.13
 -- versão do PHP: 5.4.17
 
@@ -315,6 +315,8 @@ CREATE TABLE IF NOT EXISTS `frequencia` (
   `data_frequencia` datetime NOT NULL,
   `data_fim_frequencia` datetime DEFAULT NULL,
   `cod_frequencia` int(3) NOT NULL,
+  `data_inclusao` datetime NOT NULL,
+  `data_atualizacao` datetime DEFAULT NULL,
   PRIMARY KEY (`nr_frequencia`),
   KEY `matricula` (`matricula`,`nr_vinculo`),
   KEY `tipo_frequencia` (`cod_frequencia`)
@@ -324,8 +326,8 @@ CREATE TABLE IF NOT EXISTS `frequencia` (
 -- Extraindo dados da tabela `frequencia`
 --
 
-INSERT INTO `frequencia` (`nr_frequencia`, `matricula`, `nr_vinculo`, `nr_dias`, `data_frequencia`, `data_fim_frequencia`, `cod_frequencia`) VALUES
-(1, 1234567, 1, 3, '2016-08-29 00:00:00', '2016-08-31 00:00:00', 1);
+INSERT INTO `frequencia` (`nr_frequencia`, `matricula`, `nr_vinculo`, `nr_dias`, `data_frequencia`, `data_fim_frequencia`, `cod_frequencia`, `data_inclusao`, `data_atualizacao`) VALUES
+(1, 1234567, 1, 3, '2016-08-29 00:00:00', '2016-08-31 00:00:00', 1, '2016-08-29 00:00:00', NULL);
 
 -- --------------------------------------------------------
 
@@ -985,14 +987,15 @@ CREATE TABLE IF NOT EXISTS `restricao_relogio` (
   KEY `id_orgao` (`id_orgao`),
   KEY `id_pessoa` (`id_pessoa`),
   KEY `matricula` (`matricula`,`nr_vinculo`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 --
 -- Extraindo dados da tabela `restricao_relogio`
 --
 
 INSERT INTO `restricao_relogio` (`nr_restricao`, `id_orgao`, `escopo`, `id_pessoa`, `mascara_ip_v4`, `mascara_ip_v6`, `data_atualizacao`, `id_pessoa_atualizacao`, `ip_atualizacao`, `matricula`, `nr_vinculo`) VALUES
-(1, 3, NULL, NULL, '143.54.235.130/32', NULL, '2016-08-16 00:00:00', 1, '143.54.235.130', NULL, NULL);
+(1, 3, NULL, NULL, '143.54.235.130/32', NULL, '2016-08-16 00:00:00', 1, '143.54.235.130', NULL, NULL),
+(2, 2, NULL, NULL, '143.54.235.130/32', NULL, '2016-09-05 18:19:11', 1, '::1', NULL, NULL);
 
 -- --------------------------------------------------------
 

@@ -176,7 +176,7 @@ class ConsolidaController extends BaseController
                         and month(F.data_frequencia) = C.mes
                         and year(F.data_frequencia) = C.ano
                 where 
-                    coalesce(F.data_atualizacao, F.DataInclusao) > C.data_atualizacao ";
+                    coalesce(F.data_atualizacao, F.data_inclusao) > C.data_atualizacao ";
         $query = Yii::app()->db->createCommand($sql)->queryAll();
         $processados = '';
         foreach ($query as $registro) {

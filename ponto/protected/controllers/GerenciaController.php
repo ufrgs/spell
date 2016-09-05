@@ -152,54 +152,5 @@ class GerenciaController extends BaseController
 
         print CJSON::encode($opcoes);
         //Yii::app()->end();
-    }
-    
-    /**
-     * Action utilizada para correção automática de pendências.
-     * 
-     * @return string Mensagem de sucesso ou falha
-     */
-    public function actionCorrigePendencias()
-    {
-        $sql = "update PENDENCIASISTEMACHEFIA set
-                    DataCancelamentoPendencia = CURRENT_TIMESTAMP()
-                where
-                    PENDENCIASISTEMACHEFIA.DataResolucaoPendencia is null
-                    and (
-                        (	PENDENCIASISTEMACHEFIA.IDServico = 33
-                            and not exists (
-                                select 1 
-                                from ajuste
-                                where
-                                    matricula = PENDENCIASISTEMACHEFIA.matricula
-                                    and nr_vinculo = PENDENCIASISTEMACHEFIA.nr_vinculo
-                                    and data_hora_certificacao is null
-                                union
-                                select 1 
-                                from abono
-                                where
-                                    matricula = PENDENCIASISTEMACHEFIA.matricula
-                                    and nr_vinculo = PENDENCIASISTEMACHEFIA.nr_vinculo
-                                    and data_hora_certificacao is null
-                            )
-                        )
-                        or (PENDENCIASISTEMACHEFIA.IDServico = 40
-                            and not exists (
-                                select 1 
-                                from compensacao
-                                where
-                                    matricula = PENDENCIASISTEMACHEFIA.matricula
-                                    and nr_vinculo = PENDENCIASISTEMACHEFIA.nr_vinculo
-                                    and data_hora_certificacao is null
-                            )
-                        )
-                    )";
-        $query = Yii::app()->db->createCommand($sql)->execute();
-        if ($query) {
-            return 'Pendências corrigidas com sucesso!';
-        }
-        else {
-            return 'Ocorreu um erro...';
-        }
-    }
+    }  
 }
