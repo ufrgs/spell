@@ -92,7 +92,7 @@ class RestricaoController extends BaseController
         $pessoas = Pessoa::model()->with('DadoFuncional')->findAll("
             coalesce(DadoFuncional.data_desligamento, DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL 1 DAY)) > CURRENT_TIMESTAMP() 
             and coalesce(DadoFuncional.data_aposentadoria, DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL 1 DAY)) > CURRENT_TIMESTAMP()
-            and (t.nome_pessoa like '%$term%' or convert(varchar(6), t.id_pessoa) = '$term')");
+            and (t.nome_pessoa like '%$term%'  COLLATE utf8_general_ci or LTRIM(CAST(t.id_pessoa as char(12))) = '$term')");
 
         $opcoes = array();
         if (!empty($pessoas)) {
