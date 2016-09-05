@@ -1,13 +1,31 @@
 <?php
 
-/* 
-    Document   : RelatorioController
-    Created on : 06/05/2016, 16:04:30
-    Author     : thiago
-*/
-
+/**
+ * Controlador utilizado para permitir ao usuário gerar relatórios de registros
+ * 
+ * Aqui são implementadas os recursos do menu Relatório Consolidade que é 
+ * disponibilizado para a gerência.
+ * 
+ * Esse controlador possui os métodos para geração das tabelas com os registros
+ * de horários dos servidores, podendo visualizar quem utilizou ou não o sistema
+ * separados por órgãos e períodos de tempo.
+ * 
+ * @author UFRGS <cpd-dss@ufrgs.br>
+ * @package cpd\spela
+ * @version v1.0
+ * @since v1.0
+ */
 class RelatorioController extends BaseController
 {
+    
+    /**
+     * Action principal da página de relatórios.
+     * 
+     * Esse método busca os órgãos disponíveis para consulta e os lista na tela
+     * para que o usuário possa selecionar o que desejar.
+     * 
+     * Caso o usuário não possua cargo de chefia uma mensagem de erro é exibida.
+     */
     public function actionIndex()
     {
         $orgaosChefia = Helper::getHierarquiaOrgaosChefia(Yii::app()->user->id_pessoa);
@@ -25,16 +43,20 @@ class RelatorioController extends BaseController
             ));
         }
         else {
-            // nao e chefe
+            // Não possui cargo de chefia
             $this->render('/registro/mensagem', array('mensagem' => 'Você não possui cargo de chefia.', 'classe' => 'Info'));
         }
     }
     
     /**
+     * Busca os últimos 12 meses disponíveis para relatório.
      * 
-     * Dado um orgao, busca os ultimos 12 meses disponiveis para relatorio
-     * @param int $orgao
-     * @return HTML do select
+     * A partir do parâmetro $orgao busca os meses que contém registros.
+     * 
+     * Os resultados são mostrados na tela usando método 
+     * <code>renderPartial()</code>.
+     * 
+     * @param int $orgao Chave primária do órgão
      */
     public function actionBuscaUltimos12Meses($orgao)
     {
@@ -61,6 +83,15 @@ class RelatorioController extends BaseController
         ));
     }
     
+    /**
+     * Action para exibir um relatório com registros.
+     * 
+     * Esse método mostra os registros dos servidores de um órgão em um período
+     * específico do ano. Para isso é necessário passar via GET os parâmetros 
+     * orgao (chave primária do órgão) e periodo (mês e ano a ser consultado).
+     * 
+     * O valor do parâmetro periodo deve ser passado no formato MM/AAAA.
+     */
     public function actionExibeCargaHorariaConsolidada()
     {
         if (isset($_GET['orgao'], $_GET['periodo'])) {
