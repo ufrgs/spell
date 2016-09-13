@@ -1,26 +1,69 @@
 <?php
 
+/**
+ * Componente para representar o repositório de documentos
+ * 
+ * Aqui são definidos métodos para manipulação dos documentos utlizados na
+ * aplicação, por exemplo, os documentos que podem ser anexados às mudanças de 
+ * horários.
+ * 
+ * Caso um funcionário precise se ausentar por problemas médicos, por exemplo, 
+ * ao solicitar a alteração no horário o atestado médico em formato PDF pode 
+ * ser enexado ao pedido.
+ * 
+ * @author UFRGS <cpd-dss@ufrgs.br>
+ * @package cpd\spell
+ * @version v1.0
+ * @since v1.0
+ */
 class Repositorio extends CComponent
 {
+
+    /**
+     * Lista de extensões de arquivos que não são aceitas
+     * 
+     * @var array 
+     */
     private static $_extensoesProibidas = array();
+    
+    /**
+     * Chave de autenticação do arquivo atual
+     * 
+     * @var string 
+     */
     private $_chaveAutenticacao = NULL;
+    
+    /**
+     * Mensagem de erro a ser retornada por algum método
+     * 
+     * @var string 
+     */
     private $_erro;
 
     /**
-     *
+     * Método para busca do diretório base dos arquivos
+     * 
+     * Função crida para reaproveitamento de código.
+     * 
+     * @return String Diretório base do sistema
      */
     public function enderecoBase()
     {
-        return $_SERVER['DOCUMENT_ROOT'].'';
+        return $_SERVER['DOCUMENT_ROOT'] . '';
     }
 
     /**
+     * Método para autenticação de documentos
+     * 
      * Esta função gera uma chave de autenticação, de 12 caracteres alfanuméricos,
      * que pode ser incluída no documento gerado (por exemplo, um PDF).
+     * 
+     * @return boolean Retorna TRUE indicando sucesso na geração da chave
      */
     public function geraChaveAutenticacao()
     {
         $this->_chaveAutenticacao = "";
+        
         /* INICIA COM TRÊS LETRAS MAIÚSCULAS */
         $this->_chaveAutenticacao .= chr(rand(65, 90));
         $this->_chaveAutenticacao .= chr(rand(65, 90));
@@ -36,14 +79,21 @@ class Repositorio extends CComponent
         /* TRÊS PRIMEIROS CARACTERES DO SESSION_ID */
         $this->_chaveAutenticacao .= strtoupper(substr(session_id(), 0, 3));
 
-        if (!$this->verificaChaveAutenticacaoNova($this->_chaveAutenticacao))
+        if (!$this->verificaChaveAutenticacaoNova($this->_chaveAutenticacao)) {
             $this->geraChaveAutenticacao();
+        }
 
         return true;
     }
 
     /**
-     *
+     * Método para autenticação de documentos
+     * 
+     * Essa função verifica a autenticidade de uma chave gerada pelo método
+     * <code>Repositorio::geraChaveAutenticacao()</code>.
+     * 
+     * @param string $chave Chave alfanumérica a ser validada 
+     * @return boolean Retorna TRUE indicando autenticidade da chave
      */
     private function verificaChaveAutenticacaoNova($chave)
     {
@@ -51,39 +101,47 @@ class Repositorio extends CComponent
     }
 
     /**
-     * Devolve a chave de autenticação formatada para exibição ao usuário,
-     * no formado XXX.XXX.XXX.XXX . O argumento é opcional, e caso ele seja
+     * Método auxiliar para a autenticação de documentos
+     * 
+     * Devolve a chave de autenticação formatada para exibição ao usuário
+     * no formado XXX.XXX.XXX.XXX. O argumento é opcional, e caso ele seja
      * FALSE, devolverá a chave sem formatação, isto é, sem pontos.
-     * @param boolean $Formatada Por default é TRUE.
-     * @return string Chave de autenticação
+     * 
+     * @param boolean $formatada Indicador de formação da chave
+     * @return string Retorna a chave de autenticação
      */
     public function devolveChaveAutenticacao($formatada = true)
     {
-        if ($formatada !== false)
+        if ($formatada !== false) {
             return preg_replace('/^(.{3})(.{3})(.{3})(.{3})$/', '$1.$2.$3.$4', $this->_chaveAutenticacao);
-        else
+        } else {
             return $this->_chaveAutenticacao;
+        }
     }
 
     /**
-     * Realiza o upload de um arquivo. Caso tenha sido gerada uma chave de autenticação
-     * para o objeto, ela será associado ao arquivo e será apagada em seguida.
-     * @param int $TipoDocumentoDigital O tipo de documento, segundo a tabela de apoio.
-     * @param string $NomeArquivo O nome original do arquivo que se deseja enviar.
-     * @param string $ConteudoArquivo O conteúdo binário do arquivo.
-     * @param string $tipo_arquivo Tipo MIME do arquivo, ex., application/pdf
-     * @return string O identifiador único do arquivo, usado posteriormente para visualização. Em caso de falha, retorna FALSE.
+     * Método para realizar o envio de arquivos para o servidor
+     * 
+     * Caso tenha sido gerada uma chave de autenticação para o objeto ela será 
+     * associada ao arquivo e será apagada em seguida.
+     * 
+     * @param string $NomeArquivo Nome a ser usado para armazenar o arquivo
+     * @param string $ConteudoArquivo Conteúdo do arquivo a ser armazenado
+     * @param type $tipo_arquivo Tipo da alteração que está sendo feita (Ajuste ou Abono)
+     * @return boolean|string Retorna false em caso de erro ou a chave de autenticidade do arquivo
      */
     public function upload($NomeArquivo, $ConteudoArquivo, $tipo_arquivo)
     {
-        if (isset(Yii::app()->params['Repositorio']['ExtensoesProibidas']))
+        if (isset(Yii::app()->params['Repositorio']['ExtensoesProibidas'])) {
             self::$_extensoesProibidas = Yii::app()->params['Repositorio']['ExtensoesProibidas'];
-
-        if (isset(Yii::app()->params['Repositorio']['TamanhoMaximoArquivo']))
+        }
+        
+        if (isset(Yii::app()->params['Repositorio']['TamanhoMaximoArquivo'])) {
             $iTamanhoMaximo = Yii::app()->params['Repositorio']['TamanhoMaximoArquivo'];
-        else
+        } else {
             $iTamanhoMaximo = 5;
-
+        }
+        
         if (strlen($ConteudoArquivo) > ($iTamanhoMaximo * 1024 * 1024)) {
             $this->_erro = "Arquivo grande demais. O tamanho máximo permitido é " . $iTamanhoMaximo . " MB";
             return false;
@@ -91,7 +149,6 @@ class Repositorio extends CComponent
 
         $explodeVar = explode('.', $NomeArquivo);
         $extensao = end($explodeVar);
-
 
         //if(!in_array($extensao, self::$_extensoesPermitidas)) {
         if (in_array($extensao, self::$_extensoesProibidas)) {
@@ -113,8 +170,7 @@ class Repositorio extends CComponent
                 Yii::app()->db->createCommand($sql)->execute();
                 $insert = true;
             }
-        }
-        while (!$insert);
+        } while (!$insert);
 
         $sEndereco = $this->enderecoBase() . '/repositorio/docs/' . $chave;
         $sEnderecoMetadados = $this->enderecoBase() . '/repositorio/docs/' . $chave . '.txt';
@@ -145,8 +201,9 @@ class Repositorio extends CComponent
     }
 
     /**
+     * Método auxiliar para acesso ao atributo _erro
      * 
-     * @return type
+     * @return string Mensagem de erro
      */
     public function erro()
     {
@@ -154,14 +211,19 @@ class Repositorio extends CComponent
     }
 
     /**
-     * Devolve o link para visualização do arquivo, que inclui o identificador da sessão no repositório
-     * Esse método deve sempre ser invocado ao oferecer o link de acesso ao arquivo ao usuário.
-     * O link gerado não deve ser salvo em nenhum lugar, pois ele só permite o acesso 
-     * ao documento durante o tempo de vida da sessão.
-     * @param int $TipoDocumento O tipo de documento, segundo a tabela de apoio.
-     * @param string $chave_repositorio A chave de identificação devolvida pelo repositório.
-     * @param boolean $Download Caso se deseje imprimir um link para baixar, e não visualizar diretamente o arquivo. Por default é FALSE.
-     * @return string O link para visualização, ou FALSE em caso de erro.
+     * Método para consumo de arquivos
+     * 
+     * Devolve o link para visualização do arquivo, que inclui o identificador 
+     * da sessão no repositório.
+     * 
+     * Esse método deve sempre ser invocado ao oferecer o link de acesso ao 
+     * arquivo ao usuário. O link gerado não deve ser salvo em nenhum lugar, pois 
+     * ele só permite o acesso ao documento durante o tempo de vida da sessão.
+     * 
+     * @param int $tipoDocumento Chave primária do documento
+     * @param string $chaveIdentificacao Chave de autenticação do documento
+     * @param boolean $download Variável para indicar se o documento será baixado
+     * @return string Link temporário para visualização do documento
      */
     public function devolveLinkExibicao($tipoDocumento, $chaveIdentificacao, $download = false)
     {
@@ -169,10 +231,18 @@ class Repositorio extends CComponent
     }
 
     /**
+     * Método para consumo de arquivos
      * 
-     * @param type $tipoDocumento
-     * @param type $chaveIdentificacao
-     * @return type
+     * Devolve o link para visualização do arquivo, que inclui o identificador 
+     * da sessão no repositório.
+     * 
+     * Esse método deve sempre ser invocado ao oferecer o link de acesso ao 
+     * arquivo ao usuário. O link gerado não deve ser salvo em nenhum lugar, pois 
+     * ele só permite o acesso ao documento durante o tempo de vida da sessão.
+     * 
+     * @param int $tipoDocumento Chave primária do documento
+     * @param string $chaveIdentificacao Chave de autenticação do documento
+     * @return string Link temporário para visualização do documento
      */
     public function devolveCaminhoAcessoDireto($tipoDocumento, $chaveIdentificacao)
     {
@@ -180,13 +250,14 @@ class Repositorio extends CComponent
     }
 
     /**
-     * Estabelece uma data de fim de validade para um documento digital.
+     * Método para a manipulação de arquivos
      * 
+     * Estabelece uma data de fim de validade para um documento digital.
      * 	
-     * @param int $TipoDocumento O tipo de documento, segundo a tabela de apoio.
-     * @param string $chave_repositorio A chave de identificação devolvida pelo repositório.
-     * @param string $data_expiracao Data de fim do documento (convertida para o formato do banco pela classe ValidatorData)
-     * @return boolean True em caso de sucesso. False, insucesso.
+     * @param int $tipoDocumento Chave primária do documento
+     * @param string $chaveIdentificacao Chave de autenticação do documento
+     * @param string $dataFimValidade Data de fim do documento
+     * @return boolean Retorna TRUE em caso de sucesso
      */
     public function insereDataExpiracao($tipoDocumento, $chaveIdentificacao, $dataFimValidade)
     {
@@ -199,10 +270,12 @@ class Repositorio extends CComponent
     }
 
     /**
-     * Verifica se determinada chave_autenticacao existe e retorna um array a respectiva
-     * chave_repositorio e o TipoDocumento associados ao documento.
-     * 	@param string $chave_autenticacao 
-     * 	@return array|boolean Array com ChaveIdenticacao e TipoDocumento associado ou erro.
+     * Método autenticação de documentos
+     * 
+     * Função para verificar se o documento tem uma chave válida associada.
+     * 
+     * @param string $chaveAutenticacao Chave de autenticação do documento
+     * @return boolean Retorna TRUE caso tenha uma chave válida e FALSE caso contrário
      */
     public function verificaChaveAutenticacao($chaveAutenticacao)
     {
@@ -219,8 +292,9 @@ class Repositorio extends CComponent
             if ($aMetadados['data_expiracao'] != '') {
                 $aData = explode('/', $aMetadados['data_expiracao']);
                 $iData = intval($aData[2] . $aData[1] . $aData[0]);
-                if (date('Ymd') > $iData)
+                if (date('Ymd') > $iData) {
                     return false;
+                }
             }
 
             return true;
@@ -230,11 +304,13 @@ class Repositorio extends CComponent
     }
 
     /**
-     * Devolve o nome original de um arquivo.
-     *
-     * @param int $TipoDocumento
-     * @param string $chave_repositorio
-     * @return string|boolean Nome original, ou false caso o arquivo não exista.
+     * Método para manipulação de documentos
+     * 
+     * Função para buscar o nome original de um arquivo.
+     * 
+     * @param int $tipoDocumento Chave primária do documento
+     * @param type $chaveIdentificacao Chave de autenticação do documento
+     * @return boolean|string Retorna o nome do arquivo ou FALSE caso o arquivo não exista
      */
     public function devolveNomeArquivo($tipoDocumento, $chaveIdentificacao)
     {
@@ -247,11 +323,14 @@ class Repositorio extends CComponent
     }
 
     /**
+     * Método para manipulação de documentos
      * 
-     * @param type $tipoDocumento Numérido que identifica o tipo de arquivo
-     * @param type $chaveIdentificacao Chave de identificação do arquivo
-     * @param type $nomeDocumento Nome do arquivo com sua extensão
-     * @return boolean
+     * Função para alterar o nome original de um arquivo.
+     * 
+     * @param int $tipoDocumento Chave primária do documento
+     * @param type $chaveIdentificacao Chave de autenticação do documento
+     * @param string $nomeDocumento Novo nome a ser utilizado no documento
+     * @return boolean Retorna FALSE caso o arquivo a ser alterado não exista
      */
     public function alteraNomeArquivo($tipoDocumento, $chaveIdentificacao, $nomeDocumento)
     {
@@ -265,5 +344,4 @@ class Repositorio extends CComponent
         $aMetadados['nome_arquivo'] = $nomeDocumento;
         file_put_contents($sEnderecoMetadados, serialize($aMetadados));
     }
-
 }
