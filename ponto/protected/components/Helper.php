@@ -1,24 +1,52 @@
 <?php
 
+/**
+ * Classe contendo método para uso geral da aplicação.
+ * 
+ * Aqui são implementados métodos para verificação de endereços de IP, formatação
+ * de datas e horas, busca de órgãos da instituição, correção de acentuação e 
+ * métodos para auxiliar a visualização de dados das páginas.
+ * 
+ * @author UFRGS <cpd-dss@ufrgs.br>
+ * @package cpd\spell
+ * @version v1.0
+ * @since v1.0
+ */
 class Helper {
-    
-    
+
+    /**
+     * Método auxiliar para as views da aplicação.
+     * 
+     * A função recebe um determiando tempo em minutos e verifica se seu valor
+     * é NULL. Se não for NULL o mesmo é mostrado na tela, caso contrário uma
+     * mensagem é mostrada em seu lugar.
+     * 
+     * Esse método é utilizado na página de horários no arquivo exibirHorariosOrgaos 
+     * para exibir os horários de início e fim do expediente do servidor. A 
+     * mensagem de "Não cadastrado" é exibida quando o servidor não registrou
+     * o seu horário em um dia da semana, por exemplo.
+     * 
+     * @param string $horario Horário a ser exibido
+     */
     public static function HorarioOrgao($horario)
     {
-        if ($horario == NULL)
-        {
+        if ($horario == NULL) {
             echo "Não cadastrado";
-        }
-        else
-        {
+        } else {
             echo $horario;
         }
     }
-    
+
     /**
-		Remove acento de texto utilizando iConv PHP
-		@param string $string texto para remover acento
-	*/
+     * Método para manipulação de texto.
+     * 
+     * A função recebe uma string e converte a codificação dela para o formato
+     * ASCII//TRANSLIT utilizando a função iconv do PHP 5.0.
+     * 
+     * @link https://secure.php.net/manual/pt_BR/book.iconv.php
+     * @param string $string Texto a acentuação removida
+     * @return type
+     */
 	public static function tiraAcento($string) {
 		//$string = iconv('ISO-8859-1', 'ASCII//TRANSLIT', $string);
 		$string = iconv(mb_detect_encoding($string, mb_detect_order(),TRUE), 'ASCII//TRANSLIT', $string);
@@ -26,6 +54,15 @@ class Helper {
 		return $string;
 	}
     
+    /**
+     * Método para manipulação de datas.
+     * 
+     * A função recebe um determiando tempo em minutos e o transforma em horas 
+     * utlizando o formato HH:MM.
+     * 
+     * @param int $tempoEmMinutos Tempo a ser convertido em horas
+     * @return string A hora no formato HH:MM
+     */
     public static function transformaEmFormatoHora($tempoEmMinutos) {
         $horas = intval($tempoEmMinutos/60);
         $minutos = abs($tempoEmMinutos % 60);
@@ -57,6 +94,19 @@ class Helper {
         endif;
     }
 
+    /**
+     * Método auxiliar para as views da aplicação.
+     * 
+     * É utilizado na tela de ajustes na página dadosPedido.
+     * 
+     * Esse método retorna código HTML mostrando informaçõe sobre o período
+     * trabalhado pelo servidor. São essas informações total trabalhado e 
+     * a jornada de trabalho da pessoa.
+     * 
+     * @param int $jornadaDiaria Valor representando a jornada do servidore
+     * @param array $diasComAbono Lista de dias com pedidos de abono
+     * @param int $ultimoDia Data do último registro trabalhado
+     */
     public static function mostraTotalTrabalhado($jornadaDiaria, $diasComAbono, $ultimoDia) {
         ?>
         <tr>
@@ -80,81 +130,109 @@ class Helper {
         <?
     }
 
-    public static function diaDeHoje() {
+    /**
+     * Método auxliar para maniplação de datas.
+     * 
+     * Wrapper para o método {@see Helper::diaFormatado($dia)}.
+     * 
+     * @return string Retorna string contendo a data por extenso
+     */
+    public static function diaDeHoje()
+    {
         return self::diaFormatado(time());
     }
 
-    public static function diaFormatado($dia, $comAno = false) {
+    /**
+     * Método para manipulação de datas.
+     * 
+     * Recebe por parâmetro uma data gerada a partir de uma das funções de data 
+     * do PHP e converte os dia da semana e mês numéricos para sua forma extensa.
+     * 
+     * Por exemplo, se o método for chamado como diaFormatado(time()) será 
+     * retornado algo como: Segunda-feira, 01 de setembro.
+     * 
+     * Se o parâmetro $comAno for definido como TRUE o ano será
+     * anexado ao final da frase.
+     * 
+     * @param int $dia Unidade de tempo correspondente ao dia
+     * @param boolean $comAno Indicador de retorno do ano. Use TRUE para retornar
+     * @return string Retorna uma string contendo a data formatada por extenso
+     */
+    public static function diaFormatado($dia, $comAno = false)
+    {
         switch (date("w", $dia)) {
-            case 0: 
+            case 0:
                 $diaSemana = "Domingo";
                 break;
-            case 1: 
+            case 1:
                 $diaSemana = "Segunda-feira";
                 break;
-            case 2: 
+            case 2:
                 $diaSemana = "Terça-feira";
                 break;
-            case 3: 
+            case 3:
                 $diaSemana = "Quarta-feira";
                 break;
-            case 4: 
+            case 4:
                 $diaSemana = "Quinta-feira";
                 break;
-            case 5: 
+            case 5:
                 $diaSemana = "Sexta-feira";
                 break;
-            case 6: 
+            case 6:
                 $diaSemana = "Sábado";
                 break;
         }
         switch (date("m", $dia)) {
-            case 1: 
+            case 1:
                 $mes = "janeiro";
                 break;
-            case 2: 
+            case 2:
                 $mes = "fevereiro";
                 break;
-            case 3: 
+            case 3:
                 $mes = "março";
                 break;
-            case 4: 
+            case 4:
                 $mes = "abril";
                 break;
-            case 5: 
+            case 5:
                 $mes = "maio";
                 break;
-            case 6: 
+            case 6:
                 $mes = "junho";
                 break;
-            case 7: 
+            case 7:
                 $mes = "julho";
                 break;
-            case 8: 
+            case 8:
                 $mes = "agosto";
                 break;
-            case 9: 
+            case 9:
                 $mes = "setembro";
                 break;
-            case 10: 
+            case 10:
                 $mes = "outubro";
                 break;
-            case 11: 
+            case 11:
                 $mes = "novembro";
                 break;
-            case 12: 
+            case 12:
                 $mes = "dezembro";
                 break;
         }
 
-        return $diaSemana.", ".date("d", $dia)." de ".$mes.($comAno ? " de ".date("Y", $dia) : '');
+        return $diaSemana . ", " . date("d", $dia) . " de " . $mes . ($comAno ? " de " . date("Y", $dia) : '');
     }
-    
+
     /**
-     * Verifica se um ip pertence a uma subrede (range)
-     * @param string $ip
-     * @param string $range
-     * @return boolean
+     * Método para menipuação de endereços de IP.
+     * 
+     * Essa função verifica se um endereço de IP pertence a uma subrede (range).
+     * 
+     * @param string $ip O endereço de IP a ser verificado
+     * @param string $range Espectro de valores permitidos
+     * @return boolean Retorna TRUE para inidicar que o IP está contido no espectro
      */
     public static function ip_match($ip, $range)
     {
@@ -162,17 +240,21 @@ class Helper {
         $ip = ip2long($ip);
         $subnet = ip2long($subnet);
         $mask = -1 << (32 - $bits);
-        $subnet &= $mask; # nb: in case the supplied subnet wasn't correctly aligned
+        $subnet &= $mask;
         return ($ip & $mask) == $subnet;
     }
     
     /**
-     * Retorna um array com a hierarquia de órgaos que libera a id_aplicacao para a pessoa
-     * @param int $id_pessoa
-     * @param int $id_aplicacao
-     * @return array
+     * Método para manipulação de órgãos da instituição.
+     * 
+     * Retorna um array com a hierarquia de órgaos que libera a id_aplicacao 
+     * para a pessoa.
+     * 
+     * @param int $id_pessoa Chave primária da classe Pessoa
+     * @param int $id_aplicacao Chave primária da aplicação
+     * @return array Lista de órgãos que o servidor tem permisãao
      */
-    public static function getHierarquiaOrgaosPermissao($id_pessoa, $id_aplicacao) 
+    public static function getHierarquiaOrgaosPermissao($id_pessoa, $id_aplicacao)
     {
         $orgaos = array();
         $permissao = Permissao::model()->find('id_pessoa = :id_pessoa AND id_aplicacao = :id_aplicacao AND data_expiracao IS NULL', array(
@@ -184,20 +266,23 @@ class Helper {
         }
         return $orgaos;
     }
-    
+
     /**
-     * Retorna um array com a hierarquia de órgaos que a pessoa tem chefia
-     * @param int $id_pessoa
-     * @return array
+     * Método para manipulação dos órgãos da instituição.
+     * 
+     * Retorna um array com a hierarquia de órgaos que a pessoa tem chefia.
+     * 
+     * @param int $id_pessoa Chave primária da classe Pessoa
+     * @return array Hierarquia de órgaos que a pessoa tem chefia
      */
-    public static function getHierarquiaOrgaosChefia($id_pessoa) 
+    public static function getHierarquiaOrgaosChefia($id_pessoa)
     {
         $orgaos = array();
         $servidor = DadoFuncional::model()->find(
             'id_pessoa = :id_pessoa
             and coalesce(data_desligamento, DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL 1 DAY)) > CURRENT_TIMESTAMP() 
             and coalesce(data_aposentadoria, DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL 1 DAY)) > CURRENT_TIMESTAMP() ', array(
-                ':id_pessoa' => $id_pessoa
+            ':id_pessoa' => $id_pessoa
             )
         );
         $orgaosChefia = Orgao::model()->findAll('matricula_dirigente = :matricula1 OR matricula_substituto = :matricula2', array(
@@ -209,11 +294,15 @@ class Helper {
         }
         return $orgaos;
     }
-    
+
     /**
-     * Retorna um array com os id_orgao descendentes 
-     * @param int $id_orgao
-     * @return array
+     * Método para manipulação de órgãos da instituição.
+     * 
+     * Retorna um array contendo o atributo id_orgao de todos os órgãos em ordem 
+     * descendente.
+     * 
+     * @param int $id_orgao Chave primária do órgão
+     * @return array Chaves primárias dos órgaos encontrados em ordem descentende
      */
     public static function getHierarquiaDescendenteOrgao($id_orgao)
     {
@@ -224,11 +313,15 @@ class Helper {
         }
         return $orgaosDescendentes;
     }
-    
+
     /**
-     * Retorna um array com os id_orgao ascendentes
-     * @param int $id_orgao
-     * @return array
+     * Método para manipulação de órgãos da instituição.
+     * 
+     * Retorna um array contendo o atributo id_orgao de todos os órgãos em ordem 
+     * ascendente.
+     * 
+     * @param int $id_orgao Chave primária do órgão
+     * @return array Chaves primárias dos órgaos encontrados em ordem ascendente
      */
     public static function getHierarquiaAscendenteOrgao($id_orgao)
     {
@@ -237,22 +330,28 @@ class Helper {
         while (trim($orgao->id_orgao_superior) != '') {
             $orgaosAscendentes[] = $orgao->id_orgao_superior;
             $orgao = Orgao::model()->findByPk($orgao->id_orgao_superior);
-        } 
+        }
         return $orgaosAscendentes;
     }
-    
+
     /**
-     * returns $val_1 in case $val_1 is different from NULL or ''. Otherwise, returns $val_2
-     * @param mixed $val_1
-     * @param midex $val_2
-     * @return boolean
+     * Método para manipulação de texto.
+     * 
+     * A função analisa os valores passados por parâmetro verficando se o 
+     * primeiro valor é diferente de NULL ou ''. Se as condições forem verdadeiras
+     * é retornado o primeiro parâmetro, caso contrário é retornado o segundo.
+     * 
+     * @param mixed $val_1 Valor a ser verificado
+     * @param midex $val_2 Valor a ser usado por padrão
+     * @return mixed Retorna um dos parâmetros passados para o método
      */
     public static function coalesce($val_1, $val_2)
     {
         $strVal_1 = strval($val_1);
-        if ($val_1 != NULL && trim($strVal_1) != '' && trim($strVal_1) != "''")
+        if ($val_1 != NULL && trim($strVal_1) != '' && trim($strVal_1) != "''") {
             return $val_1;
-        else
+        } else {
             return $val_2;
+        }
     }
 }
