@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * Comportamento criado para tratamento de datas
+ * 
+ * O Yii Framework disponibiliza a classe {@see CActiveRecordBehavior} para que
+ * comportamentos sejam adicionas às classes de modelo que possuem as operações
+ * do padrão active record.
+ * 
+ * Aqui são definidas as operações para manipulação de data dos modelos active
+ * record, bem como as ações que devem serem realizadas antes de alguma de salvar,
+ * buscar ou validar um modelo.
+ * 
+ * @author UFRGS <cpd-dss@ufrgs.br>
+ * @package cpd\spell
+ * @version v1.0
+ * @since v1.0
+ */
 class ConversorDataBehavior extends CActiveRecordBehavior
 {
 
@@ -80,6 +96,14 @@ class ConversorDataBehavior extends CActiveRecordBehavior
         }
     }
 
+    /**
+     * Método do Yii Framework para busca de modelos
+     * 
+     * Esse método atualiza os dados de data do modelo para um padrão após uma 
+     * busca.
+     * 
+     * @param CModelEvent $event Parâmetros para o evento de validação
+     */
     public function afterFind($event)
     {
         $valorData = $this->getOwner()->{$this->atributoOriginal};
@@ -116,6 +140,14 @@ class ConversorDataBehavior extends CActiveRecordBehavior
         parent::afterFind($event);
     }
 
+    /**
+     * Método do Yii Framework para validação de modelos
+     * 
+     * Esse método é utilizado para garantir que o modelo a ser salvo contém uma 
+     * data no formato correto.
+     * 
+     * @param CModelEvent $event Parâmetros para o evento de validação
+     */
     public function beforeValidate($event)
     {
         // Atribuir um CDbExpression ao atributo original e um caso especial
@@ -197,6 +229,15 @@ class ConversorDataBehavior extends CActiveRecordBehavior
         parent::beforeValidate($event);
     }
 
+    /**
+     * Método do Yii Framework executado antes de salvar um objeto
+     * 
+     * Esse método garante que uma validação será aplicada na data antes de
+     * salvar o modelo que a possui no banco de dados.
+     * 
+     * @param CModelEvent $event Evento a ser executado pelo Yii Framework
+     * @throws CException
+     */
     public function beforeSave($event)
     {
         if ($this->buscaValorOriginal() === false) {
