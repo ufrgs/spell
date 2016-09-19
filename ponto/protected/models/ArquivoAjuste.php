@@ -64,14 +64,10 @@ class ArquivoAjuste extends CActiveRecord
      */
 	public function rules()
 	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
 		return array(
 			array('cod_repositorio', 'required'),
 			array('nr_arquivo_ajuste, nr_ajuste, nr_abono, cod_repositorio', 'length', 'max'=>12),
 			array('descricao_arquivo', 'length', 'max'=>256),
-			// The following rule is used by search().
-			// @todo Please remove those attributes that should not be searched.
 			array('nr_arquivo_ajuste, nr_ajuste, nr_abono, cod_repositorio, descricao_arquivo', 'safe', 'on'=>'search'),
 		);
 	}
@@ -87,8 +83,6 @@ class ArquivoAjuste extends CActiveRecord
      */
 	public function relations()
 	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
 		return array(
 		);
 	}
@@ -125,8 +119,6 @@ class ArquivoAjuste extends CActiveRecord
      */
 	public function search()
 	{
-		// @todo Please modify the following code to remove attributes that should not be searched.
-
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('nr_arquivo_ajuste',$this->nr_arquivo_ajuste,true);
