@@ -1,49 +1,81 @@
 <?php
 
 /**
- * This is the model class for table "ajuste".
- *
- * The followings are the available columns in table 'ajuste':
- * @property string $nr_ajuste
- * @property string $id_pessoa
- * @property string $matricula
- * @property string $nr_vinculo
- * @property string $data_hora_ponto
- * @property string $entrada_saida
- * @property string $id_pessoa_registro
- * @property string $data_hora_registro
- * @property string $ip_registro
- * @property string $justificativa
- * @property string $id_pessoa_certificacao
- * @property string $data_hora_certificacao
- * @property string $indicador_certificado
- * @property string $nr_ponto
- * @property string $nr_justificativa
- * @property string $justificativa_certificacao
+ * Modelo criado para representar a tabela ajustes
+ * 
+ * Aqui são implementados os métodos básicos do Yii Framework para realizar o 
+ * mapeamento das entidades do banco de dados relacional no paradigma de objetos.
+ * 
+ * Além de tais operações, geralmente são implementados recursos a mais para
+ * reduzir a quantidade de queries e operações repetititvas nos controladores.
+ * 
+ * @property int $nr_ajuste Chave primária da classe Ajuste
+ * @property int $id_pessoa Chave primária da classe Pessoa
+ * @property int $matricula Chave primária da classe DadoFuncional
+ * @property int $nr_vinculo Chave primária da classe DadoFuncional
+ * @property string $data_hora_ponto Data no formato brasileiro
+ * @property char $entrada_saida Indicador de tipo de registro (E ou S)
+ * @property int $id_pessoa_registro Guarda a chave primária da classe Pessoa
+ * @property string $data_hora_registro Data atual no formato AAAA-MM-DD HH:MM:SS
+ * @property string $ip_registro Endereço de IP do usuário
+ * @property string $justificativa Texto de justificativa do ajuste
+ * @property int $id_pessoa_certificacao Chave primária da classe Pessoa contendo o código do certificador
+ * @property string $data_hora_certificacao Data em que o ajuste foi certificado
+ * @property char $indicador_certificado Indicador para o estado de certificação do documento (S ou N)
+ * @property int $nr_ponto Chave primária da classe Ponto
+ * @property char $nr_justificativa Chave primária da classe JustificativaAjuste
+ * @property string $justificativa_certificacao Texto de justificativa do certificador para o ajuste
+ * 
+ * @author UFRGS <cpd-dss@ufrgs.br>
+ * @package cpd\spell
+ * @version v1.0
+ * @since v1.0
  */
 class Ajuste extends CActiveRecord
 {
 
     /**
-     * @return string the associated database table name
+     * Método do Yii Framework para definição da tabela associada ao objeto
+     * 
+     * A string retornada define para o Yii qual tabela contém os registros a
+     * serem mapeados para essa classe.
+     * 
+     * @return string Nome da tabela no banco de dados associada ao objeto
      */
     public function tableName()
     {
         return 'ajuste';
     }
 
+    /**
+     * Método do Yii Framework para definição da chave primária do objeto
+     * 
+     * A string retornada indica a coluna contendo o identificador único do 
+     * objetos.
+     * 
+     * @return string Nome da coluna referente à chave primária do objeto
+     */
     public function primaryKey()
     {
         return 'nr_ajuste';
     }
 
     /**
-     * @return array validation rules for model attributes.
+     * Método do Yii Framework para definição de regras de validação
+     * 
+     * Aqui são definidos os atributos das colunas da tabela que presenta o 
+     * objeto como os campos que aceitam valores nulos e tamanho máximo de 
+     * caracteres suportados.
+     * 
+     * É recomendado apenas definir as regras para os atributos que forem ser 
+     * utilizados com dados do usuário.
+     * 
+     * @todo Remover os valores que não devem ser pesquisados
+     * @link http://www.yiiframework.com/doc/guide/1.1/en/form.model#declaring-validation-rules Como declarar regras
+     * @return array Regras de validação para este modelo
      */
     public function rules()
     {
-        // NOTE: you should only define rules for those attributes that
-        // will receive user inputs.
         return array(
             array('id_pessoa, data_hora_ponto, entrada_saida, id_pessoa_registro, data_hora_registro, ip_registro', 'required'),
             array('id_pessoa, id_pessoa_registro, id_pessoa_certificacao', 'length', 'max' => 6),
@@ -53,19 +85,23 @@ class Ajuste extends CActiveRecord
             array('justificativa', 'length', 'max' => 2048),
             array('justificativa_certificacao', 'length', 'max' => 512),
             array('data_hora_certificacao', 'safe'),
-            // The following rule is used by search().
-            // @todo Please remove those attributes that should not be searched.
+
+            // Colunas que podem ser utilizadas pelo método search()
             array('nr_ajuste, id_pessoa, matricula, nr_vinculo, data_hora_ponto, entrada_saida, id_pessoa_registro, data_hora_registro, ip_registro, justificativa, id_pessoa_certificacao, data_hora_certificacao, indicador_certificado', 'safe', 'on' => 'search'),
         );
     }
 
     /**
-     * @return array relational rules.
+     * Método do Yii Framework para definição de relacionamentos entre tabelas
+     * 
+     * Aqui são definidos as tabelas, os tipos de relação e as colunas que as 
+     * possuem.
+     * 
+     * @link http://www.yiiframework.com/doc/guide/1.1/en/database.arr#declaring-relationship Como declarar relacionamentos
+     * @return array Relacionamentos que esta tabela possui
      */
     public function relations()
     {
-        // NOTE: you may need to adjust the relation name and the related
-        // class name for the relations automatically generated below.
         return array(
             'Ponto' => array(self::BELONGS_TO, 'Ponto', 'nr_ponto'),
             'Pessoa' => array(self::BELONGS_TO, 'Pessoa', 'id_pessoa'),
@@ -77,7 +113,13 @@ class Ajuste extends CActiveRecord
     }
 
     /**
-     * @return array customized attribute labels (name=>label)
+     * Método do Yii Framework para definir descrições às colunas da tabela
+     * 
+     * Aqui são definidos nomes mais amigáveis aos atributos do objeto. É 
+     * utilizado para gerar mensagens de erros mais claras e mostrar dados nas
+     * telas da aplicação.
+     * 
+     * @return array Lista de descrições no formato 'coluna'=>'descrição'
      */
     public function attributeLabels()
     {
@@ -99,21 +141,17 @@ class Ajuste extends CActiveRecord
     }
 
     /**
-     * Retrieves a list of models based on the current search/filter conditions.
+     * Método do Yii Framework para buscar modelos
      *
-     * Typical usecase:
-     * - Initialize the model fields with values from filter form.
-     * - Execute this method to get CActiveDataProvider instance which will filter
-     * models according to data in model fields.
-     * - Pass data provider to CGridView, CListView or any similar widget.
-     *
-     * @return CActiveDataProvider the data provider that can return the models
-     * based on the search/filter conditions.
+     * Aqui é feita a pesquisa de um modelo de acordo com determinadas condições
+     * passadas por parâmetro.
+     * 
+     * @todo Remover atributos que não devem ser pesquisados
+     * @param array $dataProviderOptions Filtro a ser usado na consulta
+     * @return CActiveDataProvider Conjunto de dados retornados da consulta
      */
     public function search($dataProviderOptions = array())
     {
-        // @todo Please modify the following code to remove attributes that should not be searched.
-
         $criteria = new CDbCriteria;
 
         $criteria->with = array(
@@ -182,16 +220,27 @@ class Ajuste extends CActiveRecord
     }
 
     /**
-     * Returns the static model of the specified AR class.
-     * Please note that you should have this exact method in all your CActiveRecord descendants!
-     * @param string $className active record class name.
-     * @return Ajuste the static model class
+     * Método do Yii Framework para retornar a instância da classe
+     * 
+     * Esse método deve ser implementado em todas as classe {@see CActiveRecord}
+     * para permitir que o framework encontre a classe.
+     * 
+     * @param string $className Nome da classe que é Active Record.
+     * @return Ajuste A classe que é Active Record
      */
     public static function model($className = __CLASS__)
     {
         return parent::model($className);
     }
 
+    /**
+     * Método para listagem de documentos anexados
+     * 
+     * Esse método busca todos os documentos anexados em um pedido de ajuste e 
+     * devolve o link para download do documento.
+     * 
+     * @return string Links para acesso ao documento anexado
+     */
     public function listaAnexos()
     {
         $listagem = "";
