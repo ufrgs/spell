@@ -8,7 +8,7 @@
  * a possibilidade de pesquisar e alterar tais dados.
  * 
  * @author UFRGS <cpd-dss@ufrgs.br>
- * @package cpd\spela
+ * @package cpd\spell
  * @version v1.0
  * @since v1.0
  */

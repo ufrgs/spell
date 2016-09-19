@@ -8,7 +8,7 @@
  * básicas do servidor como nome, foto e cargo.
  * 
  * @author UFRGS <cpd-dss@ufrgs.br>
- * @package cpd\spela
+ * @package cpd\spell
  * @version v1.0
  * @since v1.0
  */
