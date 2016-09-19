@@ -13,17 +13,18 @@
  * @property int $id_pessoa Chave primária da classe Pessoa
  * @property int $matricula Chave primária da classe DadoFuncional
  * @property int $nr_vinculo Chave primária da classe DadoFuncional
- * @property string $data_abono Data do abono registrado
- * @property string $periodo_abono Hora do abono registrado
- * @property int $id_pessoa_registro Guarda a chave primária da classe Pessoa
- * @property string $data_hora_registro Data atual no formato AAAA-MM-DD HH:MM:SS
- * @property string $ip_registro Endereço de IP do usuário
+ * @property DateTime $data_abono Data do abono registrado
+ * @property int $periodo_abono Hora do abono registrado
  * @property string $justificativa Texto de justificativa do ajuste
  * @property int $id_pessoa_certificacao Chave primária da classe Pessoa contendo o código do certificador
- * @property string $data_hora_certificacao Data em que o ajuste foi certificado
+ * @property DateTime $data_hora_certificacao Data em que o ajuste foi certificado
  * @property char $indicador_certificado Indicador para o estado de certificação do documento (S ou N)
- * @property char $nr_justificativa Chave primária da classe JustificativaAjuste
+ * @property int $id_pessoa_registro Guarda a chave primária da classe Pessoa
+ * @property DateTime $data_hora_registro Data atual no formato AAAA-MM-DD HH:MM:SS
+ * @property string $ip_registro Endereço de IP do usuário
  * @property string $justificativa_certificacao Texto de justificativa do certificador para o ajuste
+ * @property int $nr_justificativa Chave primária da classe JustificativaAjuste
+ * @property char $indicador_excluido Indicador para o estado do ajuste (S ou N)
  * 
  * @author UFRGS <cpd-dss@ufrgs.br>
  * @package cpd\spell
