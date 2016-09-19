@@ -7,7 +7,7 @@
  * dias úteis e finais de semana dos órgãos controlados pelo sistema.
  * 
  * @author UFRGS <cpd-dss@ufrgs.br>
- * @package cpd\spela
+ * @package cpd\spell
  * @version v1.0
  * @since v1.0
  */
@@ -33,7 +33,11 @@ class HorariosController extends BaseController
      * Action utilizada para listagem de horários de acordo com uma categoria.
      * 
      * A seleção da categoria a ser mostrada é feita através do parâmetro 
-     * numérico "Orgãos" passado via método GET.
+     * numérico "Orgãos" passado via métodos GET ou POST e tratado com a 
+     * superglobal $_REQUEST[].
+     * 
+     * Caso não seja passado o parâmetro é mostrada apenas a lista de órgãos
+     * para que o usuário selecione o que desejar visualizar os horários.
      * 
      * Exemplo de URL: <code>/ponto/horarios/horariosOrgaos?Orgaos=2</code>
      */

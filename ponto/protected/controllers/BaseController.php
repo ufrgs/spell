@@ -8,7 +8,7 @@
  * lateral da aplicação e métodos utilitários para os controladores.
  * 
  * @author UFRGS <cpd-dss@ufrgs.br>
- * @package cpd\sldif
+ * @package cpd\spell
  * @version v1.0
  * @since v1.0
  */
