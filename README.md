@@ -29,12 +29,14 @@ senha: usbw
 * Para visualizar a tela de serviços acesse `localhost:8080/tempLogin/login`
 
 Lista de usurios cadastrados para teste:
+
 | Login| Senha| Tipo | Chefia | Cadastrado
 |:---|:---|:---|:---|:---|
 |1||Tcnico|4|Departamento|
 |2||Tcnico|1|Unidade acadmica|
 |3||Docente|2|rgo mximo|
 |4||Tcnico||Departamento|
+
 *Observaço: pode-se informar qualquer senha para realizar o login*
 
 ## Detalhes sobre o cdigo
