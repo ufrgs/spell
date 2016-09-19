@@ -273,8 +273,8 @@ class Abono extends CActiveRecord
      * 
      * @param int $id_pessoa Chave primária da classe Pessoa
      * @param int $nr_vinculo Chave primária da classe DadoFuncional
-     * @param string $mes Mês a ser utilizado na busca
-     * @param string $ano Ano a ser utilizado na busca
+     * @param int $mes Mês a ser utilizado na busca
+     * @param int $ano Ano a ser utilizado na busca
      * @return array Retorna um array contendo os abonos encontrados
      */
     public static function getAbonosMes($id_pessoa, $nr_vinculo, $mes, $ano)
