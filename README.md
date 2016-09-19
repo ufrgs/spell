@@ -1,26 +1,26 @@
-# Sistema de Ponto ELetrnico Livre (SPELL)
+# Sistema de Ponto ELetrônico Livre (SPELL)
 
 ## Funcionalidades
-* Acompanhamento de horrios (funcionrio e chefia)
-* Registro de horrios
-* Solicitaço de ajustes e abonos de horas
+* Acompanhamento de horários (funcionário e chefia)
+* Registro de horários
+* Solicitação de ajustes e abonos de horas
 
-## Guia de instalaço
+## Guia de instalação
 
-#### Pr-requisitos
+#### Pré-requisitos
 Para testar o sistema o computador deve conter os seguintes softwares:
 * [PHP 5.3](https://secure.php.net/downloads.php) ou superior
 * [Yii Framework 1.1](https://github.com/yiisoft/yii/releases/download/1.1.17/yii-1.1.17.467ff50.zip)
 * Servidor Web (Recomenda-se o [USBWebserver](http://www.usbwebserver.net))
 
 #### Como configurar
-1. Baixe e mova o cdigo fonte para a pasta de pginas do servidor. No caso do USBWebserver, coloque na pasta `root`
+1. Baixe e mova o código fonte para a pasta de páginas do servidor. No caso do USBWebserver, coloque na pasta `root`
 2. Baixe e extraia o Yii Framework para a pasta raiz do servidor
 3. Exececute o arquivo [ponto.sql](ponto.sql) no banco de dados
 
-Por pardro, as credenciais de acesso do banco de dados so:
+Por pardrão, as credenciais de acesso do banco de dados são:
 ```
-usurio: root
+usuário: root
 senha: usbw
 ```
 
@@ -28,16 +28,16 @@ senha: usbw
 * Para visualizar a tela do ponto acesse `localhost:8080/ponto`
 * Para visualizar a tela de serviços acesse `localhost:8080/tempLogin/login`
 
-Lista de usurios cadastrados para teste:
+Lista de usuários cadastrados para teste:
 
-| Login| Senha| Tipo | Chefia | Cadastrado
+| Login	| Senha	| Tipo | Chefia | Cadastrado
 |:---|:---|:---|:---|:---|
-|1||Tcnico|4|Departamento|
-|2||Tcnico|1|Unidade acadmica|
-|3||Docente|2|rgo mximo|
-|4||Tcnico||Departamento|
+|1||Técnico|4|Departamento|
+|2||Técnico|1|Unidade acadêmica|
+|3||Docente|2|Órgão máximo|
+|4||Técnico||Departamento|
 
-*Observaço: pode-se informar qualquer senha para realizar o login*
+*Observação: pode-se informar qualquer senha para realizar o login*
 
-## Detalhes sobre o cdigo
-* A indentaço do cdigo segue a especificaço [PSR-2](https://github.com/bobsta63/netbeans-psr-formatting)
+## Detalhes sobre o código
+* A indentação do código segue a especificação [PSR-2](https://github.com/bobsta63/netbeans-psr-formatting)
