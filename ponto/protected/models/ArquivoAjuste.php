@@ -9,9 +9,10 @@
  * Além de tais operações, geralmente são implementados recursos a mais para
  * reduzir a quantidade de queries e operações repetititvas nos controladores.
  * 
+ * @property int $nr_arquivo_ajuste Chave primária da classe ArquivoAjuste
  * @property int $nr_ajuste Chave primária da classe Ajuste
- * @property string $nr_arquivo_ajuste Chave primária da classe ArquivoAjuste
- * @property int $cod_repositorio Identificador do arquivo
+ * @property int $nr_abono Chave primária da classe Abono
+ * @property string $cod_repositorio Identificador do arquivo
  * @property string $descricao_arquivo Nome do arquivo salvo
  * 
  * @author UFRGS <cpd-dss@ufrgs.br>
