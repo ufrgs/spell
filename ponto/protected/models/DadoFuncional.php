@@ -15,7 +15,7 @@
  * @property char $regime_trabalho Tempo de trabalho dessa categoria (Ex: 40)
  * @property int $id_grupo Chave primária da classe GrupoEmprego
  * @property int $id_categoria Chave primária da classe CategoriaFuncional
- * @property int $orgao_lotacao 
+ * @property int $orgao_lotacao Chave primária do órgão o qual o funcionário é lotado
  * @property int $orgao_exercicio Chave primária do órgão o qual o funcionário atende
  * @property DateTime $data_ingresso Data em que a pessoa ingressou no cargo
  * @property DateTime $data_desligamento Data em que a pessoa se desligou do cargo
