@@ -28,7 +28,7 @@ class Pessoa extends CActiveRecord {
      * para permitir que o framework encontre a classe.
      * 
      * @param string $className Nome da classe que é Active Record.
-     * @return Ajuste A classe que é Active Record
+     * @return Pessoa A classe que é Active Record
      */
 	public static function model($className=__CLASS__) {
 		return parent::model($className);
