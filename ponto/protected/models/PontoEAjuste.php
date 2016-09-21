@@ -165,6 +165,19 @@ class PontoEAjuste extends CActiveRecord
 		return parent::model($className);
 	}
     
+    /**
+     * Método para busca de registros de um servidor.
+     * 
+     * Retorna todos os registros feitos por um servidor de acordo com o 
+     * período e situação específicados nos parâmetros.
+     * 
+     * @param int $id_pessoa Chave primária da classe Pessoa
+     * @param int $nrVinculo Chave primária da classe DadoFuncional
+     * @param int $mes Mês a ser utilizado na busca
+     * @param int $ano Ano a ser utilizado na busca
+     * @param boolean $consolidado TRUE para documento certificado ou FALSE caso contrário
+     * @return array Instâncias da classe PontoEAjuste contendo os registros do servidor
+     */
     public static function getRegistrosMes($id_pessoa, $nr_vinculo, $mes, $ano, $consolidado = false)
     {
         $restricaoAjustes = "and coalesce(indicador_certificado, 'S') = 'S'
