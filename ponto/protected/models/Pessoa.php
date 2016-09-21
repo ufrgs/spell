@@ -82,7 +82,7 @@ class Pessoa extends CActiveRecord {
      * a serem retornadas por pesquisa usando o comando SQL LIMIT.
      * 
      * @link http://www.yiiframework.com/doc/guide/1.1/en/database.ar#named-scopes Como declarar escopos
-     * @return type
+     * @return array Lista de escopos definidos
      */
 	public function scopes()
 	{
