@@ -172,7 +172,7 @@ class PontoEAjuste extends CActiveRecord
      * período e situação específicados nos parâmetros.
      * 
      * @param int $id_pessoa Chave primária da classe Pessoa
-     * @param int $nrVinculo Chave primária da classe DadoFuncional
+     * @param int $nr_vinculo Chave primária da classe DadoFuncional
      * @param int $mes Mês a ser utilizado na busca
      * @param int $ano Ano a ser utilizado na busca
      * @param boolean $consolidado TRUE para documento certificado ou FALSE caso contrário
