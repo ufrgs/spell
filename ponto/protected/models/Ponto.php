@@ -203,9 +203,9 @@ class Ponto extends CActiveRecord
      * a jornada diária, se o valor for <code>S</code> calculará a jornada semanal.
      * Caso outro valor seja passado será calculada a jornada mensal.
      * 
-     * @param type $tipo Indicador de período.
-     * @param type $nrVinculo
-     * @param type $codPessoa
+     * @param char $tipo Indicador de período.
+     * @param int $nrVinculo Chave primária da classe DadoFuncional
+     * @param int $codPessoa Chave primária da classe Pessoa
      * @return int Tempo total da jornada do servidor
      */
     public static function getJornada($tipo, $nrVinculo, $codPessoa = NULL)
