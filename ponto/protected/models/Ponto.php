@@ -1,6 +1,6 @@
 <?php
 /**
- * Modelo criado para representar a tabela ajustes
+ * Modelo criado para representar a tabela ponto
  * 
  * Aqui são implementados os métodos básicos do Yii Framework para realizar o 
  * mapeamento das entidades do banco de dados relacional no paradigma de objetos.
@@ -183,7 +183,7 @@ class Ponto extends CActiveRecord
      * para permitir que o framework encontre a classe.
      * 
      * @param string $className Nome da classe que é Active Record.
-     * @return Ajuste A classe que é Active Record
+     * @return Ponto A classe que é Active Record
      */
     public static function model($className = __CLASS__)
     {
