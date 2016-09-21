@@ -114,7 +114,6 @@ class ArquivoAjuste extends CActiveRecord
      * passadas por parâmetro.
      * 
      * @todo Remover atributos que não devem ser pesquisados
-     * @param array $dataProviderOptions Filtro a ser usado na consulta
      * @return CActiveDataProvider Conjunto de dados retornados da consulta
      */
 	public function search()

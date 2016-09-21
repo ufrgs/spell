@@ -76,8 +76,6 @@ class Abono extends CActiveRecord
      */
     public function rules()
     {
-        // NOTE: you should only define rules for those attributes that
-        // will receive user inputs.
         return array(
             array('id_pessoa, data_abono, periodo_abono, id_pessoa_registro, data_hora_registro, ip_registro', 'required'),
             array('id_pessoa, id_pessoa_registro, id_pessoa_certificacao', 'length', 'max' => 6),
@@ -87,8 +85,6 @@ class Abono extends CActiveRecord
             array('justificativa', 'length', 'max' => 2048),
             array('justificativa_certificacao', 'length', 'max' => 512),
             array('data_hora_certificacao', 'safe'),
-            // The following rule is used by search().
-            // @todo Please remove those attributes that should not be searched.
             array('nr_abono, id_pessoa, matricula, nr_vinculo, data_abono, periodo_abono, id_pessoa_registro, data_hora_registro, ip_registro, justificativa, id_pessoa_certificacao, data_hora_certificacao, indicador_certificado', 'safe', 'on' => 'search'),
         );
     }
@@ -104,8 +100,6 @@ class Abono extends CActiveRecord
      */
     public function relations()
     {
-        // NOTE: you may need to adjust the relation name and the related
-        // class name for the relations automatically generated below.
         return array(
             'Pessoa' => array(self::BELONGS_TO, 'Pessoa', 'id_pessoa'),
             'DadoFuncional' => array(self::BELONGS_TO, 'DadoFuncional', array('matricula' => 'matricula', 'nr_vinculo' => 'nr_vinculo')),
@@ -155,8 +149,6 @@ class Abono extends CActiveRecord
      */
     public function search($dataProviderOptions = array())
     {
-        // @todo Please modify the following code to remove attributes that should not be searched.
-
         $criteria = new CDbCriteria;
 
         $criteria->with = array(
