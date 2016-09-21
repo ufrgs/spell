@@ -12,7 +12,7 @@
  * @property string $id_orgao Chave primária da classe Orgao
  * @property DateTime $hora_inicio_expediente Horário em que o servidor iniciou o expediente
  * @property DateTime $hora_fim_expediente Horário de conclusão do expediente
- * @property char $permite_ocorrencia
+ * @property char $permite_ocorrencia Indicador para permitir o registro de horas por ocorrência especial
  * @property int $id_pessoa_atualizacao Identificador da pessoa que atualizou o horário. Chave primária da classe Pessoa
  * @property DateTime $data_atualizacao Data em que foi feita a atualização no horário
  * @property DateTime $hora_inicio_expediente_sabado Horário em que o servidor iniciou o expediente em um sábado
