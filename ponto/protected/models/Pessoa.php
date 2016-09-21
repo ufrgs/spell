@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Modelo criado para representar a tabela ajustes
+ * Modelo criado para representar a tabela pessoa
  * 
  * Aqui são implementados os métodos básicos do Yii Framework para realizar o 
  * mapeamento das entidades do banco de dados relacional no paradigma de objetos.
