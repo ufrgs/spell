@@ -158,8 +158,6 @@ class DefinicoesOrgao extends CActiveRecord
      */
 	public function rules()
 	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
 		return array(
 			array('id_orgao, id_pessoa_atualizacao, data_atualizacao', 'required'),
 			array('id_orgao', 'length', 'max'=>5),
@@ -168,8 +166,6 @@ class DefinicoesOrgao extends CActiveRecord
 			array('hora_inicio_expediente, hora_inicio_expediente_sabado, '
                             . 'hora_inicio_expediente_domingo, hora_fim_expediente, '
                             . 'hora_fim_expediente_sabado, hora_fim_expediente_domingo', 'safe'),
-			// The following rule is used by search().
-			// @todo Please remove those attributes that should not be searched.
 			array('id_orgao, hora_inicio_expediente, hora_inicio_expediente_sabado, '
                             . 'hora_inicio_expediente_domingo, hora_fim_expediente, hora_fim_expediente_sabado, '
                             . 'hora_fim_expediente_domingo, permite_ocorrencia, id_pessoa_atualizacao, '
@@ -188,8 +184,6 @@ class DefinicoesOrgao extends CActiveRecord
      */
 	public function relations()
 	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
 		return array(
             'Orgao' => array(self::BELONGS_TO, 'Orgao', 'id_orgao'),
 		);
@@ -232,8 +226,6 @@ class DefinicoesOrgao extends CActiveRecord
      */
 	public function search()
 	{
-		// @todo Please modify the following code to remove attributes that should not be searched.
-
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id_orgao',$this->id_orgao,false);
