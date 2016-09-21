@@ -127,7 +127,7 @@ class Repositorio extends CComponent
      * 
      * @param string $NomeArquivo Nome a ser usado para armazenar o arquivo
      * @param string $ConteudoArquivo Conteúdo do arquivo a ser armazenado
-     * @param type $tipo_arquivo Tipo da alteração que está sendo feita (Ajuste ou Abono)
+     * @param char $tipo_arquivo Tipo da alteração que está sendo feita (Ajuste ou Abono)
      * @return boolean|string Retorna false em caso de erro ou a chave de autenticidade do arquivo
      */
     public function upload($NomeArquivo, $ConteudoArquivo, $tipo_arquivo)
@@ -309,7 +309,7 @@ class Repositorio extends CComponent
      * Função para buscar o nome original de um arquivo.
      * 
      * @param int $tipoDocumento Chave primária do documento
-     * @param type $chaveIdentificacao Chave de autenticação do documento
+     * @param string $chaveIdentificacao Chave de autenticação do documento
      * @return boolean|string Retorna o nome do arquivo ou FALSE caso o arquivo não exista
      */
     public function devolveNomeArquivo($tipoDocumento, $chaveIdentificacao)
@@ -328,7 +328,7 @@ class Repositorio extends CComponent
      * Função para alterar o nome original de um arquivo.
      * 
      * @param int $tipoDocumento Chave primária do documento
-     * @param type $chaveIdentificacao Chave de autenticação do documento
+     * @param string $chaveIdentificacao Chave de autenticação do documento
      * @param string $nomeDocumento Novo nome a ser utilizado no documento
      * @return boolean Retorna FALSE caso o arquivo a ser alterado não exista
      */
