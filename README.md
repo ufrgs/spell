@@ -41,3 +41,12 @@ Lista de usuários cadastrados para teste:
 
 ## Detalhes sobre o código
 * A indentação do código segue a especificação [PSR-2](https://github.com/bobsta63/netbeans-psr-formatting)
+
+## Como gerar a documentação
+* Instale o [PHPDocumentor](https://www.phpdoc.org/)
+* Execute o comando ```phpdoc -d ponto/protected/components/ -d ponto/protected/models/ -d ponto/protected/controllers/ -t ponto/docs/api```
+
+| Argumento	| Descrição	|
+|:---|:---|
+|-d|Pasta onde está o código fonte|
+|-t|Pasta a ser armazenada a documentação|
