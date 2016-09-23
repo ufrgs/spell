@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Derivação da classe {@see CWebUser} para controle de autenticação.
+ * Derivação da classe CWebUser para controle de autenticação.
  * 
  * Aqui são definidos os métodos para verificação de permissões, login e controle
  * de sessão.

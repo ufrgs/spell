@@ -44,7 +44,8 @@ class ComponenteSeguranca extends CApplicationComponent
     public $orgaos = array();
     
     /**
-     *
+     * Lista de permissões disponíveis na aplicação
+     * 
      * @var array 
      */
     public $permissao = array();

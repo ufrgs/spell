@@ -1,35 +1,59 @@
 <?php
 
 /**
- * This is the model class for table "log_erro_acesso_registro".
- *
- * The followings are the available columns in table 'log_erro_acesso_registro':
- * @property string $nr_log
- * @property string $id_pessoa
- * @property string $matricula
- * @property string $nr_vinculo
- * @property string $data_log
- * @property string $mensagem_log
- * @property string $ip_log
- * @property string $host_log
+ * Modelo criado para representar a tabela log_erro_acesso_registro
+ * 
+ * Aqui são implementados os métodos básicos do Yii Framework para realizar o 
+ * mapeamento das entidades do banco de dados relacional no paradigma de objetos.
+ * 
+ * Além de tais operações, geralmente são implementados recursos a mais para
+ * reduzir a quantidade de queries e operações repetititvas nos controladores.
+ * 
+ * @property int $nr_log Chave primária da classe LogErroAcessoRegistro
+ * @property int $id_pessoa Chave primária da classe Pessoa
+ * @property int $matricula Chave primária da classe DadoFuncional
+ * @property int $nr_vinculo Chave primária da classe DadoFuncional
+ * @property DateTime $data_log Data em que o log foi gerado
+ * @property string $mensagem_log Mensagem do log
+ * @property string $ip_log Endereço de IP do usuário
+ * @property string $host_log Erro do host
+ * 
+ * @author UFRGS <cpd-dss@ufrgs.br>
+ * @package cpd\spell
+ * @version v1.0
+ * @since v1.0
  */
 class LogErroAcessoRegistro extends CActiveRecord
 {
 	/**
-	 * @return string the associated database table name
-	 */
+     * Método do Yii Framework para definição da tabela associada ao objeto
+     * 
+     * A string retornada define para o Yii qual tabela contém os registros a
+     * serem mapeados para essa classe.
+     * 
+     * @return string Nome da tabela no banco de dados associada ao objeto
+     */
 	public function tableName()
 	{
 		return 'log_erro_acesso_registro';
 	}
 
 	/**
-	 * @return array validation rules for model attributes.
-	 */
+     * Método do Yii Framework para definição de regras de validação
+     * 
+     * Aqui são definidos os atributos das colunas da tabela que presenta o 
+     * objeto como os campos que aceitam valores nulos e tamanho máximo de 
+     * caracteres suportados.
+     * 
+     * É recomendado apenas definir as regras para os atributos que forem ser 
+     * utilizados com dados do usuário.
+     * 
+     * @todo Remover os valores que não devem ser pesquisados
+     * @link http://www.yiiframework.com/doc/guide/1.1/en/form.model#declaring-validation-rules Como declarar regras
+     * @return array Regras de validação para este modelo
+     */
 	public function rules()
 	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
 		return array(
 			array('id_pessoa, matricula, nr_vinculo, data_log, mensagem_log, ip_log, host_log', 'required'),
 			array('id_pessoa', 'length', 'max'=>6),
@@ -38,26 +62,34 @@ class LogErroAcessoRegistro extends CActiveRecord
 			array('mensagem_log', 'length', 'max'=>512),
 			array('ip_log', 'length', 'max'=>39),
 			array('host_log', 'length', 'max'=>100),
-			// The following rule is used by search().
-			// @todo Please remove those attributes that should not be searched.
 			array('nr_log, id_pessoa, matricula, nr_vinculo, data_log, mensagem_log, ip_log, host_log', 'safe', 'on'=>'search'),
 		);
 	}
 
 	/**
-	 * @return array relational rules.
-	 */
+     * Método do Yii Framework para definição de relacionamentos entre tabelas
+     * 
+     * Aqui são definidos as tabelas, os tipos de relação e as colunas que as 
+     * possuem.
+     * 
+     * @link http://www.yiiframework.com/doc/guide/1.1/en/database.arr#declaring-relationship Como declarar relacionamentos
+     * @return array Relacionamentos que esta tabela possui
+     */
 	public function relations()
 	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
 		return array(
 		);
 	}
 
 	/**
-	 * @return array customized attribute labels (name=>label)
-	 */
+     * Método do Yii Framework para definir descrições às colunas da tabela
+     * 
+     * Aqui são definidos nomes mais amigáveis aos atributos do objeto. É 
+     * utilizado para gerar mensagens de erros mais claras e mostrar dados nas
+     * telas da aplicação.
+     * 
+     * @return array Lista de descrições no formato 'coluna'=>'descrição'
+     */
 	public function attributeLabels()
 	{
 		return array(
@@ -73,21 +105,16 @@ class LogErroAcessoRegistro extends CActiveRecord
 	}
 
 	/**
-	 * Retrieves a list of models based on the current search/filter conditions.
-	 *
-	 * Typical usecase:
-	 * - Initialize the model fields with values from filter form.
-	 * - Execute this method to get CActiveDataProvider instance which will filter
-	 * models according to data in model fields.
-	 * - Pass data provider to CGridView, CListView or any similar widget.
-	 *
-	 * @return CActiveDataProvider the data provider that can return the models
-	 * based on the search/filter conditions.
-	 */
+     * Método do Yii Framework para buscar modelos
+     *
+     * Aqui é feita a pesquisa de um modelo de acordo com determinadas condições
+     * passadas por parâmetro.
+     * 
+     * @todo Remover atributos que não devem ser pesquisados
+     * @return CActiveDataProvider Conjunto de dados retornados da consulta
+     */
 	public function search()
 	{
-		// @todo Please modify the following code to remove attributes that should not be searched.
-
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('nr_log',$this->nr_log,false);
@@ -105,11 +132,14 @@ class LogErroAcessoRegistro extends CActiveRecord
 	}
 
 	/**
-	 * Returns the static model of the specified AR class.
-	 * Please note that you should have this exact method in all your CActiveRecord descendants!
-	 * @param string $className active record class name.
-	 * @return LogErroAcessoRegistro the static model class
-	 */
+     * Método do Yii Framework para retornar a instância da classe
+     * 
+     * Esse método deve ser implementado em todas as classe {@see CActiveRecord}
+     * para permitir que o framework encontre a classe.
+     * 
+     * @param string $className Nome da classe que é Active Record.
+     * @return LogErroAcessoRegistro A classe que é Active Record
+     */
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);

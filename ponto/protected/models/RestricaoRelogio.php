@@ -1,43 +1,94 @@
 <?php
 
 /**
- * This is the model class for table "restricao_relogio".
- *
- * The followings are the available columns in table 'restricao_relogio':
- * @property string $nr_restricao
- * @property string $id_orgao
- * @property string $escopo
- * @property string $id_pessoa
- * @property string $mascara_ip_v4
- * @property string $mascara_ip_v6
- * @property string $data_atualizacao
- * @property string $id_pessoa_atualizacao
- * @property string $ip_atualizacao
+ * Modelo criado para representar a tabela restricao_relogio
+ * 
+ * Aqui são implementados os métodos básicos do Yii Framework para realizar o 
+ * mapeamento das entidades do banco de dados relacional no paradigma de objetos.
+ * 
+ * Além de tais operações, geralmente são implementados recursos a mais para
+ * reduzir a quantidade de queries e operações repetititvas nos controladores.
+ * 
+ * @property int $nr_restricao Chave primária da classe Restricao
+ * @property int $id_orgao Chave primária da classe Orgao
+ * @property char $escopo Descrição referente ao escopo da restrição
+ * @property int $id_pessoa Chave primária da classe Pessoa
+ * @property string $mascara_ip_v4 Endereço de IPv4 da máquina que contém a restrição
+ * @property string $mascara_ip_v6 Endereço de IPv6 da máquina que contém a restrição
+ * @property string $data_atualizacao Data da última atualização na restrição
+ * @property string $id_pessoa_atualizacao Identificador do usuário que fez a atualização
+ * @property string $ip_atualizacao Endereço de IP do usuário que fez a atualização
+ * 
+ * @author UFRGS <cpd-dss@ufrgs.br>
+ * @package cpd\spell
+ * @version v1.0
+ * @since v1.0
  */
 class RestricaoRelogio extends CActiveRecord
 {
-    public $inOrgaos = NULL, $inLotacao = NULL, $porOrgao = true;
+    /**
+     * Valor opcional a ser usado nas consultas utilizando o comando SQL IN.
+     * 
+     * @var int
+     */
+    public $inOrgaos = NULL;
 
     /**
-     * @return string the associated database table name
+     * Valor opcional a ser usado nas consultas utilizando o comando SQL IN.
+     * 
+     * @var int
+     */
+    public $inLotacao = NULL;
+
+    /**
+     * Indicar utilizado para habilitar a pesquisa por órgãos.
+     * 
+     * @var boolean
+     */
+    public $porOrgao = true;
+
+    /**
+     * Método do Yii Framework para definição da tabela associada ao objeto
+     * 
+     * A string retornada define para o Yii qual tabela contém os registros a
+     * serem mapeados para essa classe.
+     * 
+     * @return string Nome da tabela no banco de dados associada ao objeto
      */
     public function tableName()
     {
         return 'restricao_relogio';
     }
 
+    /**
+     * Método do Yii Framework para definição da chave primária do objeto
+     * 
+     * A string retornada indica a coluna contendo o identificador único do 
+     * objetos.
+     * 
+     * @return string Nome da coluna referente à chave primária do objeto
+     */
     public function primaryKey()
     {
         return 'nr_restricao';
     }
     
     /**
-     * @return array validation rules for model attributes.
+     * Método do Yii Framework para definição de regras de validação
+     * 
+     * Aqui são definidos os atributos das colunas da tabela que presenta o 
+     * objeto como os campos que aceitam valores nulos e tamanho máximo de 
+     * caracteres suportados.
+     * 
+     * É recomendado apenas definir as regras para os atributos que forem ser 
+     * utilizados com dados do usuário.
+     * 
+     * @todo Remover os valores que não devem ser pesquisados
+     * @link http://www.yiiframework.com/doc/guide/1.1/en/form.model#declaring-validation-rules Como declarar regras
+     * @return array Regras de validação para este modelo
      */
     public function rules()
     {
-        // NOTE: you should only define rules for those attributes that
-        // will receive user inputs.
         return array(
             array('data_atualizacao, id_pessoa_atualizacao, ip_atualizacao', 'required'),
             array('id_orgao', 'length', 'max' => 5),
@@ -46,19 +97,21 @@ class RestricaoRelogio extends CActiveRecord
             array('mascara_ip_v4', 'length', 'max' => 18),
             array('mascara_ip_v6', 'length', 'max' => 45),
             array('ip_atualizacao', 'length', 'max' => 39),
-            // The following rule is used by search().
-            // @todo Please remove those attributes that should not be searched.
             array('nr_restricao, id_orgao, escopo, id_pessoa, mascara_ip_v4, mascara_ip_v6, data_atualizacao, id_pessoa_atualizacao, ip_atualizacao', 'safe', 'on' => 'search'),
         );
     }
 
     /**
-     * @return array relational rules.
+     * Método do Yii Framework para definição de relacionamentos entre tabelas
+     * 
+     * Aqui são definidos as tabelas, os tipos de relação e as colunas que as 
+     * possuem.
+     * 
+     * @link http://www.yiiframework.com/doc/guide/1.1/en/database.arr#declaring-relationship Como declarar relacionamentos
+     * @return array Relacionamentos que esta tabela possui
      */
     public function relations()
     {
-        // NOTE: you may need to adjust the relation name and the related
-        // class name for the relations automatically generated below.
         return array(
             'Orgao' => array(self::BELONGS_TO, 'Orgao', 'id_orgao'),
             'Pessoa' => array(self::BELONGS_TO, 'Pessoa', 'id_pessoa'),
@@ -66,7 +119,13 @@ class RestricaoRelogio extends CActiveRecord
     }
 
     /**
-     * @return array customized attribute labels (name=>label)
+     * Método do Yii Framework para definir descrições às colunas da tabela
+     * 
+     * Aqui são definidos nomes mais amigáveis aos atributos do objeto. É 
+     * utilizado para gerar mensagens de erros mais claras e mostrar dados nas
+     * telas da aplicação.
+     * 
+     * @return array Lista de descrições no formato 'coluna'=>'descrição'
      */
     public function attributeLabels()
     {
@@ -84,21 +143,16 @@ class RestricaoRelogio extends CActiveRecord
     }
 
     /**
-     * Retrieves a list of models based on the current search/filter conditions.
+     * Método do Yii Framework para buscar modelos
      *
-     * Typical usecase:
-     * - Initialize the model fields with values from filter form.
-     * - Execute this method to get CActiveDataProvider instance which will filter
-     * models according to data in model fields.
-     * - Pass data provider to CGridView, CListView or any similar widget.
-     *
-     * @return CActiveDataProvider the data provider that can return the models
-     * based on the search/filter conditions.
+     * Aqui é feita a pesquisa de um modelo de acordo com determinadas condições
+     * passadas por parâmetro.
+     * 
+     * @todo Remover atributos que não devem ser pesquisados
+     * @return CActiveDataProvider Conjunto de dados retornados da consulta
      */
     public function search()
     {
-        // @todo Please modify the following code to remove attributes that should not be searched.
-
         $criteria = new CDbCriteria;
         
         $criteria->with = array('Orgao', 'Pessoa');
@@ -158,6 +212,14 @@ class RestricaoRelogio extends CActiveRecord
         ));
     }
     
+    /**
+     * Método para gerenciamento de órgãos
+     * 
+     * Esse método retorna todos os órgãos que estejam sob direção de um servidor.
+     * 
+     * @param int $codPessoaServidor Chave primária da classe Pessoa
+     * @return array Instâncias da classe Orgao no qual o servidor é dirigente
+     */
     public static function getOrgaosChefia($codPessoaServidor) {
         return Orgao::model()->with('DirigenteOrgao', 'DirigenteSubstituto')->findAll('DirigenteOrgao.id_pessoa = :id_pessoa or DirigenteSubstituto.id_pessoa = :id_pessoa2 ', array(
             ':id_pessoa' => $codPessoaServidor,
@@ -166,10 +228,13 @@ class RestricaoRelogio extends CActiveRecord
     }
 
     /**
-     * Returns the static model of the specified AR class.
-     * Please note that you should have this exact method in all your CActiveRecord descendants!
-     * @param string $className active record class name.
-     * @return RestricaoRelogio the static model class
+     * Método do Yii Framework para retornar a instância da classe
+     * 
+     * Esse método deve ser implementado em todas as classe {@see CActiveRecord}
+     * para permitir que o framework encontre a classe.
+     * 
+     * @param string $className Nome da classe que é Active Record.
+     * @return RestricaoRelogio A classe que é Active Record
      */
     public static function model($className = __CLASS__)
     {
@@ -177,16 +242,26 @@ class RestricaoRelogio extends CActiveRecord
     }
 
     /**
-     * Verifica se uma determinada pessoa pode fazer registro de ponto no IP
-     * Somente IP v4 por enquanto
-     * @param int $id_pessoa
-     * @param int $matricula
-     * @param int $nr_vinculo
-     * @param string $ip
+     * Método para controle acesso no ponto eletrônico
+     * 
+     * Esse método verifica se o usuário pode ou não fazer registo de ponto a
+     * partir do IP da máquina.
+     * 
+     * O método retorna um array contendo as chaves <code>libera</code> contendo
+     * TRUE ou FALSE e <code>mensagem</code> contendo um texto sobre o resultado.
+     * Por padrão, só é exibida uma mensagem quando o ponto não estiver liberado.
+     * 
+     * Atualmente o método só suporta endereços IPv4.
+     * 
+     * @param int $id_pessoa Chave primária da classe Pessoa
+     * @param int $matricula Chave primária da classe DadoFuncional
+     * @param int $nr_vinculo Chave primária da classe DadoFuncional
+     * @param string $ip Endereço de IP da máquina na qual o servidor está registrando
+     * @return array Array permitindo ou não o usuário de usar um determinado ponto
      */
     public static function verificaLiberacaoPonto($id_pessoa, $matricula, $nr_vinculo, $ip)
     {
-        // verifica se não tem afastamento no dia
+        // Verifica se não tem afastamento no dia
         $afastamento = Frequencia::model()->findAll(
             'matricula = :matricula AND nr_vinculo = :nr_vinculo 
             AND CURRENT_TIMESTAMP() BETWEEN data_frequencia AND data_fim_frequencia', array(
@@ -194,17 +269,20 @@ class RestricaoRelogio extends CActiveRecord
                 ':nr_vinculo' => $nr_vinculo,
             )
         );
+        
         if (!empty($afastamento)) {
             return array(
                 'libera' => false,
                 'mensagem' => 'Existe um afastamento registrado para esse dia.'
             );
         }
-        // verifica se a pessoa pode fazer registro no IP
+        
+        // Verifica se a pessoa pode fazer registro no IP
         $dadoFuncional = DadoFuncional::model()->find('matricula = :matricula AND nr_vinculo = :nr_vinculo', array(
             ':matricula' => $matricula,
             ':nr_vinculo' => $nr_vinculo,
         ));
+        
         $orgaosEmQueServidorPodeBaterPonto = Helper::getHierarquiaAscendenteOrgao($dadoFuncional->orgao_exercicio);
         $mascarasEmQueServidorPodeBaterPonto = RestricaoRelogio::model()->findAll(
             '(matricula = :matricula AND nr_vinculo = :nr_vinculo) OR id_orgao IN (:str_orgaos)', array(
@@ -213,6 +291,7 @@ class RestricaoRelogio extends CActiveRecord
                 ':str_orgaos' => implode(',', $orgaosEmQueServidorPodeBaterPonto),
             )
         );
+        
         foreach ($mascarasEmQueServidorPodeBaterPonto as $mascara) {
             if (Helper::ip_match($ip, $mascara->mascara_ip_v4)) {
                 return array(
@@ -221,6 +300,7 @@ class RestricaoRelogio extends CActiveRecord
                 );
             }
         }
+        
         return array(
             'libera' => false,
             'mensagem' => 'Local de registro não habilitado.'

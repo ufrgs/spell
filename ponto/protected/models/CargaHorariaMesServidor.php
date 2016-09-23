@@ -1,42 +1,67 @@
 <?php
 
 /**
- * This is the model class for table "ch_mes_servidor".
- *
- * The followings are the available columns in table 'ch_mes_servidor':
- * @property string $nr_carga_horaria
- * @property string $id_pessoa
- * @property string $matricula
- * @property string $nr_vinculo
- * @property string $ano
- * @property string $mes
- * @property string $data_inicio_mes
- * @property string $nr_minutos_trabalho
- * @property string $nr_minutos_abono
- * @property string $nr_minutos_afastamento
- * @property string $nr_minutos_previsto
- * @property string $nr_minutos_saldo
- * @property string $id_pessoa_atualizacao
- * @property string $data_atualizacao
- * @property string $ip_atualizacao
+ * Modelo criado para representar a tabela ch_mes_servidor
+ * 
+ * Aqui são implementados os métodos básicos do Yii Framework para realizar o 
+ * mapeamento das entidades do banco de dados relacional no paradigma de objetos.
+ * 
+ * Além de tais operações, geralmente são implementados recursos a mais para
+ * reduzir a quantidade de queries e operações repetititvas nos controladores.
+ * 
+ * @property int $nr_carga_horaria Chave primária da classe CargaHorariaMesServidor
+ * @property int $id_pessoa Chave primária da classe Pessoa
+ * @property int $matricula Chave primária da classe DadoFuncional
+ * @property int $nr_vinculo Chave primária da classe DadoFuncional
+ * @property int $ano Ano em que o registro foi feito
+ * @property int $mes Mês em que o registro foi feito
+ * @property DateTime $data_inicio_mes Data de início do mês
+ * @property int $nr_minutos_trabalho Quantidade de minutos trabalhados
+ * @property int $nr_minutos_abono Quantidade em minutos de abono
+ * @property int $nr_minutos_afastamento Quantidade em minutos de afastamentos
+ * @property int $nr_minutos_previsto Quantidade de minutos de trabalho previsto
+ * @property int $nr_minutos_saldo Quantidade de minutos de trabalho sobrando
+ * @property int $id_pessoa_atualizacao Identificador da pessoa que atualizou os dados. Chave primária da classe Pessoa
+ * @property DateTime $data_atualizacao Data em que uma atualização nos dados foi feita
+ * @property string $ip_atualizacao Endereço de IP do usuário
+ * @property int $nr_minutos_compensacao Quantidade em minutos de compensações
+ * 
+ * @author UFRGS <cpd-dss@ufrgs.br>
+ * @package cpd\spell
+ * @version v1.0
+ * @since v1.0
  */
 class CargaHorariaMesServidor extends CActiveRecord
 {
 	/**
-	 * @return string the associated database table name
-	 */
+     * Método do Yii Framework para definição da tabela associada ao objeto
+     * 
+     * A string retornada define para o Yii qual tabela contém os registros a
+     * serem mapeados para essa classe.
+     * 
+     * @return string Nome da tabela no banco de dados associada ao objeto
+     */
 	public function tableName()
 	{
 		return 'ch_mes_servidor';
 	}
 
 	/**
-	 * @return array validation rules for model attributes.
-	 */
+     * Método do Yii Framework para definição de regras de validação
+     * 
+     * Aqui são definidos os atributos das colunas da tabela que presenta o 
+     * objeto como os campos que aceitam valores nulos e tamanho máximo de 
+     * caracteres suportados.
+     * 
+     * É recomendado apenas definir as regras para os atributos que forem ser 
+     * utilizados com dados do usuário.
+     * 
+     * @todo Remover os valores que não devem ser pesquisados
+     * @link http://www.yiiframework.com/doc/guide/1.1/en/form.model#declaring-validation-rules Como declarar regras
+     * @return array Regras de validação para este modelo
+     */
 	public function rules()
 	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
 		return array(
 			array('id_pessoa, matricula, nr_vinculo, ano, mes, data_inicio_mes, nr_minutos_trabalho, nr_minutos_abono, nr_minutos_compensacao, nr_minutos_afastamento, nr_minutos_previsto, nr_minutos_saldo, id_pessoa_atualizacao, data_atualizacao, ip_atualizacao', 'required'),
 			array('id_pessoa, id_pessoa_atualizacao', 'length', 'max'=>6),
@@ -47,15 +72,19 @@ class CargaHorariaMesServidor extends CActiveRecord
 			array('nr_minutos_abono, nr_minutos_afastamento, nr_minutos_trabalho, nr_minutos_previsto, nr_minutos_compensacao', 'length', 'max'=>5),
 			array('nr_minutos_saldo', 'length', 'max'=>6),
 			array('ip_atualizacao', 'length', 'max'=>39),
-			// The following rule is used by search().
-			// @todo Please remove those attributes that should not be searched.
 			array('nr_carga_horaria, id_pessoa, matricula, nr_vinculo, ano, mes, data_inicio_mes, nr_minutos_trabalho, nr_minutos_abono, nr_minutos_compensacao, nr_minutos_afastamento, nr_minutos_previsto, nr_minutos_saldo, id_pessoa_atualizacao, data_atualizacao, ip_atualizacao', 'safe', 'on'=>'search'),
 		);
 	}
 
 	/**
-	 * @return array relational rules.
-	 */
+     * Método do Yii Framework para definição de relacionamentos entre tabelas
+     * 
+     * Aqui são definidos as tabelas, os tipos de relação e as colunas que as 
+     * possuem.
+     * 
+     * @link http://www.yiiframework.com/doc/guide/1.1/en/database.arr#declaring-relationship Como declarar relacionamentos
+     * @return array Relacionamentos que esta tabela possui
+     */
 	public function relations()
 	{
 		return array(
@@ -65,8 +94,14 @@ class CargaHorariaMesServidor extends CActiveRecord
 	}
 
 	/**
-	 * @return array customized attribute labels (name=>label)
-	 */
+     * Método do Yii Framework para definir descrições às colunas da tabela
+     * 
+     * Aqui são definidos nomes mais amigáveis aos atributos do objeto. É 
+     * utilizado para gerar mensagens de erros mais claras e mostrar dados nas
+     * telas da aplicação.
+     * 
+     * @return array Lista de descrições no formato 'coluna'=>'descrição'
+     */
 	public function attributeLabels()
 	{
 		return array(
@@ -90,21 +125,16 @@ class CargaHorariaMesServidor extends CActiveRecord
 	}
 
 	/**
-	 * Retrieves a list of models based on the current search/filter conditions.
-	 *
-	 * Typical usecase:
-	 * - Initialize the model fields with values from filter form.
-	 * - Execute this method to get CActiveDataProvider instance which will filter
-	 * models according to data in model fields.
-	 * - Pass data provider to CGridView, CListView or any similar widget.
-	 *
-	 * @return CActiveDataProvider the data provider that can return the models
-	 * based on the search/filter conditions.
-	 */
+     * Método do Yii Framework para buscar modelos
+     *
+     * Aqui é feita a pesquisa de um modelo de acordo com determinadas condições
+     * passadas por parâmetro.
+     * 
+     * @todo Remover atributos que não devem ser pesquisados
+     * @return CActiveDataProvider Conjunto de dados retornados da consulta
+     */
 	public function search()
 	{
-		// @todo Please modify the following code to remove attributes that should not be searched.
-
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('nr_carga_horaria',$this->nr_carga_horaria,false);
@@ -130,29 +160,38 @@ class CargaHorariaMesServidor extends CActiveRecord
 	}
 
 	/**
-	 * Returns the static model of the specified AR class.
-	 * Please note that you should have this exact method in all your CActiveRecord descendants!
-	 * @param string $className active record class name.
-	 * @return CargaHorariaMesServidor the static model class
-	 */
+     * Método do Yii Framework para retornar a instância da classe
+     * 
+     * Esse método deve ser implementado em todas as classe {@see CActiveRecord}
+     * para permitir que o framework encontre a classe.
+     * 
+     * @param string $className Nome da classe que é Active Record.
+     * @return CargaHorariaMesServidor A classe que é Active Record
+     */
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
 	}
     
     /**
-     * Calcula o total de horas trabalhadas (registros, ajustes, abonos, compensacoes) e o total de horas previstas e salva na tabela
+     * Método para controle de horários do servidor
+     * 
+     * Esse método calcula o total de horas trabalhadas (registros, ajustes, 
+     * abonos, compensacoes) e o total de horas previstas e salva no banco de
+     * dados.
+     * 
+     * @param int $matriculaServidor Chave primária da classe Pessoa
+     * @param int $nrVinculo Chave primária da classe DadoFuncional
+     * @param int $mes Mês a ser utilizado na busca
+     * @param int $ano Ano a ser utilizado na busca
+     * @param int $diasUteisMes Quantidade de dias úteis do período pesquisado
+     * @return boolean Retorna TRUE se os dados foram salvos com sucesso
      * @throws Exception
-     * @param type $matriculaServidor
-     * @param type $nrVinculo
-     * @param type $mes
-     * @param type $ano
-     * @param type $diasUteisMes
      */
-    public static function buscaDadosESalva($matriculaServidor, $nrVinculo, $mes, $ano, $diasUteisMes = NULL) // throws Exception
+    public static function buscaDadosESalva($matriculaServidor, $nrVinculo, $mes, $ano, $diasUteisMes = NULL)
     { 
+        // Calcula a quantidade de dias úteis caso não tenha sido informado
         if ($diasUteisMes === NULL) {
-            // se nao recebeu o parametro, calcula
             $diasUteisMes = Ponto::getNrDiasUteis($mes, $ano);
         }
         
@@ -163,8 +202,9 @@ class CargaHorariaMesServidor extends CActiveRecord
         ));
 
         if ($pessoa) {            
-            if ($pessoa->regime_trabalho == 'DE')
+            if ($pessoa->regime_trabalho == 'DE') {
                 $pessoa->regime_trabalho = 40;
+            }
 
             $cargaHorariaMensal = ($pessoa->regime_trabalho/5)*$diasUteisMes; // regime de trabalho / 5 * numero de dias uteis no mes
             // PROVISORIO
@@ -280,6 +320,14 @@ class CargaHorariaMesServidor extends CActiveRecord
         }
     }
     
+    /**
+     * Método para consulta de horários de um servidor
+     * 
+     * O método retorna a quantidade de tempo em minutos que um servidor 
+     * trabalhou a mais no mês anterior ao mês vigente.
+     * 
+     * @return int Quantidade em minutos de horas sobrando
+     */
     public function getSaldoMesAnterior()
     {
         $chMesAnterior = CargaHorariaMesServidor::model()->find(array(
@@ -297,12 +345,17 @@ class CargaHorariaMesServidor extends CActiveRecord
     }
     
     /**
-     * Retorna a carga horaria cumprida no mes/ano
-     * @param int $codPessoa
-     * @param int $nrVinculo
-     * @param int $mes
-     * @param int $ano
-     * @return int
+     * Método para consulta de horários de um servidor
+     * 
+     * O método busca todos os registros correspondentes a um servidor em um 
+     * determinado período e os retorna em uma array. Todos os parâmetros do 
+     * método são utilizados na consulta.
+     * 
+     * @param int $codPessoa Chave primária da classe Pessoa correspondente ao servidor
+     * @param int $nrVinculo Chave primária da classe DadoFuncional
+     * @param int $mes Mês a ser utilizado na busca
+     * @param int $ano Ano a ser utilizado na busca
+     * @return array Lista de objetos CargaHorariaMesServidor contendo os registros de uma pessoa
      */
     public static function getCargaHorariaMes($codPessoa, $nrVinculo, $mes, $ano)
     {

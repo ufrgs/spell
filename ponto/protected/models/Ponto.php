@@ -1,68 +1,108 @@
 <?php
 /**
- * This is the model class for table "ponto".
- *
- * The followings are the available columns in table 'ponto':
- * @property string $nr_ponto
- * @property string $id_pessoa
- * @property string $matricula
- * @property string $nr_vinculo
- * @property string $data_hora_ponto
- * @property string $entrada_saida
- * @property string $id_pessoa_registro
- * @property string $data_hora_registro
- * @property string $ip_registro
- * @property string $ambiente_registro
+ * Modelo criado para representar a tabela ponto
+ * 
+ * Aqui são implementados os métodos básicos do Yii Framework para realizar o 
+ * mapeamento das entidades do banco de dados relacional no paradigma de objetos.
+ * 
+ * Além de tais operações, geralmente são implementados recursos a mais para
+ * reduzir a quantidade de queries e operações repetititvas nos controladores.
+ * 
+ * @property int $nr_ponto Chave primária da classe Ponto
+ * @property int $id_pessoa Chave primária da classe Pessoa
+ * @property int $matricula Chave primária da classe DadoFuncional
+ * @property int $nr_vinculo Chave primária da classe DadoFuncional
+ * @property DateTime $data_hora_ponto Data e hora em que o servidor bateu ponto
+ * @property char $entrada_saida Indicador de tipo de registro (E ou S)
+ * @property int $id_pessoa_registro Guarda a chave primária da classe Pessoa
+ * @property DateTime $data_hora_registro Data atual no formato AAAA-MM-DD HH:MM:SS
+ * @property string $ip_registro Endereço de IP do usuário
+ * @property string $ambiente_registro Informações do computador no qual o registro foi feito
+ * 
+ * @author UFRGS <cpd-dss@ufrgs.br>
+ * @package cpd\spell
+ * @version v1.0
+ * @since v1.0
  */
 class Ponto extends CActiveRecord
 {
 
     /**
-     * @return string the associated database table name
+     * Método do Yii Framework para definição da tabela associada ao objeto
+     * 
+     * A string retornada define para o Yii qual tabela contém os registros a
+     * serem mapeados para essa classe.
+     * 
+     * @return string Nome da tabela no banco de dados associada ao objeto
      */
     public function tableName()
     {
         return 'ponto';
     }
 
+    /**
+     * Método do Yii Framework para definição da chave primária do objeto
+     * 
+     * A string retornada indica a coluna contendo o identificador único do 
+     * objetos.
+     * 
+     * @return string Nome da coluna referente à chave primária do objeto
+     */
     public function primaryKey()
     {
         return 'nr_ponto';
     }
 
     /**
-     * @return array validation rules for model attributes.
+     * Método do Yii Framework para definição de regras de validação
+     * 
+     * Aqui são definidos os atributos das colunas da tabela que presenta o 
+     * objeto como os campos que aceitam valores nulos e tamanho máximo de 
+     * caracteres suportados.
+     * 
+     * É recomendado apenas definir as regras para os atributos que forem ser 
+     * utilizados com dados do usuário.
+     * 
+     * @todo Remover os valores que não devem ser pesquisados
+     * @link http://www.yiiframework.com/doc/guide/1.1/en/form.model#declaring-validation-rules Como declarar regras
+     * @return array Regras de validação para este modelo
      */
     public function rules()
     {
-        // NOTE: you should only define rules for those attributes that
-        // will receive user inputs.
         return array(
             array('id_pessoa, data_hora_ponto, entrada_saida, id_pessoa_registro, data_hora_registro, ip_registro', 'required'),
             array('id_pessoa, id_pessoa_registro', 'length', 'max' => 6),
             array('matricula', 'length', 'max' => 8),
             array('nr_vinculo, entrada_saida', 'length', 'max' => 1),
             array('ip_registro', 'length', 'max' => 39),
-            // The following rule is used by search().
-            // @todo Please remove those attributes that should not be searched.
             array('nr_ponto, id_pessoa, matricula, nr_vinculo, data_hora_ponto, entrada_saida, id_pessoa_registro, data_hora_registro, ip_registro, ambiente_registro', 'safe', 'on' => 'search'),
         );
     }
 
     /**
-     * @return array relational rules.
+     * Método do Yii Framework para definição de relacionamentos entre tabelas
+     * 
+     * Aqui são definidos as tabelas, os tipos de relação e as colunas que as 
+     * possuem.
+     * 
+     * @link http://www.yiiframework.com/doc/guide/1.1/en/database.arr#declaring-relationship Como declarar relacionamentos
+     * @return array Relacionamentos que esta tabela possui
      */
     public function relations()
     {
-        // NOTE: you may need to adjust the relation name and the related
-        // class name for the relations automatically generated below.
         return array(
             'Pessoa' => array(self::BELONGS_TO, 'Pessoa', 'id_pessoa'),
         );
     }
 
     /**
-     * @return array customized attribute labels (name=>label)
+     * Método do Yii Framework para definir descrições às colunas da tabela
+     * 
+     * Aqui são definidos nomes mais amigáveis aos atributos do objeto. É 
+     * utilizado para gerar mensagens de erros mais claras e mostrar dados nas
+     * telas da aplicação.
+     * 
+     * @return array Lista de descrições no formato 'coluna'=>'descrição'
      */
     public function attributeLabels()
     {
@@ -81,21 +121,17 @@ class Ponto extends CActiveRecord
     }
 
     /**
-     * Retrieves a list of models based on the current search/filter conditions.
+     * Método do Yii Framework para buscar modelos
      *
-     * Typical usecase:
-     * - Initialize the model fields with values from filter form.
-     * - Execute this method to get CActiveDataProvider instance which will filter
-     * models according to data in model fields.
-     * - Pass data provider to CGridView, CListView or any similar widget.
-     *
-     * @return CActiveDataProvider the data provider that can return the models
-     * based on the search/filter conditions.
+     * Aqui é feita a pesquisa de um modelo de acordo com determinadas condições
+     * passadas por parâmetro.
+     * 
+     * @todo Remover atributos que não devem ser pesquisados
+     * @param array $dataProviderOptions Filtro a ser usado na consulta
+     * @return CActiveDataProvider Conjunto de dados retornados da consulta
      */
     public function search($dataProviderOptions = array())
     {
-        // @todo Please modify the following code to remove attributes that should not be searched.
-
         $criteria = new CDbCriteria;
 
         $criteria->compare('nr_ponto', $this->nr_ponto, false);
@@ -141,16 +177,37 @@ class Ponto extends CActiveRecord
     }
 
     /**
-     * Returns the static model of the specified AR class.
-     * Please note that you should have this exact method in all your CActiveRecord descendants!
-     * @param string $className active record class name.
-     * @return Ponto the static model class
+     * Método do Yii Framework para retornar a instância da classe
+     * 
+     * Esse método deve ser implementado em todas as classe {@see CActiveRecord}
+     * para permitir que o framework encontre a classe.
+     * 
+     * @param string $className Nome da classe que é Active Record.
+     * @return Ponto A classe que é Active Record
      */
     public static function model($className = __CLASS__)
     {
         return parent::model($className);
     }
 
+    /**
+     * Método para manipulação de datas.
+     * 
+     * Esse método calcula o total de horas abonasdas, total de horas compensadas
+     * e o total de horas trabalhadas de um servidor e retorna essa quantidade.
+     * 
+     * O método deve receber o tipo de período a ser calculado, número do vínculo
+     * do servidor e seu código único.
+     * 
+     * Se o parâmetro $tipo contém o valor <code>D</code> o método calculará
+     * a jornada diária, se o valor for <code>S</code> calculará a jornada semanal.
+     * Caso outro valor seja passado será calculada a jornada mensal.
+     * 
+     * @param char $tipo Indicador de período.
+     * @param int $nrVinculo Chave primária da classe DadoFuncional
+     * @param int $codPessoa Chave primária da classe Pessoa
+     * @return int Tempo total da jornada do servidor
+     */
     public static function getJornada($tipo, $nrVinculo, $codPessoa = NULL)
     {
         if ($codPessoa == NULL) {
@@ -158,12 +215,12 @@ class Ponto extends CActiveRecord
         }
         
         if ($tipo == 'D') {
-            // jornada diaria 
+            // Jornada diária 
             $restricao = " and DATE_FORMAT(data_hora_ponto, '%d/%m/%Y') = '" . date('d/m/Y') . "' ";
             $cache = 0;
         }
         elseif ($tipo == 'S') {
-            // jornada semanal 
+            // Jornada semanal 
             $restricao = " and data_hora_ponto between 
                             (case
                                 when WEEKDAY(CURRENT_TIMESTAMP()) = 0 then DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL -1 DAY) -- segunda
@@ -177,7 +234,7 @@ class Ponto extends CActiveRecord
                             and CURRENT_TIMESTAMP() ";
         }
         else {
-            // jornada mensal 
+            // Jornada mensal 
             $restricao = " and month(data_hora_ponto) = " . intval(date('m')) . " ";
         }
 
@@ -208,12 +265,12 @@ class Ponto extends CActiveRecord
                 $ultimaEntrada = strtotime($registro->data_hora_ponto);
             }
         }
-        // se a ultima entrada foi hoje, conta o tempo da entrada ate agora
+        // Se a última entrada foi hoje, conta o tempo da entrada até agora
         if (($ultimaEntrada != NULL) && (date("d/m/Y", $ultimaEntrada) == date("d/m/Y"))) {
             $jornada += (time() - $ultimaEntrada);
         }
         
-        // contabiliza os abonos certificados
+        // Contabiliza os abonos certificados
         $sql = "select sum(periodo_abono)
                 from abono
                 where
@@ -226,9 +283,9 @@ class Ponto extends CActiveRecord
             ':id_pessoa' => $codPessoa,
             ':nr_vinculo' => $nrVinculo,
         ));
-        $abonos *= 60; // multiplica por 60 para pegar o tempo em segundos
+        $abonos *= 60; // Multiplica por 60 para pegar o tempo em segundos
         
-        // contabiliza as compensacoes certificadas
+        // Contabiliza as compensações certificadas
         $sql = "select sum(periodo_compensacao)
                 from compensacao
                 where
@@ -241,56 +298,91 @@ class Ponto extends CActiveRecord
             ':id_pessoa' => $codPessoa,
             ':nr_vinculo' => $nrVinculo,
         ));
-        $compensacoes *= 60; // multiplica por 60 para pegar o tempo em segundos
+        $compensacoes *= 60; // Multiplica por 60 para pegar o tempo em segundos
 
         return $jornada + $abonos + $compensacoes;
     }
 
+    /**
+     * Método para manipulação de datas.
+     * 
+     * Esse método faz a contagem de dias úteis em um determinado perído de tempo.
+     * 
+     * @param int $mes Mês a ser utilizado na busca
+     * @param int $ano Ano a ser utilizado na busca
+     * @param boolean $ateDiaAtual Indicador para poder incluir no resultado o dia atual
+     * @return int Quantide de dias úteis dentro do período pesquisado
+     */
     public static function getNrDiasUteis($mes, $ano, $ateDiaAtual = false)
     {
         $mes = intval($mes);
         $ano = intval($ano);
-        // feriados do mes
+        
+        // Feriados do mês
         $feriados = array();
         $sql = "select dia from calendario_feriados
                 where ano = $ano and mes = $mes ";
         $query = Yii::app()->db->createCommand($sql)->queryAll();
+        
         foreach($query as $feriado) {
             $feriados[] = $feriado['Dia'];
         }
+        
         // Total de dias no mes
         $diasMes = cal_days_in_month(CAL_GREGORIAN, $mes, $ano);
 
         $diasUteis = 0;
+        
         for ($d = 1; $d <= $diasMes; $d++) {
             $diaSemana = jddayofweek(cal_to_jd(CAL_GREGORIAN, $mes, $d, $ano), 0);
+            
             // 0 = domingo e 6 = sabado
             if (($diaSemana != 0) && ($diaSemana != 6) && !in_array($d, $feriados)) {
                 $diasUteis++;
             }
-            // se e para contar ate o dia atual, para de contar quando chega ao dia atual
+            
+            // Se é para contar até o dia atual, para de contar quando chega ao dia atual
             if ($ateDiaAtual && ($d == date('d'))) {
                 break;
             }
         }
+        
         return $diasUteis;
     }
     
+    /**
+     * Método para manipulação de datas.
+     * 
+     * Esse método cria um array contendo as datas válidas de dias úteis, 
+     * feriados e finais de semana do mês.
+     * 
+     * Cada dia do calendrário tem os seguintes elementos: Data, Dia, DiaSemana,
+     * MinutosRegistro, MinutosAbono, AbonoPendente, MinutosCompensacao, 
+     * CompensacaoPendente, Feriado, EmAfastamento, Afastamentos e Registros.
+     * 
+     * @param int $mes Mês a ser utilizado na busca
+     * @param int $ano Ano a ser utilizado na busca
+     * @return array Array representando um calendário do período informado
+     */
     public static function getCalendarioMes($mes, $ano)
     {
-        // feriados do mes
+        // Feriados do mês
         $feriados = array();
         $sql = "select dia from calendario_feriados
                 where ano = $ano and mes = $mes ";
         $query = Yii::app()->db->createCommand($sql)->queryAll();
+        
         foreach($query as $feriado) {
             $feriados[] = $feriado['Dia'];
         }
+        
         $calendario = array();
         $diasMes = cal_days_in_month(CAL_GREGORIAN, $mes, $ano);
+        
         for ($d = 1; $d <= $diasMes; $d++) {
             $diaSemana = jddayofweek(cal_to_jd(CAL_GREGORIAN, $mes, $d, $ano), 0)+1;
-            // 1 = domingo e 7 = sabado
+            
+            // 1 = domingo e 7 = sábado
             $calendario[$d] = array(
                 'Data' => str_pad($d, 2, "0", STR_PAD_LEFT).'/'.str_pad($mes, 2, "0", STR_PAD_LEFT).'/'.$ano, 
                 'Dia' => $d, 
@@ -306,6 +398,7 @@ class Ponto extends CActiveRecord
                 'Registros' => array(),
             );
         }
+        
         return $calendario;
     }
 

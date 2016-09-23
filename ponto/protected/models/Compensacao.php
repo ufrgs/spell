@@ -1,42 +1,67 @@
 <?php
 
 /**
- * This is the model class for table "compensacao".
- *
- * The followings are the available columns in table 'compensacao':
- * @property string $nr_compensacao
- * @property string $id_pessoa
- * @property string $matricula
- * @property string $nr_vinculo
- * @property string $periodo_compensacao
- * @property string $data_compensacao
- * @property string $descricao_compensacao
- * @property string $justificativa
- * @property string $id_pessoa_registro
- * @property string $data_hora_registro
- * @property string $ip_registro
- * @property string $id_pessoa_certificacao
- * @property string $data_hora_certificacao
- * @property string $indicador_certificado
- * @property string $justificativa_certificacao
+ * Modelo criado para representar a tabela compensacao
+ * 
+ * Aqui são implementados os métodos básicos do Yii Framework para realizar o 
+ * mapeamento das entidades do banco de dados relacional no paradigma de objetos.
+ * 
+ * Além de tais operações, geralmente são implementados recursos a mais para
+ * reduzir a quantidade de queries e operações repetititvas nos controladores.
+ * 
+ * @property int $nr_compensacao Chave primária da classe Compensacao
+ * @property int $id_pessoa Chave primária da classe Pessoa
+ * @property int $matricula Chave primária da classe DadoFuncional
+ * @property int $nr_vinculo Chave primária da classe DadoFuncional
+ * @property int $periodo_compensacao Período de tempo em que a compensação foi registrada
+ * @property DateTime $data_compensacao Data em que a compensação foi registrada
+ * @property string $descricao_compensacao Descrição da compensação
+ * @property string $justificativa Motivo do pedido de comepnsação
+ * @property int $id_pessoa_registro Código da pessoa que registrou o pedido
+ * @property DateTime $data_hora_registro Data e hora em que o pedido foi registrado
+ * @property string $ip_registro Enderço de IP do usuário
+ * @property int $id_pessoa_certificacao Código da pessoa que certificou o pedido. Chave primária da classe Pessoa
+ * @property DateTime $data_hora_certificacao Data e hora em que o pedido foi certificado. Chave primária da classe Pessoa
+ * @property char $indicador_certificado Indicador para o estado de certificação do documento (S ou N)
+ * @property string $justificativa_certificacao Texto de justificativa do certificador para o abono
+ * @property char $indicador_excluido Indicador para o estado do ajuste (S ou N)
+ * 
+ * @author UFRGS <cpd-dss@ufrgs.br>
+ * @package cpd\spell
+ * @version v1.0
+ * @since v1.0
  */
 class Compensacao extends CActiveRecord
 {
 	/**
-	 * @return string the associated database table name
-	 */
+     * Método do Yii Framework para definição da tabela associada ao objeto
+     * 
+     * A string retornada define para o Yii qual tabela contém os registros a
+     * serem mapeados para essa classe.
+     * 
+     * @return string Nome da tabela no banco de dados associada ao objeto
+     */
 	public function tableName()
 	{
 		return 'compensacao';
 	}
 
 	/**
-	 * @return array validation rules for model attributes.
-	 */
+     * Método do Yii Framework para definição de regras de validação
+     * 
+     * Aqui são definidos os atributos das colunas da tabela que presenta o 
+     * objeto como os campos que aceitam valores nulos e tamanho máximo de 
+     * caracteres suportados.
+     * 
+     * É recomendado apenas definir as regras para os atributos que forem ser 
+     * utilizados com dados do usuário.
+     * 
+     * @todo Remover os valores que não devem ser pesquisados
+     * @link http://www.yiiframework.com/doc/guide/1.1/en/form.model#declaring-validation-rules Como declarar regras
+     * @return array Regras de validação para este modelo
+     */
 	public function rules()
 	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
 		return array(
 			array('id_pessoa, matricula, nr_vinculo, periodo_compensacao, id_pessoa_registro, data_hora_registro, ip_registro', 'required'),
 			array('id_pessoa, id_pessoa_registro, id_pessoa_certificacao', 'length', 'max'=>6),
@@ -46,19 +71,21 @@ class Compensacao extends CActiveRecord
 			array('descricao_compensacao, justificativa, justificativa_certificacao', 'length', 'max'=>512),
 			array('ip_registro', 'length', 'max'=>39),
 			array('data_compensacao, data_hora_certificacao', 'safe'),
-			// The following rule is used by search().
-			// @todo Please remove those attributes that should not be searched.
 			array('nr_compensacao, id_pessoa, matricula, nr_vinculo, periodo_compensacao, data_compensacao, descricao_compensacao, justificativa, id_pessoa_registro, data_hora_registro, ip_registro, id_pessoa_certificacao, data_hora_certificacao, indicador_certificado, justificativa_certificacao', 'safe', 'on'=>'search'),
 		);
 	}
 
 	/**
-	 * @return array relational rules.
-	 */
+     * Método do Yii Framework para definição de relacionamentos entre tabelas
+     * 
+     * Aqui são definidos as tabelas, os tipos de relação e as colunas que as 
+     * possuem.
+     * 
+     * @link http://www.yiiframework.com/doc/guide/1.1/en/database.arr#declaring-relationship Como declarar relacionamentos
+     * @return array Relacionamentos que esta tabela possui
+     */
 	public function relations()
 	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
 		return array(
             'Pessoa' => array(self::BELONGS_TO, 'Pessoa', 'id_pessoa'),
             'DadoFuncional' => array(self::BELONGS_TO, 'DadoFuncional', array('matricula' => 'matricula', 'nr_vinculo' => 'nr_vinculo')),
@@ -67,8 +94,14 @@ class Compensacao extends CActiveRecord
 	}
 
 	/**
-	 * @return array customized attribute labels (name=>label)
-	 */
+     * Método do Yii Framework para definir descrições às colunas da tabela
+     * 
+     * Aqui são definidos nomes mais amigáveis aos atributos do objeto. É 
+     * utilizado para gerar mensagens de erros mais claras e mostrar dados nas
+     * telas da aplicação.
+     * 
+     * @return array Lista de descrições no formato 'coluna'=>'descrição'
+     */
 	public function attributeLabels()
 	{
 		return array(
@@ -91,21 +124,16 @@ class Compensacao extends CActiveRecord
 	}
 
 	/**
-	 * Retrieves a list of models based on the current search/filter conditions.
-	 *
-	 * Typical usecase:
-	 * - Initialize the model fields with values from filter form.
-	 * - Execute this method to get CActiveDataProvider instance which will filter
-	 * models according to data in model fields.
-	 * - Pass data provider to CGridView, CListView or any similar widget.
-	 *
-	 * @return CActiveDataProvider the data provider that can return the models
-	 * based on the search/filter conditions.
-	 */
+     * Método do Yii Framework para buscar modelos
+     *
+     * Aqui é feita a pesquisa de um modelo de acordo com determinadas condições
+     * passadas por parâmetro.
+     * 
+     * @todo Remover atributos que não devem ser pesquisados
+     * @return CActiveDataProvider Conjunto de dados retornados da consulta
+     */
 	public function search()
 	{
-		// @todo Please modify the following code to remove attributes that should not be searched.
-
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('nr_compensacao',$this->nr_compensacao,false);
@@ -142,23 +170,33 @@ class Compensacao extends CActiveRecord
 	}
 
 	/**
-	 * Returns the static model of the specified AR class.
-	 * Please note that you should have this exact method in all your CActiveRecord descendants!
-	 * @param string $className active record class name.
-	 * @return Compensacao the static model class
-	 */
+     * Método do Yii Framework para retornar a instância da classe
+     * 
+     * Esse método deve ser implementado em todas as classe {@see CActiveRecord}
+     * para permitir que o framework encontre a classe.
+     * 
+     * @param string $className Nome da classe que é Active Record.
+     * @return Compensacao A classe que é Active Record
+     */
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
 	}
     
     /**
-     * Retorna os dias com compensacao, os dias que estao com pedidos de compensacao pendente e o total de minutos compensado
-     * @param int $id_pessoa
-     * @param int $nr_vinculo
-     * @param int $mes
-     * @param int $ano
-     * @return array(array diasComCompensacao, array diasComCompensacaoPendente, int totalCompensacao)
+     * Método para busca de compensações em um determinado período
+     * 
+     * A partir dos dados recebidos por parâmetro realiza uma busca por 
+     * compensações de acordo com o período, vínculo e pessoa informados.
+     * 
+     * O método retorna um array contendo as seguintes chaves: 
+     * diasComCompensação, diasComCompensacaoPendente e totalCompensacao.
+     * 
+     * @param int $id_pessoa Chave primária da classe Pessoa
+     * @param int $nr_vinculo Chave primária da classe DadoFuncional
+     * @param int $mes Mês a ser utilizado na busca
+     * @param int $ano Ano a ser utilizado na busca
+     * @return array Retorna um array contendo as compensações encontrados
      */
     public static function getCompensacoesMes($id_pessoa, $nr_vinculo, $mes, $ano)
     {
@@ -200,6 +238,19 @@ class Compensacao extends CActiveRecord
         );
     }
     
+    /**
+     * Método para busca de compensações em um determinado período
+     * 
+     * A partir dos dados recebidos por parâmetro realiza uma busca pela carga
+     * horária compensada de acordo com o período, vínculo e pessoa informados.
+     * 
+     * @param int $id_pessoa Chave primária da classe Pessoa
+     * @param int $nr_vinculo Chave primária da classe DadoFuncional
+     * @param int $mes Mês a ser utilizado na busca
+     * @param int $ano Ano a ser utilizado na busca
+     * @param boolean $consideraPedidoEmAnalise Indicador utilizado para considerar os pedidos ainda não certificados
+     * @return array Retorna um array contendo as compensações encontrados
+     */
     public static function getCargaHorariaCompensadaMes($id_pessoa, $nr_vinculo, $mes, $ano, $consideraPedidoEmAnalise = true)
     {
         $command = Yii::app()->db->cache(10)->createCommand(); // cache de 10 segundos
