@@ -35,7 +35,7 @@ Lista de usuários cadastrados para teste:
 |1||Técnico|4|Departamento|
 |2||Técnico|1|Unidade acadêmica|
 |3||Docente|2|Órgão máximo|
-|4||Técnico||Departamento|
+|4||Técnico|0|Departamento|
 
 *Observação: pode-se informar qualquer senha para realizar o login*
 
