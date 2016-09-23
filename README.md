@@ -16,7 +16,7 @@ Para testar o sistema o computador deve conter os seguintes softwares:
 #### Como configurar
 1. Baixe e mova o código fonte para a pasta de páginas do servidor. No caso do USBWebserver, coloque na pasta `root`
 2. Baixe e extraia o Yii Framework para a pasta raiz do servidor
-3. Exececute o arquivo [ponto.sql](ponto.sql) no banco de dados
+3. Execute o arquivo [ponto.sql](ponto.sql) no banco de dados
 
 Por pardrão, as credenciais de acesso do banco de dados são:
 ```
