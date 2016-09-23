@@ -73,7 +73,6 @@ class Abono extends CActiveRecord
      * É recomendado apenas definir as regras para os atributos que forem ser 
      * utilizados com dados do usuário.
      * 
-     * @todo Remover os valores que não devem ser pesquisados
      * @link http://www.yiiframework.com/doc/guide/1.1/en/form.model#declaring-validation-rules Como declarar regras
      * @return array Regras de validação para este modelo
      */
@@ -146,7 +145,6 @@ class Abono extends CActiveRecord
      * Aqui é feita a pesquisa de um modelo de acordo com determinadas condições
      * passadas por parâmetro.
      * 
-     * @todo Remover atributos que não devem ser pesquisados
      * @param array $dataProviderOptions Filtro a ser usado na consulta
      * @return CActiveDataProvider Conjunto de dados retornados da consulta
      */
