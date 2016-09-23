@@ -1,4 +1,7 @@
 <?php
+/**
+ * Copyright 2016 Universidade Federal do Rio Grande do Sul
+ */
 
 /**
  * Modelo criado para representar a tabela categoria

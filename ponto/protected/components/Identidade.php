@@ -1,4 +1,7 @@
 <?php
+/**
+ * Copyright 2016 Universidade Federal do Rio Grande do Sul
+ */
 
 /**
  * Classe utilizada para autenticação dos usuários.

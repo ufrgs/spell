@@ -1,4 +1,7 @@
 <?php
+/**
+ * Copyright 2016 Universidade Federal do Rio Grande do Sul
+ */
 
 /**
  * Controlador utilizado para permitir ao usuário visualizar seus dados pessoais.

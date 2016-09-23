@@ -1,4 +1,7 @@
 <?php
+/**
+ * Copyright 2016 Universidade Federal do Rio Grande do Sul
+ */
 
 /**
  * Componente para configuração da segurança da aplicação
@@ -15,13 +18,14 @@
  */
 class ComponenteSeguranca extends CApplicationComponent
 {
+
     /**
      * Chave primária da classe Pessoa
      * 
      * @var int 
      */
     private $id_pessoa = null;
-    
+
     /**
      * Chave primária da aplicação.
      * 
@@ -35,14 +39,14 @@ class ComponenteSeguranca extends CApplicationComponent
      * @var boolean 
      */
     private $entrada, $novo, $salvar, $excluir;
-    
+
     /**
      * Lista de órgãos associados ao usuário. Atualmente é um atributo não utilizado
      * 
      * @var array 
      */
     public $orgaos = array();
-    
+
     /**
      * Lista de permissões disponíveis na aplicação
      * 
@@ -67,9 +71,8 @@ class ComponenteSeguranca extends CApplicationComponent
             if (isset($sessao['id_pessoa'])) {
                 $this->carregaPessoa(Yii::app()->user->id_pessoa);
             }
-        }
-        else if (isset($sessao['id_pessoa'])) {
-                $this->carregaPessoa($sessao['id_pessoa']);
+        } else if (isset($sessao['id_pessoa'])) {
+            $this->carregaPessoa($sessao['id_pessoa']);
         }
     }
 

@@ -1,5 +1,9 @@
 <?php
 /**
+ * Copyright 2016 Universidade Federal do Rio Grande do Sul
+ */
+
+/**
  * Modelo criado para representar a tabela justificativa_ajustes
  * 
  * Aqui são implementados os métodos básicos do Yii Framework para realizar o 
