@@ -43,10 +43,23 @@ Lista de usuários cadastrados para teste:
 * A indentação do código segue a especificação [PSR-2](https://github.com/bobsta63/netbeans-psr-formatting)
 
 ## Como gerar a documentação
-* Instale o [PHPDocumentor](https://www.phpdoc.org/)
-* Execute o comando ```phpdoc -d ponto/protected/components/ -d ponto/protected/models/ -d ponto/protected/controllers/ -t ponto/docs/api```
 
-| Argumento	| Descrição	|
-|:---|:---|
-|-d|Pasta onde está o código fonte|
-|-t|Pasta a ser armazenada a documentação|
+#### Método 1
+* Instale o [PHPDocumentor](https://www.phpdoc.org/)
+* Dentro da pasta raiz do projeto, execute o comando ```phpdoc -d ponto/protected/components/ -d ponto/protected/models/ -d ponto/protected/controllers/ -t ponto/docs/phpdoc```
+* Acesse o endereço [localhost:8080/ponto/docs/phpdoc](localhost:8080/ponto/docs/phpdoc)
+
+| Argumento	| Argumento extenso | Descrição	|
+|:---|:---|:---|
+|-d|--directory|Pasta onde está o código fonte|
+|-t|--target|Pasta a ser armazenada a documentação|
+
+#### Método 2
+* Instale o [ApiGen](http://www.apigen.org/)
+* Dentro da pasta raiz do projeto, execute o comando ```apigen generate -s ponto/protected/controllers -s ponto/protected/models -s ponto/protected/components -d ponto/docs/apigen```
+* Acesse o endereço [localhost:8080/ponto/docs/apigen](localhost:8080/ponto/docs/apigen)
+
+| Argumento	| Argumento extenso | Descrição	|
+|:---|:---|:---|
+|-s|--source|Pasta onde está o código fonte|
+|-d|--destination|Pasta a ser armazenada a documentação|
