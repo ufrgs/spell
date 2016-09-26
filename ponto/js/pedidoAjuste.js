@@ -47,6 +47,15 @@ $(document).ready(function() {
     $("#hora").mask("99:99");
     $("#horaSaida").mask("99:99");
     
+    /**
+     * **pedidoAjuste.js**
+     * 
+     * Evento que permitir ao servidor acompanhar o horário de outro vínculo caso
+     * o mesmo esteja relacionado a mais de um vínculo.
+     * 
+     * @ignore
+     * @event Evento onChange. Quando o valor do campo é alterado essa ação é executada
+     */
     $("#selVinculo").change(function() {
         if ($(this).val() != '') {
             window.location = HOME + 'ajuste/pedido/?v='+$(this).val();
@@ -54,6 +63,15 @@ $(document).ready(function() {
     });
 });
 
+/**
+ * **pedidoAjuste.js**
+ * 
+ * Função utilizada para preparar e exibir o modal para criação de um novo pedido.
+ * Aqui são incluidos os elementos do modal manualmente, dispensando o uso de um
+ * arquivo externo contendo o código HTML do modal.
+ * 
+ * @returns {void} Prepara e exibe o modal para criação de um novo pedido
+ */
 function novoAjuste() {
     $("#divPedido input[type=text]").val('');
     $("#divPedido select").val('');
@@ -65,6 +83,15 @@ function novoAjuste() {
     $("#divPedido").dialog('open');
 }
 
+/**
+ * **pedidoAjuste.js**
+ * 
+ * Função utilizada para exibir o campo para preenchimento da justificativa de 
+ * ajuste caso a opção "Outra" da caixa de seleção seja selecionada.
+ * 
+ * @param {char} val Atributo value da caixa de seleção de justificativa
+ * @returns {void} Abre ou fecha a caixa de inserção de texto da justificativa
+ */
 function verificaJustificativa(val) {
     $("#divOutraJustificativa").slideUp();
     if (val == "o") {
@@ -72,6 +99,15 @@ function verificaJustificativa(val) {
     }
 }
 
+/**
+ * **pedidoAjuste.js**
+ * 
+ * Função utilizada para validar os campos do modal de pedido de ajuste, exibido
+ * na tela Ajuste de Registros. Caso os dados necessários para realizar um pedido
+ * de ajuste tenham sido informados, a função também solicita o ajuste.
+ * 
+ * @returns {void} Mostra na tela mensagem de erro ou sucesso na validação dos campos e da solicitação
+ */
 function enviaSolicitacao() {
     var msg = "";
     if ($("input[name=tipo]:checked").val() == undefined) {
@@ -81,14 +117,14 @@ function enviaSolicitacao() {
         msg += "Selecione o dia para o ajuste. <br/>";
     }
     else {
-        // testa se e um dia valido
+        // Testa se é um dia válido
         var auxData = $("#data").val().split("/");
         auxData = auxData[2] + "/" + auxData[1] + "/" + auxData[0];
         if (!Date.parse(auxData)) {
             msg += "Escreva um dia válido. <br/>";
         }
         else {
-            // testa se o dia e maior que o atual
+            // Testa se o dia é maior que o atual
             var hoje = new Date();
             auxData = new Date(auxData);
             if (auxData > hoje) {
@@ -100,7 +136,7 @@ function enviaSolicitacao() {
         msg += "Selecione a hora para o ajuste. <br/>";
     }
     else {
-        // testa se e um horario valido
+        // Testa se é um horário válido
         if (!/^(([0-1]?[0-9])|([2][0-3])):([0-5]?[0-9])$/i.test($("#hora").val())) {
             msg += "Escreva um horário válido. <br/>";
         }
@@ -164,6 +200,17 @@ function enviaSolicitacao() {
     }
 }
 
+/**
+ * **pedidoAjuste.js**
+ * 
+ * Função para exclusão de pedidos de ajuste. Caso todos os campos necessários
+ * estejam preenchidos corretamente é feita uma requisição ao servidor para
+ * exclusão do pedido.
+ * 
+ * @param {int} nr Número do pedido a ser excluido
+ * @param {string} tipo Tipo do pedido. Na tela de ajustes tem o valor "ajuste"
+ * @returns {void} Atualiza a tela em caso de sucesso ou exibe mensagem de erro
+ */
 function excluir(nr, tipo) {
     if (confirm("Tem certeza que deseja excluir esse pedido de ajuste?")) {
         $.ajax({
@@ -182,6 +229,15 @@ function excluir(nr, tipo) {
     }
 }
 
+/**
+ * **pedidoAjuste.js**
+ * 
+ * Função para exibir a barra de pregresso de upload dos anexos utilizados no
+ * pedido de ajustes.
+ * 
+ * @param {Event} e Evento a ser aplicado a animação
+ * @returns {void} Mostra e aplica animação na barra de progresso
+ */
 function progressHandlingFunction(e){
     if(e.lengthComputable){
         $('progress').attr({value:e.loaded,max:e.total});
