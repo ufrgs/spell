@@ -15,6 +15,7 @@
  * 
  * @author UFRGS <cpd-dss@ufrgs.br>
  * @package cpd\spell
+ * @subpackage controllers
  * @version v1.0
  * @since v1.0
  */
