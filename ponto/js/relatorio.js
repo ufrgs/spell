@@ -1,5 +1,5 @@
 /**
- * **relatio.js**
+ * **relatorio.js**
  * 
  * Função utilizada para verificar os pedidos em um órgão realizados nos últimos
  * 12 mêses.
