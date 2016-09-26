@@ -44,6 +44,8 @@ Lista de usuários cadastrados para teste:
 
 ## Como gerar a documentação
 
+### Documentação do código PHP
+
 #### Método 1
 * Instale o [PHPDocumentor](https://www.phpdoc.org/)
 * Dentro da pasta raiz do projeto, execute o comando ```phpdoc -d ponto/protected/components/ -d ponto/protected/models/ -d ponto/protected/controllers/ -t ponto/docs/phpdoc```
@@ -63,3 +65,24 @@ Lista de usuários cadastrados para teste:
 |:---|:---|:---|
 |-s|--source|Pasta onde está o código fonte|
 |-d|--destination|Pasta a ser armazenada a documentação|
+
+### Documentação do código JavaScript
+
+#### Método 1
+* Instale o [documentation.js](http://documentation.js.org/)
+* Dentro da pasta raiz do projeto, execute o comando ```documentation build ponto/js/ -f html -o ponto/docs/documentation```
+* Acesse o endereço [localhost:8080/ponto/docs/documentation](localhost:8080/ponto/docs/documentation)
+
+| Argumento	| Argumento extenso | Descrição	|
+|:---|:---|:---|
+|-f|--format|Formato da documantação (HTML, Markdown)|
+|-o|--output|Pasta a ser armazenada a documentação|
+
+#### Método 2
+* Instale o [JSDoc](http://usejsdoc.org/)
+* Dentro da pasta raiz do projeto, execute o comando ```jsdoc ponto/js/ -d ponto/docs/jsdoc/```
+* Acesse o endereço [localhost:8080/ponto/docs/jsdoc](localhost:8080/ponto/docs/jsdoc)
+
+| Argumento	| Argumento extenso | Descrição	|
+|:---|:---|:---|
+|-d|--directory|Pasta a ser armazenada a documentação|
