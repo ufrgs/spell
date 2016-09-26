@@ -1,8 +1,10 @@
 
 $(document).ready(function() {
-    // modal do pedido
+    
+    // Modal do pedido
     $("#divPedido").dialog({title: "Registro de Compensação", width: 650, height: 350, autoOpen:false, modal:true});
-    // modal da certificacao
+
+    // Modal da certificação
     $("#modal").dialog({title: "Informações do Pedido", autoOpen: false, width: 600, height: 450});
     
     $("#data").datepicker({dateFormat:"dd/mm/yy", minDate: 0, stepMonths: 0, changeMonth: false,});
@@ -16,11 +18,29 @@ $(document).ready(function() {
     });
 });
 
+/**
+ * **compensacao.js**
+ * 
+ * Função utilizada para preparar e exibir o modal para criação de um novo pedido.
+ * Aqui são incluidos os elementos do modal manualmente, dispensando o uso de um
+ * arquivo externo contendo o código HTML do modal.
+ * 
+ * @returns {void} Prepara e exibe o modal para criação de um novo pedido
+ */
 function novoRegistro() {
     $("#divPedido input[type=text]").val('');
     $("#divPedido").dialog('open');
 }
 
+/**
+ * **compensacao.js**
+ * 
+ * Função utilizada para validar os campos do modal de pedido de compensação. 
+ * Caso os dados necessários para realizar um pedido tenham sido informados, 
+ * a função também solicita o ajuste.
+ * 
+ * @returns {void} Mostra na tela mensagem de erro ou sucesso na validação dos campos e da solicitação
+ */
 function enviaSolicitacao() {
     var msg = "";
     if ($("#data").val() == "") {
@@ -106,6 +126,14 @@ function enviaSolicitacao() {
     }
 }
 
+/**
+ * **compensacao.js**
+ * 
+ * Função para exclusão de um pedido de compensação.
+ * 
+ * @param {int} nr Número do pedido a ser excluido
+ * @returns {void} Atualiza a tela em caso de sucesso ou exibe mensagem de erro
+ */
 function excluir(nr) {
     if (confirm("Tem certeza que deseja excluir esse registro de compensação?")) {
         $.ajax({
@@ -124,14 +152,33 @@ function excluir(nr) {
     }
 }
 
+/**
+ * **compensacao.js**
+ * 
+ * Função para exibir a barra de pregresso de upload dos anexos utilizados no
+ * pedido de compensação.
+ * 
+ * @param {Event} e Evento a ser aplicado a animação
+ * @returns {void} Mostra e aplica animação na barra de progresso
+ */
 function progressHandlingFunction(e){
     if(e.lengthComputable){
         $('progress').attr({value:e.loaded,max:e.total});
     }
 }
 
-// certificacao
+// Métodos utilizados para certificação
 
+/**
+ * **compensacao.js**
+ * 
+ * Função utilizada para mostrar detalhes de um pedido de ajuste. Quando chamada
+ * um modal é aberto com as informações do pedido.
+ * 
+ * @param {int} nr Número do pedido a ser excluido
+ * @param {string} tipo Tipo do pedido. Na tela de ajustes tem o valor "ajuste"
+ * @returns {void} Mostra um modal com o pedido solicitado ou uma mensagem de erro
+ */
 function verPedido(nr) {
     $.ajax({
         url: HOME+"compensacao/dadosPedido",
@@ -148,6 +195,16 @@ function verPedido(nr) {
     });
 }
 
+/**
+ * **compensacao.js**
+ * 
+ * Função utilizada para mostrar detalhes de um pedido de ajuste já certificado. 
+ * Quando chamada um modal é aberto com as informações do pedido certificado.
+ * 
+ * @param {int} nr Número do pedido a ser excluido
+ * @param {string} tipo Tipo do pedido. Na tela de ajustes tem o valor "ajuste"
+ * @returns {void} Mostra um modal com o pedido solicitado ou uma mensagem de erro
+ */
 function verPedidoCertificado(nr) {
     $.ajax({
         url: HOME+"compensacao/dadosPedidoCertificado",
@@ -163,6 +220,17 @@ function verPedidoCertificado(nr) {
     });
 }
 
+/**
+ * **compensacao.js**
+ * 
+ * Função utilizada para certificação de um único pedido de compensação. Quando 
+ * essa função é chamada, o identificador do pedido de compensação solicitado é 
+ * enviado ao servidor contendo seu novo estado (aprovado ou negado) juntamente 
+ * com a justificativa do certificador.
+ * 
+ * @param {char} certifica S ou N indicando a aprovação ou reprovação do pedido de ajuste
+ * @returns {void} Atualiza a tela em caso de sucesso ou exibe mensagem de erro
+ */
 function certificarPedido(certifica) {
     if ($("#nrPedido").val() != '') {
         if ((certifica == 'N') && ($("#justificativa").val().length < 3)) {
@@ -193,6 +261,15 @@ function certificarPedido(certifica) {
     }
 }
 
+/**
+ * **compensacao.js**
+ * 
+ * Função utilizada para certificação de mais de um pedido de compensação. Quando 
+ * essa função é chamada, os pedidos de compensação ainda não certificados são
+ * enviados para o servidor com seu estado alterado para aprovado.
+ * 
+ * @returns {void} Atualiza a tela em caso de sucesso ou exibe mensagem de erro
+ */
 function certificarSelecionados() {
     var pedidos = $("input[name=certificarCompensacao]:checked");
     if (pedidos.length > 0) {
