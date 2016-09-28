@@ -90,9 +90,3 @@ fieldset fieldset fieldset fieldset fieldset fieldset fieldset
 .escondido {
     display: none;
 }
-
-@media print {    
-    .escondeNaImpressao, .escondeNaImpressao * {
-        display: none !important;
-    }
-}

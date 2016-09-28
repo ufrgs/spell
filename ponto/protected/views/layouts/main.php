@@ -23,7 +23,7 @@
                 <?php
                 $tituloPagina = "Ponto Eletrônico";
                 if (isset(Yii::app()->session['id_pessoa'], Yii::app()->controller->menu)): ?>
-                    <nav>
+                    <nav class="escondeNaImpressao">
                         <span><?=Yii::app()->controller->menu['label']?></span>
                         <ul>
                         <? foreach (Yii::app()->controller->menu['items'] as $menu):
