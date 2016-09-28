@@ -1,5 +1,9 @@
 <?php
 /**
+ * Copyright 2016 Universidade Federal do Rio Grande do Sul
+ */
+
+/**
  * Modelo criado para representar a tabela ponto
  * 
  * Aqui são implementados os métodos básicos do Yii Framework para realizar o 
@@ -21,6 +25,7 @@
  * 
  * @author UFRGS <cpd-dss@ufrgs.br>
  * @package cpd\spell
+ * @subpackage models
  * @version v1.0
  * @since v1.0
  */
@@ -63,7 +68,6 @@ class Ponto extends CActiveRecord
      * É recomendado apenas definir as regras para os atributos que forem ser 
      * utilizados com dados do usuário.
      * 
-     * @todo Remover os valores que não devem ser pesquisados
      * @link http://www.yiiframework.com/doc/guide/1.1/en/form.model#declaring-validation-rules Como declarar regras
      * @return array Regras de validação para este modelo
      */
@@ -126,7 +130,6 @@ class Ponto extends CActiveRecord
      * Aqui é feita a pesquisa de um modelo de acordo com determinadas condições
      * passadas por parâmetro.
      * 
-     * @todo Remover atributos que não devem ser pesquisados
      * @param array $dataProviderOptions Filtro a ser usado na consulta
      * @return CActiveDataProvider Conjunto de dados retornados da consulta
      */

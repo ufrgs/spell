@@ -1,4 +1,5 @@
 # Sistema de Ponto ELetrônico Livre (SPELL)
+Esse sistema foi desenvolvido no [Centro de Processamento de Dados](http://www.ufrgs.br/cpd/)(CPD) da [Universidade Federal do Rio Grande do Sul](http://www.ufrgs.br/)(UFRGS) para ser implementado em pontos eletrônicos da [Universidade Federal Fluminense](http://www.uff.br/)(UFF) visando melhorar o controle de horários dos servidores da instituição.
 
 ## Funcionalidades
 * Acompanhamento de horários (funcionário e chefia)
@@ -16,7 +17,7 @@ Para testar o sistema o computador deve conter os seguintes softwares:
 #### Como configurar
 1. Baixe e mova o código fonte para a pasta de páginas do servidor. No caso do USBWebserver, coloque na pasta `root`
 2. Baixe e extraia o Yii Framework para a pasta raiz do servidor
-3. Exececute o arquivo [ponto.sql](ponto.sql) no banco de dados
+3. Execute o arquivo [ponto.sql](ponto.sql) no banco de dados
 
 Por pardrão, as credenciais de acesso do banco de dados são:
 ```
@@ -35,9 +36,9 @@ Lista de usuários cadastrados para teste:
 |1||Técnico|4|Departamento|
 |2||Técnico|1|Unidade acadêmica|
 |3||Docente|2|Órgão máximo|
-|4||Técnico||Departamento|
+|4||Técnico|0|Departamento|
 
 *Observação: pode-se informar qualquer senha para realizar o login*
 
-## Detalhes sobre o código
-* A indentação do código segue a especificação [PSR-2](https://github.com/bobsta63/netbeans-psr-formatting)
+## Mais informações
+Para mais informações, guias e tutoriais sobre o projeto acesse a [Wiki](http://gitlab.dev.ufrgs.br/lvalente/cpd-spell/wikis/home) do repositório.
