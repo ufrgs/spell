@@ -11,33 +11,6 @@ $cs->registerScriptFile(Yii::app()->baseUrl."/js/circle-progress.js", CClientScr
     height: 28px;
 }
 </style>
-<script type="text/javascript">
-    
-/**
- * Funçao criada para excluir registros de ajustes e abonos no menu da gerência.
- * 
- * @param {int} nr Chave primária do pedido
- * @param {string} tipo Tipo de pedido (ajuste ou abono)
- * @returns {void} Atualiza a tela após a remoção do pedido ou mostra mensagem de erro
- */
-function excluir(nr, tipo) {
-    if (confirm("Tem certeza que deseja excluir esse pedido de ajuste?")) {
-        $.ajax({
-            type: 'POST',
-            url: HOME + 'gerencia/excluirPedido',
-            data: { nr: nr, tipo: tipo },
-            success: function (result) {
-                alert(result);
-                if (result.indexOf("sucesso") != -1)
-                    document.location.reload(true);
-            },
-            error: function (result) {
-                alert(result);
-            }
-        });
-    }
-}
-</script>
 <?php
 
 ob_start();
