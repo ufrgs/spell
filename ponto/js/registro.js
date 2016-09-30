@@ -1,4 +1,6 @@
 /**
+ * ** registro.js **
+ * 
  * Função utilizada para atualizar o horário do relógio exibido na tela.
  * 
  * @returns {void} Mostra na tela o valor atualizado do horário
@@ -17,6 +19,8 @@ var atualizaRelogio = function () {
 }
 
 /**
+ * ** registro.js **
+ * 
  * Proporção de tamanho dos textos da página
  * 
  * @type int
@@ -24,6 +28,8 @@ var atualizaRelogio = function () {
 var size = 1;
 
 /**
+ * ** registro.js **
+ * 
  * Variável para controle de registro no ponto. Tem valor TRUE caso já tenha
  * sido feito ponto e FALSE caso contrário.
  * 
@@ -84,6 +90,8 @@ $(document).ready(function () {
 });
 
 /**
+ * ** registro.js **
+ * 
  * Função utilizada para validação do login do servidor.
  * 
  * @returns {Boolean} TRUE em caso de senha não infomada e FALSE caso contrário
@@ -97,6 +105,8 @@ function verificaSenhaEmBranco() {
 }
 
 /**
+ * ** registro.js **
+ * 
  * Função utilizada para implementar o recurso de acessibilidade que aumenta o 
  * tamanho da fonte dos textos contidos na página.
  * 
@@ -112,6 +122,8 @@ function aumentarTexto() {
 }
 
 /**
+ * ** registro.js **
+ * 
  * Função utilizada para implementar o recurso de acessibilidade que diminui o 
  * tamanho da fonte dos textos contidos na página.
  * 
@@ -127,6 +139,8 @@ function diminuirTexto() {
 }
 
 /**
+ * ** registro.js **
+ * 
  * Função utilizada como disparador da função <code>registraPonto(tipo)</code> 
  * indicando que uma solicitação de registro de entrada.
  * 
@@ -138,6 +152,8 @@ function registraEntrada() {
 }
 
 /**
+ * ** registro.js **
+ * 
  * Função utilizada como disparador da função <code>registraPonto(tipo)</code> 
  * indicando que uma solicitação de registro de saída.
  * 
@@ -149,6 +165,8 @@ function registraSaida() {
 }
 
 /**
+ * ** registro.js **
+ * 
  * Função utilizada para realizar o registro de ponto do usuário.
  * 
  * Em caso de falha uma mensagem de erro é mostrada na tela e a função é finalizada.
@@ -255,6 +273,8 @@ function registraPonto(tipo) {
 }
 
 /**
+ * ** registro.js **
+ * 
  * Função utilizada para fazer o registro no ponto caso ainda não tenha sido feito.
  * 
  * @param {char} tipo Tipo de registro a se feito (E para entreada, S para saída)
@@ -289,6 +309,8 @@ function fazRegistroPonto(tipo) {
 }
 
 /**
+ * ** registro.js **
+ * 
  * Função auxiliar para abertura de um modal na tela do usuário. É utiliada para
  * mostrar mensagens de erro e sucesso.
  * 
@@ -327,6 +349,8 @@ function abreModal(titulo, conteudo, botoes) {
 }
 
 /**
+ * ** registro.js **
+ * 
  * Função auxiliar para fechamento do modal aberto pela função
  * <code>abreModal(titulo, conteudo, botoes)</code>.
  * 
