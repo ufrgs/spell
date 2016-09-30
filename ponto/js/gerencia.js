@@ -17,6 +17,12 @@ $(document).ready(function() {
     });
 });
 
+/**
+ * 
+ * @deprecated Função não é mais utilizada e a action foi removida
+ * @ignore
+ * @returns {void}
+ */
 function corrigePendencia() {
     $.ajax({
         url: HOME + "gerencia/corrigePendencias",
@@ -29,6 +35,27 @@ function corrigePendencia() {
     });
 }
 
+/**
+ * **gerencia.js**
+ * 
+ * Função para mostrar a jornada de trabalho de um servidor pesquisado na tela
+ * de gerência.
+ * 
+ * O parâmetro "dados" é passado no seguinte formato: <code>{p: 0}</code>
+ * 
+ * Para realizar a filtragem por data a função utiliza a seguinte representação: 
+ * ```
+ * {
+ *  p: 3, // Chave primária da pessoa
+ *  v: 1, // Número do vínculo da pessoa
+ *  a: 2016, // Ano a ser visualizado
+ *  m: 4 // Número do mês
+ * }
+ * ```
+ * 
+ * @param {int} JSON contendo a chave p com a chave primária da pessoa como valor
+ * @returns {void} Mostra os registros de horário da pessoa pesquisada
+ */
 function renderizaAcompanhamento(dados) {
     $.ajax({
         url: HOME + "acompanhamento/pessoa",
@@ -44,6 +71,15 @@ function renderizaAcompanhamento(dados) {
     });
 }
 
+/**
+ * **acompanhamentoChefia.js**
+ * 
+ * Script para definir os eventos da página de acompanhamento, como os circulos
+ * que exibem a jornada de trabalho do servidor pesquisado e os elementos de 
+ * seleção de datas para filtragem de carga horária.
+ * 
+ * @returns {void} Inicializa os eventos da página
+ */
 function iniciaScripts() {
     $('#progressoDiario').circleProgress({
         value: $('#progressoDiario').attr('value'),
