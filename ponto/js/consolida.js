@@ -1,3 +1,11 @@
+/**
+ * **consolida.js**
+ * 
+ * Função utilizada para consolidar os registros do mês. Todos os servidores
+ * com registro no mês selecionado terão seus horários consolidados.
+ * 
+ * @returns {void} Mostra na tela uma mensagem de sucesso ou erro na operação
+ */
 function servidores() {
     $("#mensagem").html('<img src="/ponto/css/imgs/bigLoader.gif" alt="Carregando..."/>');
     $.ajax({
@@ -17,6 +25,14 @@ function servidores() {
     });
 }
 
+/**
+ * **consolida.js**
+ * 
+ * Função utilizada para consolidar horários de um lote de servidores de um 
+ * determinado mês e ano.
+ * 
+ * @returns {void} Mostra na tela uma mensagem de sucesso ou erro na operação
+ */
 function lote() {
     $("#mensagem").html('<img src="/ponto/css/imgs/bigLoader.gif" alt="Carregando..."/>');
     $.ajax({
