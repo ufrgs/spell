@@ -18,24 +18,6 @@ $(document).ready(function() {
 });
 
 /**
- * 
- * @deprecated Função não é mais utilizada e a action foi removida
- * @ignore
- * @returns {void}
- */
-function corrigePendencia() {
-    $.ajax({
-        url: HOME + "gerencia/corrigePendencias",
-        success: function(retorno) {
-            alert(retorno);
-        },
-        error: function(retorno) {
-            alert(retorno);
-        }
-    });
-}
-
-/**
  * **gerencia.js**
  * 
  * Função para mostrar a jornada de trabalho de um servidor pesquisado na tela
