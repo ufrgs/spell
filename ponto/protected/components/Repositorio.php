@@ -235,25 +235,6 @@ class Repositorio extends CComponent
     }
 
     /**
-     * Método para consumo de arquivos
-     * 
-     * Devolve o link para visualização do arquivo, que inclui o identificador 
-     * da sessão no repositório.
-     * 
-     * Esse método deve sempre ser invocado ao oferecer o link de acesso ao 
-     * arquivo ao usuário. O link gerado não deve ser salvo em nenhum lugar, pois 
-     * ele só permite o acesso ao documento durante o tempo de vida da sessão.
-     * 
-     * @param int $tipoDocumento Chave primária do documento
-     * @param string $chaveIdentificacao Chave de autenticação do documento
-     * @return string Link temporário para visualização do documento
-     */
-    public function devolveCaminhoAcessoDireto($tipoDocumento, $chaveIdentificacao)
-    {
-        return "http://".$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT']."/repositorio/abreArquivo.php?" . $chaveIdentificacao . "&" . $tipoDocumento;
-    }
-
-    /**
      * Método para a manipulação de arquivos
      * 
      * Estabelece uma data de fim de validade para um documento digital.
