@@ -52,7 +52,6 @@ class Helper {
      * @return type
      */
 	public static function tiraAcento($string) {
-		//$string = iconv('ISO-8859-1', 'ASCII//TRANSLIT', $string);
 		$string = iconv(mb_detect_encoding($string, mb_detect_order(),TRUE), 'ASCII//TRANSLIT', $string);
 		$string = preg_replace("/[^a-zA-Z0-9\/_| -]/", '', $string);
 		return $string;

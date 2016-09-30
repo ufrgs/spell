@@ -64,7 +64,6 @@ class UsuarioWeb extends CWebUser
      */
     protected function changeIdentity($id, $name, $states)
     {
-        //Yii::app()->getSession()->regenerateID(true);
         $this->setId($id);
         $this->setName($name);
         $this->loadIdentityStates($states);

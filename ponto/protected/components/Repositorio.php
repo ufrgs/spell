@@ -154,7 +154,6 @@ class Repositorio extends CComponent
         $explodeVar = explode('.', $NomeArquivo);
         $extensao = end($explodeVar);
 
-        //if(!in_array($extensao, self::$_extensoesPermitidas)) {
         if (in_array($extensao, self::$_extensoesProibidas)) {
             $this->_erro = "Extensão de arquivo não permitida";
             return false;
