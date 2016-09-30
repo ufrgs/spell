@@ -1,7 +1,7 @@
 
 <div class="card" id="divLogin">
     <div class="row">
-        <img class="logo" src="<?=Yii::app()->baseUrl?>/imgs/logo.png" alt="Logo do Ponto Eletrônico"/> <br/>
+        <img class="logo" src="<?=Yii::app()->baseUrl?>/imgs/logo.png" width="160" alt="Logo do Ponto Eletrônico"/> <br/>
     </div>
     <? if (isset($mensagem)): ?>
         <fieldset class="aviso">

@@ -1,6 +1,6 @@
 <header class="row">
 	<div class="col s12 m5">
-		<img id="logo" src="<?=Yii::app()->baseUrl?>/imgs/logoPonto.png" alt="Logo do Ponto Eletrônico da UFRGS"/>
+        <img id="logo" src="<?=Yii::app()->baseUrl?>/imgs/logoPonto.png" width="140" alt="Logo do Ponto Eletrônico da UFRGS"/>
 	</div>
 
 	<? if (count($pessoa->DadosFuncionais) == 1): ?>
