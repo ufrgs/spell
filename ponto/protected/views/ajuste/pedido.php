@@ -162,7 +162,7 @@ if (count($pessoa->DadosFuncionais) == 1): ?>
             <label class="esquerdaAlinhado maior" for="horaSaida">Hora de Saída:</label>
             <input type="text" size="5" name="horaSaida" id="horaSaida" /> <br/>
         </div>
-        <label class="esquerdaAlinhado maior" for="justificativa">justificativa:</label>
+        <label class="esquerdaAlinhado maior" for="justificativa">Justificativa:</label>
         <select name="justificativa" id="justificativa" onchange="verificaJustificativa(this.value)">
             <option value=""> -------------- </option>
             <? foreach ($justificativas as $justificativa): ?>

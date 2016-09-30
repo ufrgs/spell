@@ -155,7 +155,7 @@ class AjusteController extends BaseController
             $ajuste->id_pessoa_registro = $pessoa->id_pessoa;
             $ajuste->data_hora_registro = new CDbExpression("CURRENT_TIMESTAMP()");
             $ajuste->ip_registro = $_SERVER['REMOTE_ADDR'];
-            $ajuste->justificativa = ($_POST['justificativa'] == 'o' ? utf8_decode($_POST['outraJustificativa']) : NULL);
+            $ajuste->justificativa = ($_POST['justificativa'] == 'o' ? $_POST['outraJustificativa'] : NULL);
             $ajuste->nr_justificativa = ($_POST['justificativa'] != 'o' ? $_POST['justificativa'] : NULL);
 
             $transacao = Yii::app()->db->beginTransaction();
@@ -184,7 +184,7 @@ class AjusteController extends BaseController
                         $ajusteSaida->id_pessoa_registro = $pessoa->id_pessoa;
                         $ajusteSaida->data_hora_registro = new CDbExpression("CURRENT_TIMESTAMP()");
                         $ajusteSaida->ip_registro = $_SERVER['REMOTE_ADDR'];
-                        $ajusteSaida->justificativa = ($_POST['justificativa'] == 'o' ? utf8_decode($_POST['outraJustificativa']) : NULL);
+                        $ajusteSaida->justificativa = ($_POST['justificativa'] == 'o' ? $_POST['outraJustificativa'] : NULL);
                         $ajusteSaida->nr_justificativa = ($_POST['justificativa'] != 'o' ? $_POST['justificativa'] : NULL);
                         if ($ajusteSaida->save()) {
                             // se teve anexos, salva os mesmos arquivos para a saida
@@ -498,7 +498,7 @@ class AjusteController extends BaseController
             }
             
             if ($pedido) {
-                $pedido->justificativa_certificacao = utf8_decode($_POST['justificativa']);
+                $pedido->justificativa_certificacao = $_POST['justificativa'];
                 $pedido->indicador_certificado = $_POST['certifica'];
                 $pedido->id_pessoa_certificacao = Yii::app()->user->id_pessoa;
                 $pedido->data_hora_certificacao = new CDbExpression("CURRENT_TIMESTAMP()");
@@ -631,7 +631,7 @@ class AjusteController extends BaseController
             else {
                 $anexo->nr_abono = $ajuste->nr_abono;
             }
-            $anexo->descricao_arquivo = utf8_decode($arquivos['name'][$i]);
+            $anexo->descricao_arquivo = $arquivos['name'][$i];
             $anexo->cod_repositorio = $identificadorRepositorio;
             
             return $anexo->save();

@@ -244,17 +244,17 @@ class HorariosController extends BaseController
                             }
                         }
                     }
-                    $mensagem = array('mensagem'=>utf8_encode("O hor&aacute;rio foi salvo com sucesso."), 'tipo'=>'flash-success');                    
+                    $mensagem = array('mensagem'=>"O hor&aacute;rio foi salvo com sucesso.", 'tipo'=>'flash-success');                    
                     echo json_encode($mensagem);                    
                     
                 }
                 else {                    
-                    $mensagem = array('mensagem'=>utf8_encode("Ocorreu um erro ao salvar o hor&aacute;rio."), 'tipo'=>'flash-error');                    
+                    $mensagem = array('mensagem'=>"Ocorreu um erro ao salvar o hor&aacute;rio.", 'tipo'=>'flash-error');                    
                     echo json_encode($mensagem); 
                 }
             }            
             else {
-                $mensagem = array('mensagem'=>utf8_encode("Ocorreu um erro ao salvar o hor&aacute;rio. ".$msg), 'tipo'=>'flash-error');                    
+                $mensagem = array('mensagem'=>"Ocorreu um erro ao salvar o hor&aacute;rio. ".$msg, 'tipo'=>'flash-error');                    
                 echo json_encode($mensagem); 
             }
         }

@@ -175,7 +175,7 @@ class CompensacaoController extends BaseController
                 $compensacao->id_pessoa_registro = $pessoa->id_pessoa;
                 $compensacao->data_hora_registro = new CDbExpression("CURRENT_TIMESTAMP()");
                 $compensacao->ip_registro = $_SERVER['REMOTE_ADDR'];
-                $compensacao->justificativa = utf8_decode($_POST['justificativa']);
+                $compensacao->justificativa = $_POST['justificativa'];
 
                 $transacao = Yii::app()->db->beginTransaction();
                 try {
@@ -414,7 +414,7 @@ class CompensacaoController extends BaseController
             $pedido = Compensacao::model()->with('DadoFuncional')->findByPk($_POST['nrPedido'], $criteria);               
             
             if ($pedido) {
-                $pedido->justificativa_certificacao = utf8_decode($_POST['justificativa']);
+                $pedido->justificativa_certificacao = $_POST['justificativa'];
                 $pedido->indicador_certificado = $_POST['certifica'];
                 $pedido->id_pessoa_certificacao = Yii::app()->user->id_pessoa;
                 $pedido->data_hora_certificacao = new CDbExpression("CURRENT_TIMESTAMP()");
