@@ -98,7 +98,7 @@ function certificarSelecionados(tipo) {
                 $("#modal").html('<fieldset class="field'+(retorno.erro ? 'Erro' : 'Sucesso')+'">'+retorno.mensagem+'</fieldset>');
                 $("#modal").dialog('open');
                 if (retorno.mensagem.indexOf("sucesso") != -1) {
-                    setTimeout(function(){window.location=HOME+"ajuste/pedidosAvaliacao.js/"}, 2000);
+                    setTimeout(function(){window.location=HOME+"ajuste/pedidosAvaliacao/"}, 2000);
                 }
             },
             error: function(retorno) {
