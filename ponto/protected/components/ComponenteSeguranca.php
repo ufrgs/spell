@@ -109,7 +109,8 @@ class ComponenteSeguranca extends CApplicationComponent
                 ':id_pessoa' => $this->id_pessoa,
                 ':id_aplicacao' => $this->id_aplicacao,
             ));
-            // permissao simplificada para somente um nivel
+
+            // Permissão simplificada para somente um nível
             if (!empty($permissao)) {
                 $this->entrada = $this->novo = $this->salvar = $this->excluir = true;
                 $this->orgaos = Helper::getHierarquiaDescendenteOrgao($permissao->id_orgao);
@@ -143,11 +144,14 @@ class ComponenteSeguranca extends CApplicationComponent
     {
         foreach ($this->permissao as $codAplicacao => $actions) {
             if (in_array($actionId, $actions) || $actions[0] == '*') {
-                if ($codAplicacao == '*')
+                if ($codAplicacao == '*') {
                     return true;
+                }
+
                 return $this->carregaAplicacao($codAplicacao)->direitoEntrada();
             }
         }
+
         return false;
     }
 
@@ -163,8 +167,10 @@ class ComponenteSeguranca extends CApplicationComponent
      */
     public function direitoEntrada()
     {
-        if (is_null($this->id_aplicacao))
+        if (is_null($this->id_aplicacao)) {
             throw new Exception("Aplicação não carregada");
+        }
+
         return $this->entrada;
     }
 
@@ -180,8 +186,10 @@ class ComponenteSeguranca extends CApplicationComponent
      */
     public function direitoNovo()
     {
-        if (is_null($this->id_aplicacao))
+        if (is_null($this->id_aplicacao)) {
             throw new Exception("Aplicação não carregada");
+        }
+
         return $this->novo;
     }
 
@@ -197,8 +205,10 @@ class ComponenteSeguranca extends CApplicationComponent
      */
     public function direitoSalvar()
     {
-        if (is_null($this->id_aplicacao))
+        if (is_null($this->id_aplicacao)) {
             throw new Exception("Aplicação não carregada");
+        }
+
         return $this->salvar;
     }
 
@@ -214,8 +224,10 @@ class ComponenteSeguranca extends CApplicationComponent
      */
     public function direitoExcluir()
     {
-        if (is_null($this->id_aplicacao))
+        if (is_null($this->id_aplicacao)) {
             throw new Exception("Aplicação não carregada");
+        }
+
         return $this->excluir;
     }
 
@@ -227,8 +239,9 @@ class ComponenteSeguranca extends CApplicationComponent
      */
     public function orgaosEscopo()
     {
-        if (is_null($this->id_aplicacao))
+        if (is_null($this->id_aplicacao)) {
             throw new Exception("Aplicação não carregada");
+        }
 
         return $this->orgaos;
     }
