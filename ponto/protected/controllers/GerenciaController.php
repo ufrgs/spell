@@ -30,17 +30,17 @@ class GerenciaController extends BaseController
     {
         $registros = new Ponto('search');
         if (isset($_GET['Ponto'])) {
-            $registros->attributes = array_map("utf8_decode", $_GET['Ponto']);  //Campos do modelo
+            $registros->attributes = $_GET['Ponto'];  //Campos do modelo
         }
         
         $ajustes = new Ajuste('search');
         if (isset($_GET['Ajuste'])) {
-            $ajustes->attributes = array_map("utf8_decode", $_GET['Ajuste']);  //Campos do modelo
+            $ajustes->attributes = $_GET['Ajuste'];  //Campos do modelo
         }
         
         $abonos = new Abono('search');
         if (isset($_GET['Abono'])) {
-            $abonos->attributes = array_map("utf8_decode", $_GET['Abono']);  //Campos do modelo
+            $abonos->attributes = $_GET['Abono'];  //Campos do modelo
         }
 
         $this->render('index', array(

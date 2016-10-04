@@ -175,6 +175,16 @@ if (count($pessoa->DadosFuncionais) == 1): ?>
                     <td class="alinhaDireita">
                         <?
                         $saldo = ($totalRegistros+$totalAbono+$totalCompensacao+$horasAfastamento) - ($cargaHorariaMesSelecionado*60);
+                        if (($saldo > 0) && ($totalCompensacao > 0)) {
+                            if ($saldo > $totalCompensacao) {
+                                // saldo de horas excedente é maior do que a compensação 
+                                $saldo -= $totalCompensacao;
+                            }
+                            else {
+                                // compensação é considerada só até zerar o saldo
+                                $saldo = 0;
+                            }
+                        }
                         ?>
                         <strong><span class="<?=($saldo < 0 ? 'textoVermelho' : 'textoVerde')?>"><?=Helper::transformaEmFormatoHora($saldo)?></span></strong>
                     </td>
@@ -186,7 +196,7 @@ if (count($pessoa->DadosFuncionais) == 1): ?>
                         </td>
                         <td class="alinhaDireita">
                             <?
-                            $saldo = ($totalRegistros+$totalAbono+$totalCompensacao+$horasAfastamento) - ($cargaHorariaMesSelecionado*60) + $saldoMesAnterior;
+                            $saldo = $saldo + $saldoMesAnterior;
                             ?>
                             <strong><span class="<?=($saldo < 0 ? 'textoVermelho' : 'textoVerde')?>"><?=Helper::transformaEmFormatoHora($saldo)?></span></strong>
                         </td>

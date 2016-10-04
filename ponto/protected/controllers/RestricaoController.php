@@ -30,10 +30,19 @@ class RestricaoController extends BaseController
      */
     public function actionIndex()
     {
-        $restricao = new RestricaoRelogio('search');
-        $restricoesOrgao = $restricao->search();
-        $restricao->porOrgao = false;
-        $restricoesPessoa = $restricao->search();
+        $restricoesOrgao = new RestricaoRelogio('search');
+        $restricoesPessoa = new RestricaoRelogio('search');
+        $restricoesPessoa->porOrgao = false;
+        if (isset($_GET['RestricaoRelogio'])) {
+            $restricoesOrgao->attributes = $_GET['RestricaoRelogio']; 
+            if (isset($_GET['RestricaoRelogio']['sigla_orgao'])) {
+                $restricoesOrgao->sigla_orgao = strtoupper($_GET['RestricaoRelogio']['sigla_orgao']);
+            }
+            $restricoesPessoa->attributes = $_GET['RestricaoRelogio']; 
+            if (isset($_GET['RestricaoRelogio']['nome_pessoa'])) {
+                $restricoesPessoa->nome_pessoa = $_GET['RestricaoRelogio']['nome_pessoa'];
+            }
+        }
 
         $this->render("index", array(
             'restricoesOrgao' => $restricoesOrgao,

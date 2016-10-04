@@ -45,12 +45,26 @@ class RestricaoRelogio extends CActiveRecord
     public $inLotacao = NULL;
 
     /**
-     * Indicar utilizado para habilitar a pesquisa por órgãos.
+     * Indicador utilizado para habilitar a pesquisa por órgãos.
      * 
      * @var boolean
      */
     public $porOrgao = true;
 
+    /**
+     * Atributo fictício para ser utilizado nos filtros da tabela.
+     * 
+     * @var boolean
+     */
+    public $sigla_orgao = NULL;
+    
+    /**
+     * Atributo fictício para ser utilizado nos filtros da tabela.
+     * 
+     * @var boolean
+     */
+    public $nome_pessoa = NULL;
+    
     /**
      * Método do Yii Framework para definição da tabela associada ao objeto
      * 
@@ -164,11 +178,10 @@ class RestricaoRelogio extends CActiveRecord
         }
         if ($this->inLotacao != NULL) {
             $criteria->addCondition("t.id_pessoa in (
-                select S.id_pessoa 
-                from SERVIDOR S
-                    join dado_funcional D on S.matricula = D.matricula
+                select D.id_pessoa 
+                from dado_funcional D
                 where
-                    D.coalesce(D.data_desligamento, DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL 1 DAY)) > CURRENT_TIMESTAMP() 
+                    coalesce(D.data_desligamento, DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL 1 DAY)) > CURRENT_TIMESTAMP() 
                     and coalesce(D.data_aposentadoria, DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL 1 DAY)) > CURRENT_TIMESTAMP()
                     and D.orgao_exercicio in ".implode(',', $this->inLotacao)."
             )");
@@ -190,25 +203,34 @@ class RestricaoRelogio extends CActiveRecord
         $criteria->compare('data_atualizacao', $this->data_atualizacao, true);
         $criteria->compare('id_pessoa_atualizacao', $this->id_pessoa_atualizacao, false);
         $criteria->compare('ip_atualizacao', $this->ip_atualizacao, true);
+        $criteria->compare('Orgao.sigla_orgao', $this->sigla_orgao, true);
+        $criteria->compare('Orgao.nome_orgao', $this->sigla_orgao, true, 'OR');
+        $criteria->compare('Pessoa.nome_pessoa', $this->nome_pessoa, true);
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
             'pagination' => array(
-                'pageSize' => 20
+                'pageSize' => 30
             ),
             'sort' => array(
                 'attributes' => array(
-                    'mascara_ip_v4',
-                    'mascara_ip_v6',
+                    '*',
                     'nome_orgao' => array(
                         'asc' => 'Orgao.sigla_orgao asc',
                         SORT_ASC => 'Orgao.sigla_orgao asc',
                         'desc' => 'Orgao.sigla_orgao desc',
                         SORT_DESC => 'Orgao.sigla_orgao desc',
+                    ),
+                    'nome_pessoa' => array(
+                        'asc' => 'Pessoa.nome_pessoa desc',
+                        SORT_ASC => 'Pessoa.nome_pessoa desc',
+                        'desc' => 'Pessoa.nome_pessoa asc',
+                        SORT_DESC => 'Pessoa.nome_pessoa asc',
                     )
                 ),
                 'defaultOrder' => array(
-                    'nome_orgao' => SORT_ASC,
+                    'sigla_orgao' => SORT_ASC,
+                    'nome_pessoa' => SORT_ASC,
                 )
             ),
         ));

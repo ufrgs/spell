@@ -301,7 +301,20 @@ class CargaHorariaMesServidor extends CActiveRecord
             $registroCargaMes->nr_minutos_compensacao = intval($tempoCompensacao);
             $registroCargaMes->nr_minutos_afastamento = intval($tempoAfastamento);
             $registroCargaMes->nr_minutos_previsto = intval($tempoPrevisto - $tempoAfastamento);
-            $registroCargaMes->nr_minutos_saldo = intval(($jornadaMensal + $tempoAbono + $tempoCompensacao) - ($tempoPrevisto - $tempoAfastamento));
+            // calcula o saldo parcial sem os minutos oriundos de compensação
+            $saldo = intval(($jornadaMensal + $tempoAbono) - ($tempoPrevisto - $tempoAfastamento));
+            // se o saldo for negativo, adiciona os minutos de compensação até o valor necessário para cobrir o saldo
+            if (($saldo < 0) && ($tempoCompensacao > 0)) {
+                // se o tempo de compensacao é menor que o necessário para cobrir o saldo, adiciona todo tempo compensado
+                if (-$saldo > $tempoCompensacao) {
+                    $saldo += $tempoCompensacao;
+                }
+                // senão, zera o saldo
+                else {
+                    $saldo = 0;
+                }
+            }
+            $registroCargaMes->nr_minutos_saldo = $saldo;
             $registroCargaMes->id_pessoa_atualizacao = (isset(Yii::app()->session['id_pessoa']) ? Yii::app()->session['id_pessoa'] : 0);
             $registroCargaMes->data_atualizacao = new CDbExpression('CURRENT_TIMESTAMP()');
             $registroCargaMes->ip_atualizacao = $_SERVER['REMOTE_ADDR'];

@@ -9,10 +9,11 @@ $cs->registerScriptFile(Yii::app()->baseUrl.'/js/restricao.js', CClientScript::P
     <div id="restricoesOrgao">
         <?
         $this->widget('zii.widgets.grid.CGridView', array(
-            'dataProvider' => $restricoesOrgao,
+            'dataProvider' => $restricoesOrgao->search(),
+            'filter' => $restricoesOrgao,
             'columns' => array(
                 array(
-                    'name' => 'nome_orgao',
+                    'name' => 'sigla_orgao',
                     'sortable' => true,
                     'value' => 'CHtml::link($data->Orgao->sigla_orgao." - ".$data->Orgao->nome_orgao, 
                         "javascript:alteraRestricao($data->nr_restricao, \'".$data->Orgao->sigla_orgao." - ".$data->Orgao->nome_orgao."\', \'$data->mascara_ip_v4\', \'$data->mascara_ip_v6\')")',
@@ -30,7 +31,6 @@ $cs->registerScriptFile(Yii::app()->baseUrl.'/js/restricao.js', CClientScript::P
                     'header' => 'Máscara IPv6',
                 ),
                 array(
-                    'name' => '',
                     'sortable' => false,
                     'value' => 'CHtml::link("excluir", "javascript:excluiRestricao($data->nr_restricao)")',
                     'header' => '',
@@ -49,7 +49,8 @@ $cs->registerScriptFile(Yii::app()->baseUrl.'/js/restricao.js', CClientScript::P
     <div id="restricoesPessoa">
         <?
         $this->widget('zii.widgets.grid.CGridView', array(
-            'dataProvider' => $restricoesPessoa,
+            'dataProvider' => $restricoesPessoa->search(),
+            'filter' => $restricoesPessoa,
             'columns' => array(
                 array(
                     'name' => 'nome_pessoa',
@@ -70,7 +71,6 @@ $cs->registerScriptFile(Yii::app()->baseUrl.'/js/restricao.js', CClientScript::P
                     'header' => 'Máscara IPv6',
                 ),
                 array(
-                    'name' => '',
                     'sortable' => false,
                     'value' => 'CHtml::link("excluir", "javascript:excluiRestricao($data->nr_restricao)")',
                     'header' => '',
