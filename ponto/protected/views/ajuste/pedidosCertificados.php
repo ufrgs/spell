@@ -51,7 +51,7 @@ $cs->registerScriptFile(Yii::app()->baseUrl."/js/pedidosCertificados.js", CClien
             array(
                 'name' => 'indicador_certificado',
                 'sortable' => true,
-                'value' => '($data->indicador_certificado == "S" ? "Certificado" : "Não certificado")." por<br/>".$data->Certificador->nome_pessoa',
+                'value' => '($data->indicador_certificado == "S" ? "<span class=\"textoVerde\">Certificado" : "<span class=\"textoVermelho\">Não certificado")."</span> por<br/>".$data->Certificador->nome_pessoa',
                 'type' => 'raw',
                 'header' => 'Certificado'
             ),
