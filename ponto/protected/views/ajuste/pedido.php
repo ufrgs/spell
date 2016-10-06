@@ -78,7 +78,7 @@ if (count($pessoa->DadosFuncionais) == 1): ?>
                     'type' => 'raw',
                 ),
                 array(
-                    'value' => '(trim($data->indicador_certificado) != "" ? (trim($data->indicador_certificado) == "S" ? "<span class=\"textoVerde\">Certificado</span>" : "<span class=\"textoVermelho\">Não indicador_certificado</span>")." por<br/>".$data->Certificador->nome_pessoa : "Pendente")',
+                    'value' => '(trim($data->indicador_certificado) != "" ? (trim($data->indicador_certificado) == "S" ? "<span class=\"textoVerde\">Certificado</span>" : "<span class=\"textoVermelho\">Não certificado</span>")." por<br/>".$data->Certificador->nome_pessoa : "Pendente")',
                     'header' => 'Status',
                     'type' => 'raw',
                 ),
@@ -148,7 +148,7 @@ if (count($pessoa->DadosFuncionais) == 1): ?>
         <input type="hidden" id="nrPonto" name="nrPonto" value="<?=(isset($_GET['n']) ? $_GET['n'] : '')?>"/>
         <input type="hidden" id="tipoEDataAjuste" value="<?=(isset($_GET['td']) ? $_GET['td'] : '')?>"/>
         <input type="hidden" id="nrVinculo" name="nrVinculo" value="<?=$pessoa->DadosFuncionais->nr_vinculo?>"/>
-        <label class="esquerdaAlinhado maior">tipo:</label>
+        <label class="esquerdaAlinhado maior">Tipo:</label>
         <input type="radio" name="tipo" id="tipoE" value="E" <?=(!empty($registroAjustar) && $registroAjustar->entrada_saida == 'E' ? 'checked="checked"' : '')?>/> <label for="tipoE">Entrada</label> &nbsp; &nbsp;
         <input type="radio" name="tipo" id="tipoS" value="S" <?=(!empty($registroAjustar) && $registroAjustar->entrada_saida == 'S' ? 'checked="checked"' : '')?>/> <label for="tipoS">Saída</label> &nbsp; &nbsp;
         <input type="radio" name="tipo" id="tipoP" value="P" /> <label for="tipoP">Período</label> &nbsp; &nbsp;

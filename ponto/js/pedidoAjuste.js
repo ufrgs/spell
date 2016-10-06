@@ -1,6 +1,6 @@
 
 $(document).ready(function() {
-    $("#divPedido").dialog({title: "Pedido de ajuste", width: 650, height: 350, autoOpen:false, modal:true});
+    $("#divPedido").dialog({title: "Pedido de ajuste", width: 700, height: 350, autoOpen:false, modal:true});
     if ($("#nrPonto").val() != '') {
         // se e correcao de registro, nao mostra abono e periodo
         $("label[for=tipoA]").hide();
@@ -80,6 +80,9 @@ function novoAjuste() {
     $("#tipoA").show();
     $("label[for=tipoP]").show();
     $("#tipoP").show();
+    $("#mensagens").html('').hide();
+    $("#divOutraJustificativa textarea").val('');
+    $("#divOutraJustificativa").hide();
     $("#divPedido").dialog('open');
 }
 
@@ -133,7 +136,7 @@ function enviaSolicitacao() {
         }
     }
     if ($("#hora").val() == "") {
-        msg += "Selecione a hora para o ajuste. <br/>";
+        msg += "Selecione a hora "+($("input[name=tipo]:checked").val() == "P" ? 'de entrada ' : '')+"para o ajuste. <br/>";
     }
     else {
         // Testa se é um horário válido
@@ -185,6 +188,7 @@ function enviaSolicitacao() {
                 $("#botaoEnviar").html(retorno.mensagem);
                 if (retorno.mensagem.indexOf("sucesso") != -1) {
                     $("#botaoEnviar").addClass("fieldSucesso").slideDown();
+                    $("#mensagens").html('').hide();
                     setTimeout(function(){window.location=HOME+"ajuste/pedido/"}, 2000);
                 }
                 else {
