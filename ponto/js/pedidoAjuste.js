@@ -156,10 +156,20 @@ function enviaSolicitacao() {
         msg += "Justifique o seu pedido de ajuste. <br/>";
     }
     if (($("#justificativa").val() == "o") && ($("#outraJustificativa").val().length > 2048)) {
-        msg += "Digite no máximo 2048 caracteres na justificativa (atualmente "+$("#outraJustificativa").val().length+")."
+        msg += "Digite no máximo 2048 caracteres na justificativa (atualmente "+$("#outraJustificativa").val().length+"). <br/>"
     }
     if ($("#registroAnterior").val() == ($("input[name=tipo]:checked").val()+$("#data").val()+$("#hora").val())) {
-        msg += "Você não alterou o dia e horário para solicitar o ajuste.";
+        msg += "Você não alterou o dia e horário para solicitar o ajuste. <br/>";
+    }
+    var file = $("#anexos").prop('files')[0];
+    var size = file.size;
+    var type = file.type;
+    if (size > 1048576*5) {
+        msg += "O arquivo anexo não pode ter mais do que 5 MiB. <br/>";
+    }
+    else if ((type != 'application/pdf') && (type != 'application/x-pdf') && 
+            (type != 'image/jpeg') && (type != 'image/pjpeg') && (type != 'image/png') && (type != 'image/gif')) {
+        msg += "O arquivo anexo precisa estar em formato PDF, JPG, PNG ou GIF. <br/>";
     }
     if (msg != "") {
         $("#mensagens").html(msg).slideDown();

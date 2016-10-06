@@ -3,11 +3,11 @@
 session_start();
 
 if (!($temp = each($_GET)))
-    die("Par‚metros insuficientes!");
+    die("Par√¢metros insuficientes!");
 $ChaveDoc = $temp[0]; // O primeiro argumento deve a Chave do Documento
 
 if (!($temp = each($_GET)))
-    die("Par‚metros insuficientes!");
+    die("Par√¢metros insuficientes!");
 
 $TipoDoc = $temp[0]; // O segundo argumento deve o Tipo de Documento
 
@@ -15,16 +15,16 @@ $Download = ( ($temp = each($_GET)) && ($temp[0] == "D") );
 
 $sEndereco = $_SERVER['DOCUMENT_ROOT'] . '/repositorio/docs/' . $ChaveDoc . '.txt';
 $sArquivo = $_SERVER['DOCUMENT_ROOT'] . '/repositorio/docs/' . $ChaveDoc;
-$aDados = unserialize(file_get_contents($sEndereco));
+$DadosDocumento = unserialize(file_get_contents($sEndereco));
 
-$Pedacos = explode(".", $aDados['nome_arquivo']);
+$Pedacos = explode(".", $DadosDocumento['nome_arquivo']);
 $Extensao = $Pedacos[count($Pedacos) - 1];
 
-if ($aDados['data_expiracao'] != '') {
-    $aData = explode('/', $aDados['data_expiracao']);
+if ($DadosDocumento['data_expiracao'] != '') {
+    $aData = explode('/', $DadosDocumento['data_expiracao']);
     $iData = intval($aData[2] . $aData[1] . $aData[0]);
     if (date('Ymd') > $iData)
-        die('Documento inv·lido!');
+        die('Documento inv√°lido!');
 }
 
 switch ($Extensao) {

@@ -163,7 +163,22 @@ class AjusteController extends BaseController
                 if ($ajuste->save()) {
                     if (!empty($_FILES['anexos']['name']) && (trim($_FILES['anexos']['name'][0]) != '')) {
                         for ($i = 0; $i < count($_FILES['anexos']['name']); $i++) {
-                            if (!$this->fazUploadArquivo($_FILES['anexos'], $i, $ajuste, $tipo)) {
+                            // somente PDF
+                            if (!preg_match("/application\/(x-pdf|pdf)$/i", $_FILES['anexos']["type"][$i]) && 
+                                !preg_match("/image\/(pjpeg|jpeg|png|gif)$/i", $_FILES['anexos']["type"][$i])) {
+                                $transacao->rollback();
+                                $erro = true;
+                                $msg = "Só são permitidos arquivos PDF, JPG, PNG ou GIF.";
+                                break;
+                            }
+                            // somente arquivos com menos de 5Mb
+                            else if ($_FILES['anexos']["size"][$i] > 5*1024*1024) {
+                                $transacao->rollback();
+                                $erro = true;
+                                $msg = "Só são permitidos arquivos com menos de 5MiB.";
+                                break;
+                            }
+                            else if (!$this->fazUploadArquivo($_FILES['anexos'], $i, $ajuste, $tipo)) {
                                 $transacao->rollback();
                                 $erro = true;
                                 $msg = "Ocorreu um erro ao salvar os anexos do pedido.";
@@ -171,7 +186,7 @@ class AjusteController extends BaseController
                             }
                         }
                     }
-                    if ($tipo == 'P') {
+                    if (!$erro && ($tipo == 'P')) {
                         // se for periodo, faz um novo registro de saida
                         $ajusteSaida = new Ajuste();
                         $dataHoraPonto = implode("-", array_reverse(explode("/", $_POST['data']))) . " " . $_POST['horaSaida'];
