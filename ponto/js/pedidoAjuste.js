@@ -162,15 +162,18 @@ function enviaSolicitacao() {
         msg += "Você não alterou o dia e horário para solicitar o ajuste. <br/>";
     }
     var file = $("#anexos").prop('files')[0];
-    var size = file.size;
-    var type = file.type;
-    if (size > 1048576*5) {
-        msg += "O arquivo anexo não pode ter mais do que 5 MiB. <br/>";
+    if (file != undefined) {
+        var size = file.size;
+        var type = file.type;
+        if (size > 1048576*5) {
+            msg += "O arquivo anexo não pode ter mais do que 5 MiB. <br/>";
+        }
+        else if ((type != 'application/pdf') && (type != 'application/x-pdf') && 
+                (type != 'image/jpeg') && (type != 'image/pjpeg') && (type != 'image/png') && (type != 'image/gif')) {
+            msg += "O arquivo anexo precisa estar em formato PDF, JPG, PNG ou GIF. <br/>";
+        }
     }
-    else if ((type != 'application/pdf') && (type != 'application/x-pdf') && 
-            (type != 'image/jpeg') && (type != 'image/pjpeg') && (type != 'image/png') && (type != 'image/gif')) {
-        msg += "O arquivo anexo precisa estar em formato PDF, JPG, PNG ou GIF. <br/>";
-    }
+    
     if (msg != "") {
         $("#mensagens").html(msg).slideDown();
     }
