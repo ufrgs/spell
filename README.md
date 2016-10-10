@@ -71,4 +71,4 @@ if (($ipv4 != 'Número IPv4 da rede') && ($ipv6 != 'Número IPv6 da rede')) {
 ```
 
 ## Mais informações
-Para mais informações, guias e tutoriais sobre o projeto acesse a [Wiki](http://gitlab.dev.ufrgs.br/lvalente/cpd-spell/wikis/home) do repositório.
+Para mais informações, guias e tutoriais sobre o projeto acesse a [Wiki](https://github.com/ufrgs/spell/wiki) do repositório.
