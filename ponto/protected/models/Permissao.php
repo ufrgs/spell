@@ -76,4 +76,26 @@ class Permissao extends CActiveRecord {
             'Pessoa' => array(self::BELONGS_TO, 'Pessoa', 'id_pessoa'),
 		);
 	}
+    
+    /**
+     * Método do Yii Framework para definição de regras de validação
+     * 
+     * Aqui são definidos os atributos das colunas da tabela que presenta o 
+     * objeto como os campos que aceitam valores nulos e tamanho máximo de 
+     * caracteres suportados.
+     * 
+     * É recomendado apenas definir as regras para os atributos que forem ser 
+     * utilizados com dados do usuário.
+     * 
+     * @link http://www.yiiframework.com/doc/guide/1.1/en/form.model#declaring-validation-rules Como declarar regras
+     * @return array Regras de validação para este modelo
+     */
+    public function rules()
+    {
+        return array(
+            array('id_aplicacao, id_pessoa, id_orgao', 'required'),
+            array('id_aplicacao, id_pessoa', 'length', 'max' => 6),
+            array('id_orgao', 'length', 'max' => 5)
+        );
+    }
 }

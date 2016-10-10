@@ -84,4 +84,30 @@ class Orgao extends CActiveRecord
 			'DirigenteSubstituto'  =>array(self::BELONGS_TO, 'DadoFuncional', 'matricula_substituto'),
         );
     }
+    
+    /**
+     * Método do Yii Framework para definição de regras de validação
+     * 
+     * Aqui são definidos os atributos das colunas da tabela que presenta o 
+     * objeto como os campos que aceitam valores nulos e tamanho máximo de 
+     * caracteres suportados.
+     * 
+     * É recomendado apenas definir as regras para os atributos que forem ser 
+     * utilizados com dados do usuário.
+     * 
+     * @link http://www.yiiframework.com/doc/guide/1.1/en/form.model#declaring-validation-rules Como declarar regras
+     * @return array Regras de validação para este modelo
+     */
+    public function rules()
+    {
+        return array(
+            array('id_orgao, sigla_orgao, nome_orgao', 'required'),
+            array('id_orgao', 'length', 'max' => 5),
+            array('sigla_orgao', 'length', 'max' => 10),
+            array('nome_orgao', 'length', 'max' => 255),
+            array('email', 'length', 'max' => 150),
+            array('matricula_dirigente, matricula_substituto', 'length', 'max' => 8),
+            array('id_orgao_superior', 'length', 'max' => 5)
+        );
+    }
 }

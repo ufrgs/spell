@@ -79,6 +79,29 @@ class Pessoa extends CActiveRecord {
 	}
 	
     /**
+     * Método do Yii Framework para definição de regras de validação
+     * 
+     * Aqui são definidos os atributos das colunas da tabela que presenta o 
+     * objeto como os campos que aceitam valores nulos e tamanho máximo de 
+     * caracteres suportados.
+     * 
+     * É recomendado apenas definir as regras para os atributos que forem ser 
+     * utilizados com dados do usuário.
+     * 
+     * @link http://www.yiiframework.com/doc/guide/1.1/en/form.model#declaring-validation-rules Como declarar regras
+     * @return array Regras de validação para este modelo
+     */
+    public function rules()
+    {
+        return array(
+            array('id_pessoa, nome_pessoa, email', 'required'),
+            array('id_categoria', 'length', 'max' => 6),
+            array('nome_pessoa', 'length', 'max' => 150),
+            array('tipo_foto', 'length', 'max' => 4)
+        );
+    }
+    
+    /**
      * Método do Yii Framework para definição de escopos
      * 
      * Esse método é utilizado para definir condições a serem aplicadas nas 
