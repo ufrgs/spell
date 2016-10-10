@@ -126,7 +126,7 @@ if (count($pessoa->DadosFuncionais) == 1): ?>
                     'type' => 'raw',
                 ),
                 array(
-                    'value' => '(trim($data->indicador_certificado) != "" ? (trim($data->indicador_certificado) == "S" ? "<span class=\"textoVerde\">Certificado</span>" : "<span class=\"textoVermelho\">Não indicador_certificado</span>")." por<br/>".$data->Certificador->nome_pessoa : "Pendente")',
+                    'value' => '(trim($data->indicador_certificado) != "" ? (trim($data->indicador_certificado) == "S" ? "<span class=\"textoVerde\">Certificado</span>" : "<span class=\"textoVermelho\">Não certificado</span>")." por<br/>".$data->Certificador->nome_pessoa : "Pendente")',
                     'header' => 'Status',
                     'type' => 'raw',
                 ),
