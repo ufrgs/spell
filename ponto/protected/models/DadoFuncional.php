@@ -72,7 +72,7 @@ class DadoFuncional extends CActiveRecord
     {
         return array('matricula', 'nr_vinculo');
     }
-  
+
     /**
      * Método do Yii Framework para definição de relacionamentos entre tabelas
      * 
@@ -90,6 +90,33 @@ class DadoFuncional extends CActiveRecord
             'CatFuncional' => array(self::BELONGS_TO, 'CategoriaFuncional', 'id_categoria'),
             'GrupoEmprego' => array(self::BELONGS_TO, 'GrupoEmprego', 'id_grupo'),
             'Pessoa' => array(self::BELONGS_TO, 'Pessoa', 'id_pessoa'),
+        );
+    }
+
+    /**
+     * Método do Yii Framework para definição de regras de validação
+     * 
+     * Aqui são definidos os atributos das colunas da tabela que presenta o 
+     * objeto como os campos que aceitam valores nulos e tamanho máximo de 
+     * caracteres suportados.
+     * 
+     * É recomendado apenas definir as regras para os atributos que forem ser 
+     * utilizados com dados do usuário.
+     * 
+     * @link http://www.yiiframework.com/doc/guide/1.1/en/form.model#declaring-validation-rules Como declarar regras
+     * @return array Regras de validação para este modelo
+     */
+    public function rules()
+    {
+        return array(
+            array('matricula, nr_vinculo, id_pessoa, regime_trabalho, id_grupo, id_categoria, orgao_lotacao, orgao_exercicio, data_ingresso', 'required'),
+            array('matricula', 'length', 'max' => 8),
+            array('nr_vinculo', 'length', 'max' => 1),
+            array('id_pessoa', 'length', 'max' => 6),
+            array('regime_trabalho', 'length', 'max' => 2),
+            array('id_grupo', 'length', 'max' => 2),
+            array('id_categoria', 'length', 'max' => 3),
+            array('orgao_lotacao, orgao_exercicio', 'length', 'max' => 5)
         );
     }
 }

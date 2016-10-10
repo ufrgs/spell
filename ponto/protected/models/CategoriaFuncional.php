@@ -35,9 +35,9 @@ class CategoriaFuncional extends CActiveRecord
      * @return CategoriaFuncional A classe que é Active Record
      */
 	public static function model($className=__CLASS__)
-	{
-		return parent::model($className);
-	}
+    {
+        return parent::model($className);
+    }
 
     /**
      * Método do Yii Framework para definição da tabela associada ao objeto
@@ -47,11 +47,11 @@ class CategoriaFuncional extends CActiveRecord
      * 
      * @return string Nome da tabela no banco de dados associada ao objeto
      */
-	public function tableName()
-	{
-		return 'categoria';
-	}
-	
+    public function tableName()
+    {
+        return 'categoria';
+    }
+
     /**
      * Método do Yii Framework para definição da chave primária do objeto
      * 
@@ -60,11 +60,11 @@ class CategoriaFuncional extends CActiveRecord
      * 
      * @return string Nome da coluna referente à chave primária do objeto
      */
-	public function primaryKey()
+    public function primaryKey()
     {
         return array('id_categoria');
     }
-    
+
     /**
      * Método do Yii Framework para definição de relacionamentos entre tabelas
      * 
@@ -80,5 +80,27 @@ class CategoriaFuncional extends CActiveRecord
             'grupoEmprego' => array(self::BELONGS_TO, 'GrupoEmprego', 'id_grupo'),
         );
     }
-				
+
+    /**
+     * Método do Yii Framework para definição de regras de validação
+     * 
+     * Aqui são definidos os atributos das colunas da tabela que presenta o 
+     * objeto como os campos que aceitam valores nulos e tamanho máximo de 
+     * caracteres suportados.
+     * 
+     * É recomendado apenas definir as regras para os atributos que forem ser 
+     * utilizados com dados do usuário.
+     * 
+     * @link http://www.yiiframework.com/doc/guide/1.1/en/form.model#declaring-validation-rules Como declarar regras
+     * @return array Regras de validação para este modelo
+     */
+    public function rules()
+    {
+        return array(
+            array('id_categoria, nome_categora, regime_trabalho', 'required'),
+            array('id_categoria', 'length', 'max' => 3),
+            array('nome_categoria', 'length', 'max' => 255),
+            array('regime_trabalho', 'length', 'max' => 2)
+        );
+    }
 }

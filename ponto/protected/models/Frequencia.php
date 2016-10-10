@@ -79,4 +79,28 @@ class Frequencia extends CActiveRecord {
             'DadoFuncional' => array(self::BELONGS_TO, 'DadoFuncional', array('matricula' => 'id_pessoa', 'nr_vinculo' => 'nr_vinculo')),
 		);
 	}
+    
+    /**
+     * Método do Yii Framework para definição de regras de validação
+     * 
+     * Aqui são definidos os atributos das colunas da tabela que presenta o 
+     * objeto como os campos que aceitam valores nulos e tamanho máximo de 
+     * caracteres suportados.
+     * 
+     * É recomendado apenas definir as regras para os atributos que forem ser 
+     * utilizados com dados do usuário.
+     * 
+     * @link http://www.yiiframework.com/doc/guide/1.1/en/form.model#declaring-validation-rules Como declarar regras
+     * @return array Regras de validação para este modelo
+     */
+    public function rules()
+    {
+        return array(
+            array('nr_frequencia, matricula, nr_vinculo, nr_dias, data_frequencia, cod_frequencia', 'required'),
+            array('nr_frequencia, matricula', 'length', 'max' => 8),
+            array('nr_vinculo', 'length', 'max' => 1),
+            array('nr_dias', 'length', 'max' => 11),
+            array('cod_frequencia', 'length', 'max' => 3)
+        );
+    }
 }
