@@ -1,5 +1,6 @@
 # Sistema de Ponto ELetrônico Livre (SPELL)
-Esse sistema foi desenvolvido no [Centro de Processamento de Dados](http://www.ufrgs.br/cpd/)(CPD) da [Universidade Federal do Rio Grande do Sul](http://www.ufrgs.br/)(UFRGS) para ser implementado em pontos eletrônicos da [Universidade Federal Fluminense](http://www.uff.br/)(UFF) visando melhorar o controle de horários dos servidores da instituição.
+Esse sistema foi desenvolvido no [Centro de Processamento de Dados](http://www.ufrgs.br/cpd/)(CPD) da [Universidade Federal do Rio Grande do Sul](http://www.ufrgs.br/)(UFRGS) com base no sistema já utilizado na Universidade para ser disponibilizado a outras instituições que estejam necessitando de uma solução para registro e acompanhamento da carga horária dos seus servidores. 
+O sistema foi portado em colaboração com a [Universidade Federal Fluminense](http://www.uff.br/)(UFF).
 
 ## Funcionalidades
 * Acompanhamento de horários (funcionário e chefia)
@@ -64,11 +65,11 @@ recomenda-se adicionar o seguinte código no método `beforeAction` da classe
 ```
 if (($ipv4 != 'Número IPv4 da rede') && ($ipv6 != 'Número IPv6 da rede')) {
     $this->render('mensagem', array(
-        'mensagem' => "O registro de Ponto só funciona na rede da UFF.",
+        'mensagem' => "O registro de Ponto só funciona na rede da Universidade.",
     ));
     return false;
 }
 ```
 
 ## Mais informações
-Para mais informações, guias e tutoriais sobre o projeto acesse a [Wiki](https://github.com/ufrgs/spell/wiki) do repositório.
+Para mais informações, guias e tutoriais sobre o projeto acesse a [Wiki](http://gitlab.dev.ufrgs.br/lvalente/cpd-spell/wikis/home) do repositório.
