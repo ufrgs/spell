@@ -43,6 +43,10 @@ Lista de usuários cadastrados para teste:
 
 ## Guia de configuração
 
+#### **Configurações PHP e Apache**
+
+Para que o sistema funcione, é necessário habilitar as tags curtas (short_open_tag) no php.ini e habilitar o mod_rewrite nas configurações do Apache.
+
 #### **Conexão com o banco de dados**
 Os dados de acesso ao banco de dados são especificados no arquivo `ponto/protected/config/config.php`.
 Basta alterar os valores contidos na chave `db` do array `components`.
